@@ -11,7 +11,7 @@ void registerLevel(const LevelData& level) {
 }
 
 void RegisterLevels() {
-	registerLevel(LevelData("level_1", "SpriteMap1"));
+	registerLevel(LevelData("level_1", "SpriteMap1", "background", 25, 25, 2.5f, 0.35f));
 }
 
 const LevelData& getLevelData(const uint32_t levelNum) {
