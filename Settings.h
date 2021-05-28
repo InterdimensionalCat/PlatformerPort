@@ -36,7 +36,7 @@ public:
 	};
 
 	template<typename T>
-	static T getSetting(const std::string& settingname) noexcept {
+	static T getSetting(const std::string& settingname) {
 		static_assert(
 			std::is_same<T, int>::value
 			|| std::is_same<T, float>::value
@@ -48,15 +48,17 @@ public:
 		if (!settings) {
 			settings = std::make_unique<StandardSettings>();
 		}
-		try {
-			return std::get<T>(settings->getSetting(settingname));
-		}
-		catch (const std::bad_variant_access&) {
-			return T();
-		}
-		catch (const std::out_of_range&) {
-			return T();
-		}
+		//try {
+		//	
+		//}
+		//catch (const std::bad_variant_access&) {
+		//	return T();
+		//}
+		//catch (const std::out_of_range&) {
+		//	return T();
+		//}
+
+		return std::get<T>(settings->getSetting(settingname));
 	}
 
 	template<typename T>

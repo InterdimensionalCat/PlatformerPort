@@ -1,4 +1,5 @@
 #pragma once
+
 class LevelData
 {
 public:
@@ -7,7 +8,7 @@ public:
 		const float baseScrollPercent, const float scrollGrowth)
 		: levelname(levelname), tilesetname(tilesetname), parallaxTextureName(parallaxTextureName), 
 		levelWidth(levelWidth), levelHeight(levelHeight),
-		baseScrollPercent(baseScrollPercent), scrollGrowth(scrollGrowth) {}
+		baseScrollPercent(baseScrollPercent), scrollGrowth(scrollGrowth)  {}
 	std::string levelname;
 	std::string tilesetname;
 	std::string parallaxTextureName;
