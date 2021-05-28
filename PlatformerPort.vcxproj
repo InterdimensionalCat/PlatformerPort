@@ -149,13 +149,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Actor.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="EventQueue.cpp" />
     <ClCompile Include="Image.cpp" />
+    <ClCompile Include="InputHandle.cpp" />
     <ClCompile Include="LevelData.cpp" />
     <ClCompile Include="LevelRegistry.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Parallax.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerGraphics.cpp" />
+    <ClCompile Include="PlayerLogic.cpp" />
+    <ClCompile Include="PlayerPhysics.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="stdafx.cpp" />
@@ -169,12 +177,20 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Actor.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Component.h" />
+    <ClInclude Include="EventQueue.h" />
     <ClInclude Include="Image.h" />
+    <ClInclude Include="InputHandle.h" />
     <ClInclude Include="LevelData.h" />
     <ClInclude Include="LevelRegistry.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Parallax.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerGraphics.h" />
+    <ClInclude Include="PlayerLogic.h" />
+    <ClInclude Include="PlayerPhysics.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="stdafx.h" />

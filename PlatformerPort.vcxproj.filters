@@ -43,6 +43,18 @@
     <Filter Include="Source Files\Level">
       <UniqueIdentifier>{9327264d-ec9e-4ffe-811d-f15cc759d84b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Actor">
+      <UniqueIdentifier>{b4701699-237c-4760-a42f-0dde7ebceda0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Actor">
+      <UniqueIdentifier>{a6d541e2-0d40-459d-8400-febfae2a1aa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Actor\Player">
+      <UniqueIdentifier>{7cfc3900-1fee-4486-aa4a-3989998bd6f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Actor\Player">
+      <UniqueIdentifier>{dac78e7a-3b4a-4add-859a-edaa4a77aac1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -90,6 +102,30 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Actor.cpp">
+      <Filter>Source Files\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Source Files\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="EventQueue.cpp">
+      <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="InputHandle.cpp">
+      <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\Actor\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerLogic.cpp">
+      <Filter>Source Files\Actor\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerGraphics.cpp">
+      <Filter>Source Files\Actor\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerPhysics.cpp">
+      <Filter>Source Files\Actor\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -136,6 +172,30 @@
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>Header Files\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Header Files\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="EventQueue.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="InputHandle.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\Actor\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerLogic.h">
+      <Filter>Header Files\Actor\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerGraphics.h">
+      <Filter>Header Files\Actor\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerPhysics.h">
+      <Filter>Header Files\Actor\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
