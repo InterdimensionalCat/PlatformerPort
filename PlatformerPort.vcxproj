@@ -160,10 +160,10 @@
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Parallax.cpp" />
+    <ClCompile Include="PhysicsBody.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerGraphics.cpp" />
     <ClCompile Include="PlayerLogic.cpp" />
-    <ClCompile Include="PlayerPhysics.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="stdafx.cpp" />
@@ -187,10 +187,10 @@
     <ClInclude Include="LevelRegistry.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Parallax.h" />
+    <ClInclude Include="PhysicsBody.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerGraphics.h" />
     <ClInclude Include="PlayerLogic.h" />
-    <ClInclude Include="PlayerPhysics.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="stdafx.h" />

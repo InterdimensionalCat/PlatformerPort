@@ -55,6 +55,12 @@
     <Filter Include="Source Files\Actor\Player">
       <UniqueIdentifier>{dac78e7a-3b4a-4add-859a-edaa4a77aac1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Physics">
+      <UniqueIdentifier>{d37993ec-2b3a-49b9-88c9-46f76349d0d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{2fd5ab72-a7cd-484e-93de-19579e60ab5f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -123,8 +129,8 @@
     <ClCompile Include="PlayerGraphics.cpp">
       <Filter>Source Files\Actor\Player</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerPhysics.cpp">
-      <Filter>Source Files\Actor\Player</Filter>
+    <ClCompile Include="PhysicsBody.cpp">
+      <Filter>Source Files\Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -194,8 +200,8 @@
     <ClInclude Include="PlayerGraphics.h">
       <Filter>Header Files\Actor\Player</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerPhysics.h">
-      <Filter>Header Files\Actor\Player</Filter>
+    <ClInclude Include="PhysicsBody.h">
+      <Filter>Header Files\Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

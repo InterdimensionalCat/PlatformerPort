@@ -5,32 +5,13 @@
 class Actor
 {
 public:
-	Actor(const std::string& name,
-		std::unique_ptr<RenderComponent> renderer,
-		std::unique_ptr<PhysicsComponent> physics,
-		std::unique_ptr<LogicComponent> logic)
-		: name(name), renderer(std::move(renderer)),
-		physics(std::move(physics)), logic(std::move(logic)) {
-
-		this->renderer->setActor(this);
-		this->physics->setActor(this);
-		this->logic->setActor(this);
-	}
-
-	void update() {
-		logic->update();
-		physics->update();
-		renderer->update();
-	}
-
-	void draw(ic::Window& window) const {
-		renderer->draw(window);
-	}
-
-
-	std::unique_ptr<RenderComponent> renderer;
-	std::unique_ptr<PhysicsComponent> physics;
-	std::unique_ptr<LogicComponent> logic;
+	Actor(const std::string& name) : name(name) {}
+	virtual void update() = 0;
+	virtual void draw(ic::Window& window) const = 0;
 	std::string name;
+
+	sf::FloatRect hitbox = sf::FloatRect(0, 0, 0, 0);
+	sf::Vector2f pos = sf::Vector2f(0, 0);
+	sf::Vector2f vel = sf::Vector2f(0, 0);
 };
 

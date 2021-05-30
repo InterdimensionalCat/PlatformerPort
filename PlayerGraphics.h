@@ -1,12 +1,17 @@
 #pragma once
-#include "Component.h"
 #include "LevelData.h"
-#include "Player.h"
 
-class PlayerGraphics :
-    public RenderComponent
+class Player;
+namespace ic {
+    class Window;
+}
+
+class PlayerGraphics
 {
 public:
-    PlayerGraphics(const LevelData& data) : RenderComponent(data) {}
+    PlayerGraphics(const LevelData& data) {}
+    void update() {}
+    void draw(ic::Window& window) const;
+    Player* player;
 };
 
