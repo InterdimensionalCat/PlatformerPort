@@ -33,8 +33,21 @@ public:
 		}
 		void move(Camera& camera, const float percentX, const float percentY) {
 			auto prevrect = sprite.getTextureRect();
-			prevrect.left = (int)(percentX*(repetitionPercentX*(float)tex.getTexture().getSize().x - (float)Settings::getSetting<int>("Width")));
-			prevrect.top  = (int)(percentY*(repetitionPercentY*(float)tex.getTexture().getSize().y - (float)Settings::getSetting<int>("Height")));
+			if (repetitionPercentY >= 1.0f) {
+				prevrect.left = (int)(percentX * (repetitionPercentX * (float)tex.getTexture().getSize().x - (float)Settings::getSetting<int>("Width")));
+			}
+			else {
+				prevrect.left = (int)(percentX * (repetitionPercentX * (float)tex.getTexture().getSize().x - (float)Settings::getSetting<int>("Width") * 0.0f));
+			}
+
+			if (repetitionPercentY >= 1.0f) {
+				prevrect.top = (int)(percentY * (repetitionPercentY * (float)tex.getTexture().getSize().y - (float)Settings::getSetting<int>("Height")));
+			}
+			else {
+				prevrect.top = (int)(percentY * (repetitionPercentY * (float)tex.getTexture().getSize().y - (float)Settings::getSetting<int>("Height") * 0.0f));
+			}
+
+
 
 
 			sprite.setTextureRect(prevrect);
@@ -54,8 +67,17 @@ public:
 	void move(Camera& camera) {
 
 		//calc scroll here xd
-		auto percentX = camera.scrollpos.x / (camera.boundsInPixels.x - (float)Settings::getSetting<int>("Width"));
-		auto percentY = camera.scrollpos.y / (camera.boundsInPixels.y - (float)Settings::getSetting<int>("Height"));
+
+		float percentX = 0;
+		float percentY = 0;
+
+		if (camera.boundsInPixels.x != (float)Settings::getSetting<int>("Width")) {
+			percentX = camera.scrollpos.x / (camera.boundsInPixels.x - (float)Settings::getSetting<int>("Width"));
+		}
+
+		if (camera.boundsInPixels.y != (float)Settings::getSetting<int>("Height")) {
+			percentY = camera.scrollpos.y / (camera.boundsInPixels.y - (float)Settings::getSetting<int>("Height"));
+		}
 
 		//if (percentX != 0.0f || percentY != 0.0f) {
 			for (auto& layer : layers) {

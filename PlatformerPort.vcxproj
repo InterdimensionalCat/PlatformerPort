@@ -126,7 +126,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\benne\source\repos\PlatformerPort\packages\sfml-graphics.2.4.2.0\build\native\lib\x64\v140\Debug\static;C:\Users\benne\source\repos\PlatformerPort\packages\sfml-audio.2.4.2.0\build\native\lib\x64\v140\Debug\static;C:\Users\benne\source\repos\PlatformerPort\packages\sfml-network.2.4.2.0\build\native\lib\x64\v140\Debug\static;C:\Users\benne\source\repos\PlatformerPort\packages\sfml-system.2.4.2.0\build\native\lib\x64\v140\Debug\static;C:\Users\benne\source\repos\PlatformerPort\packages\sfml-system.2.4.2.0\build\native\lib\x64;C:\Users\benne\source\repos\PlatformerPort\packages\sfml-window.2.4.2.0\build\native\lib\x64\v140\Debug\static</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>F:\cppgames\PlatformerPort\packages\sfml-graphics.2.4.2.0\build\native\lib\x64\v140\Debug\static;F:\cppgames\PlatformerPort\packages\sfml-audio.2.4.2.0\build\native\lib\x64\v140\Debug\static;F:\cppgames\PlatformerPort\packages\sfml-network.2.4.2.0\build\native\lib\x64\v140\Debug\static;F:\cppgames\PlatformerPort\packages\sfml-system.2.4.2.0\build\native\lib\x64\v140\Debug\static;F:\cppgames\PlatformerPort\packages\sfml-system.2.4.2.0\build\native\lib\x64;F:\cppgames\PlatformerPort\packages\sfml-window.2.4.2.0\build\native\lib\x64\v140\Debug\static;C:\Users\benne\source\repos\PlatformerPort\packages\sfml-graphics.2.4.2.0\build\native\lib\x64\v140\Debug\static;C:\Users\benne\source\repos\PlatformerPort\packages\sfml-audio.2.4.2.0\build\native\lib\x64\v140\Debug\static;C:\Users\benne\source\repos\PlatformerPort\packages\sfml-network.2.4.2.0\build\native\lib\x64\v140\Debug\static;C:\Users\benne\source\repos\PlatformerPort\packages\sfml-system.2.4.2.0\build\native\lib\x64\v140\Debug\static;C:\Users\benne\source\repos\PlatformerPort\packages\sfml-system.2.4.2.0\build\native\lib\x64;C:\Users\benne\source\repos\PlatformerPort\packages\sfml-window.2.4.2.0\build\native\lib\x64\v140\Debug\static</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;opengl32.lib;freetype.lib;sfml-window-s-d.lib 	;winmm.lib;gdi32.lib;sfml-audio-s-d.lib 	;openal32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;sfml-network-s-d.lib 	;ws2_32.lib;sfml-system-s-d.lib 	;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -150,17 +150,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AnimationRegistry.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="EventQueue.cpp" />
+    <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="InputHandle.cpp" />
     <ClCompile Include="LevelData.cpp" />
     <ClCompile Include="LevelRegistry.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MovingPlatform.cpp" />
     <ClCompile Include="Parallax.cpp" />
     <ClCompile Include="PhysicsBody.cpp" />
+    <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerGraphics.cpp" />
     <ClCompile Include="PlayerLogic.cpp" />
@@ -178,16 +183,21 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimationRegistry.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="EventQueue.h" />
+    <ClInclude Include="Goal.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="InputHandle.h" />
     <ClInclude Include="LevelData.h" />
     <ClInclude Include="LevelRegistry.h" />
     <ClInclude Include="Logger.h" />
+    <ClInclude Include="MovingPlatform.h" />
     <ClInclude Include="Parallax.h" />
     <ClInclude Include="PhysicsBody.h" />
+    <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerGraphics.h" />
     <ClInclude Include="PlayerLogic.h" />

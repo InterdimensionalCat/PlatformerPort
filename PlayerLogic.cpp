@@ -26,7 +26,7 @@ void PlayerLogic::update() {
 		break;
 	}
 
-	updatePos();
+	//updatePos();
 }
 
 void PlayerLogic::updateStill() {
@@ -44,6 +44,8 @@ void PlayerLogic::updateStill() {
 		player->changeState(ActionState::Airborne);
 	}
 
+	updateAirborneTimer();
+
 
 }
 
@@ -53,24 +55,24 @@ void PlayerLogic::updateRun() {
 	case MoveResult::Left:
 
 		//vel is opposite the move dir and high -> turn state
-		if (vel.x > 0) {
-			if (abs(vel.x) > turnThreshold) {
+		if (player->vel.x > 0) {
+			if (abs(player->vel.x) > turnThreshold) {
 				player->changeState(ActionState::GroundTurn);
 			}
 			else {
-				vel.x = -groundAccel;
+				player->vel.x = -groundAccel;
 			}
 		}
 		break;
 	case MoveResult::Right:
 
 		//vel is opposite the move dir and high -> turn state
-		if (vel.x < 0) {
-			if (abs(vel.x) > turnThreshold) {
+		if (player->vel.x < 0) {
+			if (abs(player->vel.x) > turnThreshold) {
 				player->changeState(ActionState::GroundTurn);
 			}
 			else {
-				vel.x = groundAccel;
+				player->vel.x = groundAccel;
 			}
 		}
 		break;
@@ -87,6 +89,10 @@ void PlayerLogic::updateRun() {
 	if (jump(jumpForce)) {
 		player->changeState(ActionState::Airborne);
 	}
+
+	updateAirborneTimer();
+
+	checkSpeedBounds(maxSpeedX, maxSpeedY);
 }
 
 void PlayerLogic::updateTurn() {
@@ -95,14 +101,14 @@ void PlayerLogic::updateTurn() {
 	case MoveResult::Left:
 
 		//vel is in the opposite direction of the turn
-		if (vel.x < 0) {
+		if (player->vel.x < 0) {
 			player->changeState(ActionState::GroundMove);
 		}
 		break;
 	case MoveResult::Right:
 
 		//vel is in the opposite direction of the turn
-		if (vel.x > 0) {
+		if (player->vel.x > 0) {
 			player->changeState(ActionState::GroundMove);
 		}
 		break;
@@ -118,6 +124,10 @@ void PlayerLogic::updateTurn() {
 	if (jump(jumpForce)) {
 		player->changeState(ActionState::Airborne);
 	}
+
+	updateAirborneTimer();
+
+	checkSpeedBounds(maxSpeedX, maxSpeedY);
 }
 
 void PlayerLogic::updateAirborne() {
@@ -129,14 +139,21 @@ void PlayerLogic::updateAirborne() {
 	//shorten jump
 	shortenJump();
 
-	//check if still airborn
+	checkSpeedBounds(maxSpeedX, maxSpeedY);
 }
 
 void PlayerLogic::shortenJump() {
 	if (!input->isDown(sf::Keyboard::Space)) {
-		if (vel.y < 0) {
-			vel.y /= jumpReleaseSpeedMod;
+		if (player->vel.y < 0) {
+			player->vel.y /= jumpReleaseSpeedMod;
 		}
+	}
+}
+
+void PlayerLogic::updateAirborneTimer() {
+	if (--airborneTimer <= 0) {
+		airborneTimer = 0;
+		player->changeState(ActionState::Airborne);
 	}
 }
 
@@ -145,16 +162,16 @@ void PlayerLogic::applyGravity() {
 }
 
 void PlayerLogic::checkSpeedBounds(const float maxX, const float maxY) {
-	if (vel.x >  maxX) vel.x =  maxX;
-	if (vel.x < -maxX) vel.x = -maxX;
-	if (vel.y >  maxY) vel.y =  maxY;
-	if (vel.y < -maxY) vel.y = -maxY;
+	if (player->vel.x >  maxX) player->vel.x =  maxX;
+	if (player->vel.x < -maxX) player->vel.x = -maxX;
+	if (player->vel.y >  maxY) player->vel.y =  maxY;
+	if (player->vel.y < -maxY) player->vel.y = -maxY;
 }
 
 bool PlayerLogic::applyFriction(const float frc) {
-	vel.x /= frc;
-	if (abs(vel.x) < toMeters(2)) {
-		vel.x = 0;
+	player->vel.x /= frc;
+	if (abs(player->vel.x) < toMeters(1)) {
+		player->vel.x = 0;
 		return false;
 	}
 	else {
@@ -185,8 +202,8 @@ bool PlayerLogic::jump(const float jumpForce) {
 }
 
 void PlayerLogic::move(float motionX, float motionY) {
-	vel += sf::Vector2f(motionX, motionY);
+	player->vel += sf::Vector2f(motionX, motionY);
 }
-void PlayerLogic::updatePos() {
-	pos += vel;
-}
+//void PlayerLogic::updatePos() {
+//	pos += vel;
+//}
