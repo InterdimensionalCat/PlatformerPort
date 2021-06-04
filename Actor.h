@@ -22,6 +22,7 @@ public:
 	virtual void setAirborne(const bool airborne) = 0;
 	virtual bool isAirborne() { return false; }
 	virtual bool collidable() { return true; }
+	virtual void despawn() {}
 	std::string name;
 
 	const std::string& getName() const { return name; }
@@ -83,6 +84,8 @@ public:
 	sf::FloatRect hitbox = sf::FloatRect(0, 0, 0, 0);
 	sf::Vector2f pos = sf::Vector2f(0, 0);
 	sf::Vector2f vel = sf::Vector2f(0, 0);
+
+	Scene* scene;
 
 //private:
 //

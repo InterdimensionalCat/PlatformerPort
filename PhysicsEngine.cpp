@@ -3,6 +3,11 @@
 #include "Actor.h"
 #include "Tilemap.h"
 #include "Tile.h"
+#include "LevelData.h"
+
+PhysicsEngine::PhysicsEngine(const LevelData& data) : scene(data.scene) {
+
+}
 
 void PhysicsEngine::update(Bodies& bodies, Tilemap& tilemap) {
 
@@ -52,9 +57,15 @@ void PhysicsEngine::checkMapBounds(Bodies& bodies, Tilemap& tilemap) {
 
 		//bot
 
-		if (hitbox.top + hitbox.height > height && body->getVelY() > 0) {
-			body->setPosY(height - hitbox.height);
-			body->setVelY(0.0f);
+		//if (hitbox.top + hitbox.height > height && body->getVelY() > 0) {
+		//	body->setPosY(height - hitbox.height);
+		//	body->setVelY(0.0f);
+		//}
+
+		if (hitbox.top > height) {
+			//body->setPosY(height - hitbox.height);
+			//body->setVelY(0.0f);
+			body->despawn();
 		}
 
 		//right

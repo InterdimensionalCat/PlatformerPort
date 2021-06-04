@@ -5,12 +5,17 @@ class Tiles;
 class Tilemap;
 class Tile;
 
+class Scene;
+
+class LevelData;
+
 class PhysicsEngine
 {
 
 	typedef std::vector<std::shared_ptr<Actor>> Bodies;
 	typedef std::shared_ptr<Actor> Body;
 public:
+	PhysicsEngine(const LevelData& data);
 	void update(Bodies& bodies, Tilemap& tilemap);
 	void updatePositions(Bodies& bodies);
 
@@ -23,5 +28,7 @@ public:
 	void entityCollision(Bodies& bodies);
 
 	sf::FloatRect getSpeedAdjustedAABB(Body& body);
+
+	Scene* scene;
 };
 

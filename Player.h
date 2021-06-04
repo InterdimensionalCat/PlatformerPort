@@ -3,6 +3,7 @@
 #include "LevelData.h"
 #include "PlayerLogic.h"
 #include "PlayerGraphics.h"
+#include "Scene.h"
 
 enum class ActionState {
 	GroundStill,
@@ -17,12 +18,19 @@ public:
 	Player(const LevelData& data) : Actor("Player"),
 		graphics(std::make_unique<PlayerGraphics>(data)),
 		logic(std::make_unique<PlayerLogic>(data)) {
+
+		scene = data.scene;
+
 		graphics->player = this;
 		logic->player = this;
 		hitbox = sf::FloatRect(0, 0, toMeters(64 - 25), toMeters(64 - 10));
 		//pos = sf::Vector2f(0, 0);
 		pos = data.playerSpawnPos;
 		vel = sf::Vector2f(0, 0);
+	}
+
+	void despawn() override {
+		scene->setResetLevel();
 	}
 
 	void update() override {

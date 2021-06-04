@@ -97,7 +97,7 @@ void PlayerLogic::updateRun() {
 
 void PlayerLogic::updateTurn() {
 	//try horz move
-	switch (moveHorz(groundAccel)) {
+	switch (moveHorz(groundAccel * 2.0f)) {
 	case MoveResult::Left:
 
 		//vel is in the opposite direction of the turn
@@ -143,6 +143,7 @@ void PlayerLogic::updateAirborne() {
 }
 
 void PlayerLogic::shortenJump() {
+	if (!jumpFlag) return;
 	if (!input->isDown(sf::Keyboard::Space)) {
 		if (player->vel.y < 0) {
 			player->vel.y /= jumpReleaseSpeedMod;
@@ -159,6 +160,9 @@ void PlayerLogic::updateAirborneTimer() {
 
 void PlayerLogic::applyGravity() {
 	move(0.0f, gravity);
+	if (player->getVelY() > 0.0f) {
+		jumpFlag = false;
+	}
 }
 
 void PlayerLogic::checkSpeedBounds(const float maxX, const float maxY) {
@@ -194,8 +198,18 @@ MoveResult PlayerLogic::moveHorz(const float AccelX) {
 }
 
 bool PlayerLogic::jump(const float jumpForce) {
+
+	auto jforce = jumpForce;
+
+	if(input->isDown(sf::Keyboard::LShift)) {
+		jforce *= 3.0f;
+	}
+
 	if (input->isPressed(sf::Keyboard::Space)) {
-		move(0, -jumpForce);
+		move(0, -jforce);
+
+		jumpFlag = true;
+
 		return true;
 	}
 	return false;

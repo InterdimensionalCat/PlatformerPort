@@ -5,15 +5,69 @@
 #include "Goal.h"
 #include "Actor.h"
 #include "MovingPlatform.h"
+#include "Boop.h"
 
-void loadLevel1Actors(std::vector<std::shared_ptr<Actor>>& actors) {
-	actors.push_back(std::make_shared<MovingPlatform>(toMeters(384), toMeters(192), toMeters(200), PlatformType::Falling));
-	actors.push_back(std::make_shared<MovingPlatform>(toMeters(704), toMeters(192), toMeters(200), PlatformType::Falling));
-	actors.push_back(std::make_shared<MovingPlatform>(toMeters(1024), toMeters(192), toMeters(200), PlatformType::Falling));
+void loadLevel1Actors(std::vector<std::shared_ptr<Actor>>& actors, const LevelData& data) {
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(384), toMeters(192), toMeters(200), PlatformType::Falling));
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(704), toMeters(192), toMeters(200), PlatformType::Falling));
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(1024), toMeters(192), toMeters(200), PlatformType::Falling));
 
-	actors.push_back(std::make_shared<MovingPlatform>(toMeters(0), toMeters(184), toMeters(200), PlatformType::Vertical));
-	actors.push_back(std::make_shared<MovingPlatform>(toMeters(1408), toMeters(590), toMeters(250), PlatformType::Vertical));
-	actors.push_back(std::make_shared<MovingPlatform>(toMeters(310), toMeters(448), toMeters(640), PlatformType::Horizontal));
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(0), toMeters(184), toMeters(200), PlatformType::Vertical));
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(1408), toMeters(590), toMeters(300), PlatformType::Vertical));
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(310), toMeters(448), toMeters(640), PlatformType::Horizontal));
+
+	actors.push_back(std::make_shared<Boop>(data, toMeters(448),    toMeters(1152), toMeters(1.5), toMeters(128), false));
+	actors.push_back(std::make_shared<Boop>(data, toMeters(448+64), toMeters(1152), toMeters(1.5), toMeters(64 ), false));
+	actors.push_back(std::make_shared<Boop>(data, toMeters(1216),   toMeters(1152), toMeters(1.5), toMeters(128), false));
+}
+
+void loadLevel2Actors(std::vector<std::shared_ptr<Actor>>& actors, const LevelData& data) {
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(1792), toMeters(128), toMeters(500), PlatformType::Vertical));
+
+
+	actors.push_back(std::make_shared<Boop>(data, toMeters(1792 + 32), toMeters(128 - 64), toMeters(0.7f), toMeters(16), false));
+	actors.push_back(std::make_shared<Boop>(data, toMeters(2048), toMeters(128), toMeters(2.4f), toMeters(64), false));
+	actors.push_back(std::make_shared<Boop>(data, toMeters(2304), toMeters(128), toMeters(2.5f), toMeters(64), false));
+	actors.push_back(std::make_shared<Boop>(data, toMeters(2688), toMeters(512), toMeters(0.7f), toMeters(50), false, 0.0f));
+	actors.push_back(std::make_shared<Boop>(data, toMeters(3840), toMeters(832), toMeters(0.7f), toMeters(64), true));
+	actors.push_back(std::make_shared<Boop>(data, toMeters(5824), toMeters(832), toMeters(0.0f), toMeters(0.0f), true));
+}
+
+void loadLevel3Actors(std::vector<std::shared_ptr<Actor>>& actors, const LevelData& data) {
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(832), toMeters(10240 - 640), toMeters(576), PlatformType::Vertical));
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(1152), toMeters(9408), toMeters(200), PlatformType::Falling));
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(1024), toMeters(9408), toMeters(200), PlatformType::Falling));
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(896 ), toMeters(9408), toMeters(200), PlatformType::Falling));
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(768 ), toMeters(9408), toMeters(200), PlatformType::Falling));
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(640 ), toMeters(9408), toMeters(200), PlatformType::Falling));
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(512 ), toMeters(9408), toMeters(200), PlatformType::Falling));
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(384 ), toMeters(9408), toMeters(200), PlatformType::Falling));
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(256 ), toMeters(9408), toMeters(200), PlatformType::Falling));
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(128 ), toMeters(9408), toMeters(200), PlatformType::Falling));
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(0   ), toMeters(9408), toMeters(200), PlatformType::Falling));
+
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(0), toMeters(8256 - 640), toMeters(640), PlatformType::Vertical));
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(1152), toMeters(7616 - 640), toMeters(640), PlatformType::Vertical));
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(384), toMeters(6848 - 320), toMeters(320), PlatformType::Vertical));
+	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(0), toMeters(6492 - 640), toMeters(640), PlatformType::Vertical));
+
+	actors.push_back(std::make_shared<Boop>(data, 13.5, toMeters(9856 - 13), toMeters(5.5f + 0.3f), 4, false, 0));
+	actors.push_back(std::make_shared<Boop>(data, 13.5, toMeters(9728 - 13), toMeters(5.3f + 0.3f), 4, false, 0));
+	actors.push_back(std::make_shared<Boop>(data, 13.5, toMeters(9600 - 13), toMeters(5.1f + 0.3f), 4, false, 0));
+
+	actors.push_back(std::make_shared<Boop>(data, toMeters(1152), toMeters(8512), toMeters(0  ), toMeters(0  ), true));
+	actors.push_back(std::make_shared<Boop>(data, toMeters(256 ), toMeters(8448), toMeters(0  ), toMeters(0  ), false, 0));
+	actors.push_back(std::make_shared<Boop>(data, toMeters(576 ), toMeters(8448), toMeters(0  ), toMeters(0  ), false, 0));
+
+	actors.push_back(std::make_shared<Boop>(data, toMeters(1088), toMeters(7552), toMeters(0  ), toMeters(0  ), true));
+
+	actors.push_back(std::make_shared<Boop>(data, toMeters(960 ), toMeters(7040), toMeters(5.0), toMeters(30 ), false, 0));
+	actors.push_back(std::make_shared<Boop>(data, toMeters(832 ), toMeters(6976), toMeters(5.0), toMeters(30 ), false, 0));
+	actors.push_back(std::make_shared<Boop>(data, toMeters(640 ), toMeters(6912), toMeters(5.0), toMeters(30 ), false, 0));
+
+	actors.push_back(std::make_shared<Boop>(data, toMeters(896 ), toMeters(5440), toMeters(0  ), toMeters(0  ), true));
+	actors.push_back(std::make_shared<Boop>(data, toMeters(960 ), toMeters(2800), toMeters(0  ), toMeters(0  ), false, 0));
+	actors.push_back(std::make_shared<Boop>(data, toMeters(512 ), toMeters(448 ), toMeters(0  ), toMeters(0  ), true, toMeters(0.1f)));
 }
 
 void LevelData::load() {
@@ -33,8 +87,8 @@ void LevelData::load() {
 			colormap.at(x).at(y) = colordat;
 			if (colordat.toInteger() == 0x0000FFFF) {
 				Logger::get() << "Player is at: " << x << ", " << y << "\n";
-				//playerSpawnPos = sf::Vector2f((float)x, (float)y);
-				playerSpawnPos = sf::Vector2f((float)0, (float)0);
+				playerSpawnPos = sf::Vector2f((float)x, (float)y);
+				//playerSpawnPos = sf::Vector2f((float)0, (float)0);
 			}
 
 			if (colordat.toInteger() == 0x020202FF) {
@@ -46,6 +100,7 @@ void LevelData::load() {
 }
 
 std::vector<std::shared_ptr<Actor>> LevelData::loadActors(Scene* scene) const {
+	this->scene = scene;
 	std::vector<std::shared_ptr<Actor>> actors;
 
 	//load player first
@@ -55,7 +110,15 @@ std::vector<std::shared_ptr<Actor>> LevelData::loadActors(Scene* scene) const {
 	actors.push_back(std::make_shared<Goal>(*this, scene));
 
 	if (levelname == "level_1") {
-		loadLevel1Actors(actors);
+		loadLevel1Actors(actors, *this);
+	}
+
+	if (levelname == "level_2") {
+		loadLevel2Actors(actors, *this);
+	}
+
+	if (levelname == "level_3") {
+		loadLevel3Actors(actors, *this);
 	}
 
 	return actors;

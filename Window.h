@@ -37,11 +37,13 @@ namespace ic {
 				{
 			
 					if (event.type == sf::Event::Closed) {
-
+						Settings::setSetting<bool>("running", false);
 					}
 			
 					if (event.type == sf::Event::KeyPressed) {
-
+						if (event.key.code == sf::Keyboard::Escape) {
+							Settings::setSetting<bool>("running", false);
+						}
 					}
 			
 					if (event.type == sf::Event::MouseButtonPressed) {

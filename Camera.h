@@ -15,6 +15,13 @@ public:
 
 	Camera(const LevelData& data, std::shared_ptr<Actor> followTarget) : Camera(data, CameraMode::Follow) {
 		Camera::followTarget = followTarget;
+
+		auto targetHitbox = followTarget->getPosAdjustedAABB();
+
+		auto targetScrollPos = sf::Vector2f((scrollpos.x + toPixels(targetHitbox.left + targetHitbox.width)) / 2.0f - (float)Settings::getSetting<int>("Width") / 4.0f,
+			(scrollpos.y + toPixels(targetHitbox.top + targetHitbox.height)) / 2.0f - (float)Settings::getSetting<int>("Height") / 4.0f);
+
+		scrollpos = targetScrollPos;
 	}
 
 	Camera(const LevelData& data, const CameraMode& mode = CameraMode::Controlled) : mode(mode) {

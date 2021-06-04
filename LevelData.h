@@ -2,7 +2,6 @@
 #include "Image.h"
 
 class Actor;
-
 class Scene;
 
 class LevelData
@@ -32,5 +31,6 @@ public:
 
 	sf::Vector2f playerSpawnPos;
 	sf::Vector2f goalPos;
+	mutable Scene* scene;
 };
 
