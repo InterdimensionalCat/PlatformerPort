@@ -8,6 +8,8 @@
 #include "InputHandle.h"
 #include "PHysicsEngine.h"
 #include "AnimationRegistry.h"
+#include "AudioRegistry.h"
+#include "AudioEngine.h"
 
 class Scene
 {
@@ -24,7 +26,16 @@ public:
 		engine = std::make_shared<PhysicsEngine>(firstLevel);
 
 		camera = std::make_unique<Camera>(firstLevel, actors.at(0));
+
+		audio = std::make_shared<AudioEngine>();
+		audio->playMusic("FlatZone", 10.0f);
 	}
+
+	~Scene() {
+		clearAnimRegistry();
+		clearAudioRegistry();
+	}
+
 	void update() {
 		//window.updateInput();
 
@@ -96,6 +107,7 @@ public:
 	}
 
 	void setChangeLevel() {
+		audio->playSound("PlayerWin", 20.0f);
 		changeLevelFlag = true;
 	}
 
@@ -130,6 +142,8 @@ public:
 		camera = std::make_unique<Camera>(newLevelData, actors.at(0));
 	}
 
+	std::shared_ptr<AudioEngine> audio;
+
 private:
 
 	friend class LevelData;
@@ -138,6 +152,7 @@ private:
 		RegisterTiles();
 		RegisterLevels();
 		RegisterAnimations();
+		RegisterAudio();
 	}
 
 	//tilemap

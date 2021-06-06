@@ -93,6 +93,8 @@ void PlayerLogic::updateRun() {
 	updateAirborneTimer();
 
 	checkSpeedBounds(maxSpeedX, maxSpeedY);
+
+	updateSFX();
 }
 
 void PlayerLogic::updateTurn() {
@@ -210,6 +212,14 @@ bool PlayerLogic::jump(const float jumpForce) {
 
 		jumpFlag = true;
 
+
+		if (player->scene->audio->getStatusOfSound("PlayerJump1") != sf::SoundSource::Status::Playing) {
+			player->scene->audio->playSound("PlayerJump1", 12.0f);
+		}
+		else {
+			player->scene->audio->playSound("PlayerJump2", 12.0f);
+		}
+
 		return true;
 	}
 	return false;
@@ -221,3 +231,26 @@ void PlayerLogic::move(float motionX, float motionY) {
 //void PlayerLogic::updatePos() {
 //	pos += vel;
 //}
+
+void PlayerLogic::updateSFX() {
+	if (player->state == ActionState::GroundMove) {
+		groundedAudioTimer++;
+		if (player->vel.x != 0) {
+			int cycle = (int)round(60.0f / (abs(player->vel.x) * audioCycleMod));
+
+			if (cycle > 45) cycle = 45;
+			if (cycle < 10) cycle = 10;
+
+			if (groundedAudioTimer >= cycle) {
+				if (stepFlag) {
+					player->scene->audio->playSound("PlayerDash1", 10.0f);
+				}
+				else {
+					player->scene->audio->playSound("PlayerDash2", 10.0f);
+				}
+				groundedAudioTimer = 0;
+				stepFlag = !stepFlag;
+			}
+		}
+	}
+}

@@ -29,6 +29,8 @@ public:
 	void checkSpeedBounds(const float maxX, const float maxY);
 	void updateAirborneTimer();
 
+	void updateSFX();
+
 	//float maxSpeedX = toMeters(6.0f);
 	float maxSpeedX = toMeters(6.2f);
 	//float maxSpeedY = toMeters(25.0f);
@@ -51,6 +53,10 @@ public:
 
 	int airborneTimer = 0;
 	int maxAirborneTimer = 5;
+
+	int groundedAudioTimer = 0;
+	float audioCycleMod = 60.0f;
+	bool stepFlag = true;
 
 	bool jumpFlag = false;
 
