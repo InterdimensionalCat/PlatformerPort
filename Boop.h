@@ -62,6 +62,14 @@ public:
 	}
 
 	void despawn() override {
+
+		if (scene->audio->getStatusOfSound("BoopDeath") != sf::SoundSource::Status::Playing) {
+			scene->audio->playSound("BoopDeath", 15.0f);
+		}
+		else {
+			scene->audio->playSound("BoopDeath2", 15.0f);
+		}
+
 		scene->removeActor(this);
 	}
 
@@ -95,7 +103,9 @@ public:
 	float boopKillTolerencePercent = 0.7f;
 	//float boopJumpVal = toMeters(25.0f);
 	float jumpVelMod = 1.5f;
+	//float jumpVelMod = 0.8f;
 	float jumpMin = toMeters(10.0f);
+	//float jumpMin = toMeters(5.0f);
 
 	bool airborne = true;
 	float spawnPointX;

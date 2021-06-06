@@ -30,6 +30,7 @@ public:
 	}
 
 	void despawn() override {
+		scene->audio->playSound("PlayerDead", 15.0f);
 		scene->setResetLevel();
 	}
 
@@ -47,6 +48,11 @@ public:
 		if (state == newstate) return;
 		state = newstate;
 		graphics->changeState(newstate);
+
+		if (state == ActionState::GroundStill) {
+			//logic->groundedAudioTimer = 0;
+			//logic->stepFlag = true;
+		}
 	}
 
 	void setAirborne(const bool airborne) override {

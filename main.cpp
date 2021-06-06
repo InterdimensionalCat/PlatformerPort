@@ -62,8 +62,6 @@ void game() {
 		//draw
 		draw((float)accumulator / targetDT, *scene);
 	}
-
-	clearAnimRegistry();
 }
 
 void stop() {

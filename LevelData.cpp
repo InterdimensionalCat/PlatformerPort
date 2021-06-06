@@ -7,6 +7,9 @@
 #include "MovingPlatform.h"
 #include "Boop.h"
 
+#pragma warning( push )
+#pragma warning( disable : 4244 )
+
 void loadLevel1Actors(std::vector<std::shared_ptr<Actor>>& actors, const LevelData& data) {
 	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(384), toMeters(192), toMeters(200), PlatformType::Falling));
 	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(704), toMeters(192), toMeters(200), PlatformType::Falling));
@@ -16,9 +19,9 @@ void loadLevel1Actors(std::vector<std::shared_ptr<Actor>>& actors, const LevelDa
 	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(1408), toMeters(590), toMeters(300), PlatformType::Vertical));
 	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(310), toMeters(448), toMeters(640), PlatformType::Horizontal));
 
-	actors.push_back(std::make_shared<Boop>(data, toMeters(448),    toMeters(1152), toMeters(1.5), toMeters(128), false));
-	actors.push_back(std::make_shared<Boop>(data, toMeters(448+64), toMeters(1152), toMeters(1.5), toMeters(64 ), false));
-	actors.push_back(std::make_shared<Boop>(data, toMeters(1216),   toMeters(1152), toMeters(1.5), toMeters(128), false));
+	actors.push_back(std::make_shared<Boop>(data, toMeters(448),    toMeters(1152), toMeters(1.5f), toMeters(128), false));
+	actors.push_back(std::make_shared<Boop>(data, toMeters(448+64), toMeters(1152), toMeters(1.5f), toMeters(64 ), false));
+	actors.push_back(std::make_shared<Boop>(data, toMeters(1216),   toMeters(1152), toMeters(1.5f), toMeters(128), false));
 }
 
 void loadLevel2Actors(std::vector<std::shared_ptr<Actor>>& actors, const LevelData& data) {
@@ -51,9 +54,9 @@ void loadLevel3Actors(std::vector<std::shared_ptr<Actor>>& actors, const LevelDa
 	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(384), toMeters(6848 - 320), toMeters(320), PlatformType::Vertical));
 	actors.push_back(std::make_shared<MovingPlatform>(data, toMeters(0), toMeters(6492 - 640), toMeters(640), PlatformType::Vertical));
 
-	actors.push_back(std::make_shared<Boop>(data, 13.5, toMeters(9856 - 13), toMeters(5.5f + 0.3f), 4, false, 0));
-	actors.push_back(std::make_shared<Boop>(data, 13.5, toMeters(9728 - 13), toMeters(5.3f + 0.3f), 4, false, 0));
-	actors.push_back(std::make_shared<Boop>(data, 13.5, toMeters(9600 - 13), toMeters(5.1f + 0.3f), 4, false, 0));
+	actors.push_back(std::make_shared<Boop>(data, 13.5f, toMeters(9856 - 13), toMeters(5.5f + 0.3f), 4, false, 0));
+	actors.push_back(std::make_shared<Boop>(data, 13.5f, toMeters(9728 - 13), toMeters(5.3f + 0.3f), 4, false, 0));
+	actors.push_back(std::make_shared<Boop>(data, 13.5f, toMeters(9600 - 13), toMeters(5.1f + 0.3f), 4, false, 0));
 
 	actors.push_back(std::make_shared<Boop>(data, toMeters(1152), toMeters(8512), toMeters(0  ), toMeters(0  ), true));
 	actors.push_back(std::make_shared<Boop>(data, toMeters(256 ), toMeters(8448), toMeters(0  ), toMeters(0  ), false, 0));
@@ -69,6 +72,8 @@ void loadLevel3Actors(std::vector<std::shared_ptr<Actor>>& actors, const LevelDa
 	actors.push_back(std::make_shared<Boop>(data, toMeters(960 ), toMeters(2800), toMeters(0  ), toMeters(0  ), false, 0));
 	actors.push_back(std::make_shared<Boop>(data, toMeters(512 ), toMeters(448 ), toMeters(0  ), toMeters(0  ), true, toMeters(0.1f)));
 }
+
+#pragma warning( pop )
 
 void LevelData::load() {
 	auto width = levelWidth;
