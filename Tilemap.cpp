@@ -196,30 +196,38 @@ void Tilemap::disableInactiveSides() {
 
 std::vector<Tile> Tilemap::getTilesWithinArea(const sf::FloatRect& hitbox) {
     std::vector<Tile> returntiles;
-    //size_t startX = (size_t)abs(floor(hitbox.left));
-    //size_t startY = (size_t)abs(floor(hitbox.top));
 
-    //size_t endX = (size_t)abs(floor(hitbox.left + hitbox.width));
-    //size_t endY = (size_t)abs(floor(hitbox.top + hitbox.height));
-    //for (size_t x = startX; x < endX; x++) {
-    //    for (size_t y = startY; y < endY; y++) {
-    //        auto tile = tiles.at(x).at(y);
-    //        auto tileAABB = sf::FloatRect(tile.pos, sf::Vector2f(1.0f, 1.0f));
-    //        if (hitbox.intersects(tileAABB) && tile.getType() == TileType::Solid) {
-    //            returntiles.push_back(tile);
-    //        }
-    //    }
-    //}
 
-    //return returntiles;
+    size_t startX = (size_t)abs(floor(hitbox.left));
+    size_t startY = (size_t)abs(floor(hitbox.top));
 
-    for (auto& x : tiles) {
-        for (auto& y : x) {
-            if(y.getType() != TileType::Air)
-            returntiles.push_back(y);
+    if (startX > 0) startX -= 1;
+    if (startY > 0) startY -= 1;
+
+    size_t endX = (size_t)abs(ceil(hitbox.left + hitbox.width)) + 1;
+    size_t endY = (size_t)abs(ceil(hitbox.top + hitbox.height)) + 1;
+
+    returntiles.reserve((endX - startX + 1) * (endY - startY + 1));
+
+    for (size_t x = startX; x < endX && x < tiles.size(); x++) {
+        for (size_t y = startY; y < endY && y < tiles.at(0).size(); y++) {
+            auto tile = tiles.at(x).at(y);
+            auto tileAABB = sf::FloatRect(tile.pos, sf::Vector2f(1.0f, 1.0f));
+            if (hitbox.intersects(tileAABB) && tile.getType() == TileType::Solid) {
+                returntiles.push_back(tile);
+            }
         }
     }
 
     return returntiles;
+
+    //for (auto& x : tiles) {
+    //    for (auto& y : x) {
+    //        if(y.getType() != TileType::Air)
+    //        returntiles.push_back(y);
+    //    }
+    //}
+
+    //return returntiles;
 }
 
