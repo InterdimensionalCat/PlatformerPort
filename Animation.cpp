@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Animation.h"
+#include "Window.h"
 
 using namespace sf;
 

@@ -4,6 +4,7 @@
 #include "Image.h"
 #include "TileRegistry.h"
 #include "Window.h"
+#include "LevelData.h"
 
 Tilemap::Tilemap(const LevelData& firstMap) : currentMap(firstMap), rendertex(std::make_unique<sf::RenderTexture>()) {
 	loadMap(firstMap);

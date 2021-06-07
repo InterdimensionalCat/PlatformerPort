@@ -1,5 +1,6 @@
 #pragma once
-#include "LevelData.h"
+
+class LevelData;
 
 class Player;
 class InputHandle;

@@ -15,6 +15,7 @@
 #include <variant>
 #include <map>
 #include <vector>
+#include <array>
 
 namespace fs = std::filesystem;
 

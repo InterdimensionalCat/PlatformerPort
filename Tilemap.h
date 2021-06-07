@@ -1,8 +1,11 @@
 #pragma once
 #include "Tile.h"
-#include "LevelData.h"
-#include "Window.h"
 #include "Texture.h"
+#include "LevelData.h"
+
+namespace ic {
+	class Window;
+}
 
 class Tilemap
 {

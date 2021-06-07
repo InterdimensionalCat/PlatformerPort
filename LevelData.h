@@ -7,15 +7,9 @@ class Scene;
 class LevelData
 {
 public:
-	LevelData(const std::string& levelname, const std::string& tilesetname, const std::string& parallaxTextureName, 
+	LevelData(const std::string& levelname, const std::string& tilesetname, const std::string& parallaxTextureName,
 		const float levelWidth, const float levelHeight,
-		const float baseScrollPercent, const float scrollGrowth)
-		: levelname(levelname), tilesetname(tilesetname), parallaxTextureName(parallaxTextureName), 
-		levelWidth(levelWidth), levelHeight(levelHeight),
-		baseScrollPercent(baseScrollPercent), scrollGrowth(scrollGrowth), 
-	    mapData(ic::Image(levelname)) {
-		load();
-	}
+		const float baseScrollPercent, const float scrollGrowth);
 
 	void load();
 	std::vector<std::shared_ptr<Actor>> loadActors(Scene* scene) const;

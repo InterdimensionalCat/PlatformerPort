@@ -1,5 +1,4 @@
 #pragma once
-#include <array>
 
 enum class TileType {Solid, Air};
 
@@ -7,29 +6,20 @@ class TileBase
 {
 public:
 
-	TileBase() : TileBase(0x54AAF500, TileType::Air, 1, 1) {}
+	TileBase();
 
-	TileBase(const uint32_t id, 
+	TileBase(const uint32_t id,
 		const TileType type,
 		const uint32_t tilesetX,
-		const uint32_t tilesetY) : id(sf::Color(id)), type(type), tilesetX(tilesetX), tilesetY(tilesetY) {
-	}
+		const uint32_t tilesetY);
 
-	const sf::Color& getID() const {
-		return id;
-	}
+	const sf::Color& getID() const;
 
-	const TileType& getType() const {
-		return type;
-	}
+	const TileType& getType() const;
 
-	const uint32_t getTilesetX() const {
-		return tilesetX;
-	}
+	const uint32_t getTilesetX() const;
 
-	const uint32_t getTilesetY() const {
-		return tilesetY;
-	}
+	const uint32_t getTilesetY() const;
 
 private:
 
@@ -44,52 +34,29 @@ private:
 class Tile {
 public:
 
-	Tile() : base(std::make_shared<TileBase>()), pos(sf::Vector2f(0, 0)) {}
+	Tile();
 
-	Tile(std::shared_ptr<TileBase> base, const float posX, const float posY) : 
-		base(base), 
-		pos(sf::Vector2f(posX, posY)), 
-		activeSides({ true, true, true, true }) {}
+	Tile(std::shared_ptr<TileBase> base, const float posX, const float posY);
 
-	bool isLeftActive() const {
-		return activeSides.at(3);
-	}
+	bool isLeftActive() const;
 
-	bool isRightActive() const {
-		return activeSides.at(1);
-	}
+	bool isRightActive() const;
 
-	bool isTopActive() const {
-		return activeSides.at(0);
-	}
+	bool isTopActive() const;
 
-	bool isBotActive() const {
-		return activeSides.at(2);
-	}
+	bool isBotActive() const;
 
-	const sf::Color& getID() const {
-		return base->id;
-	}
+	const sf::Color& getID() const;
 
-	const TileType& getType() const {
-		return base->type;
-	}
+	const TileType& getType() const;
 
-	uint32_t getTilesetX() const {
-		return base->tilesetX;
-	}
+	uint32_t getTilesetX() const;
 
-	uint32_t getTilesetY() const {
-		return base->tilesetY;
-	}
+	uint32_t getTilesetY() const;
 
-	float getPosX() const {
-		return pos.x;
-	}
+	float getPosX() const;
 
-	float getPosY() const {
-		return pos.y;
-	}
+	float getPosY() const;
 
 private:
 

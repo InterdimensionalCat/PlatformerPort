@@ -162,7 +162,6 @@
     <ClCompile Include="AudioRegistry.cpp" />
     <ClCompile Include="Boop.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Component.cpp" />
     <ClCompile Include="EventQueue.cpp" />
     <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Image.cpp" />
@@ -172,9 +171,7 @@
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MovingPlatform.cpp" />
-    <ClCompile Include="Music.cpp" />
     <ClCompile Include="Parallax.cpp" />
-    <ClCompile Include="PhysicsBody.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerGraphics.cpp" />
@@ -197,7 +194,6 @@
     <ClInclude Include="AudioRegistry.h" />
     <ClInclude Include="Boop.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Component.h" />
     <ClInclude Include="EventQueue.h" />
     <ClInclude Include="Goal.h" />
     <ClInclude Include="Image.h" />
@@ -206,9 +202,7 @@
     <ClInclude Include="LevelRegistry.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MovingPlatform.h" />
-    <ClInclude Include="Music.h" />
     <ClInclude Include="Parallax.h" />
-    <ClInclude Include="PhysicsBody.h" />
     <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerGraphics.h" />

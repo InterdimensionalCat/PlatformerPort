@@ -6,6 +6,7 @@
 #include "Actor.h"
 #include "MovingPlatform.h"
 #include "Boop.h"
+#include "PlayerLogic.h"
 
 #pragma warning( push )
 #pragma warning( disable : 4244 )
@@ -74,6 +75,16 @@ void loadLevel3Actors(std::vector<std::shared_ptr<Actor>>& actors, const LevelDa
 }
 
 #pragma warning( pop )
+
+LevelData::LevelData(const std::string& levelname, const std::string& tilesetname, const std::string& parallaxTextureName,
+	const float levelWidth, const float levelHeight,
+	const float baseScrollPercent, const float scrollGrowth)
+	: levelname(levelname), tilesetname(tilesetname), parallaxTextureName(parallaxTextureName),
+	levelWidth(levelWidth), levelHeight(levelHeight),
+	baseScrollPercent(baseScrollPercent), scrollGrowth(scrollGrowth),
+	mapData(ic::Image(levelname)) {
+	load();
+}
 
 void LevelData::load() {
 	auto width = levelWidth;

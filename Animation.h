@@ -1,8 +1,11 @@
 #pragma once
 #pragma once
 
-#include "Window.h"
 #include "Texture.h"
+
+namespace ic {
+	class Window;
+}
 
 //Animation.h
 /*

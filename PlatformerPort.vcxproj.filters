@@ -117,9 +117,6 @@
     <ClCompile Include="Actor.cpp">
       <Filter>Source Files\Actor</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>Source Files\Actor</Filter>
-    </ClCompile>
     <ClCompile Include="EventQueue.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
@@ -134,9 +131,6 @@
     </ClCompile>
     <ClCompile Include="PlayerGraphics.cpp">
       <Filter>Source Files\Actor\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsBody.cpp">
-      <Filter>Source Files\Physics</Filter>
     </ClCompile>
     <ClCompile Include="PhysicsEngine.cpp">
       <Filter>Source Files\Physics</Filter>
@@ -160,9 +154,6 @@
       <Filter>Source Files\Audio</Filter>
     </ClCompile>
     <ClCompile Include="AudioRegistry.cpp">
-      <Filter>Source Files\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="Music.cpp">
       <Filter>Source Files\Audio</Filter>
     </ClCompile>
     <ClCompile Include="Sound.cpp">
@@ -215,9 +206,6 @@
     <ClInclude Include="Actor.h">
       <Filter>Header Files\Actor</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>Header Files\Actor</Filter>
-    </ClInclude>
     <ClInclude Include="EventQueue.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
@@ -232,9 +220,6 @@
     </ClInclude>
     <ClInclude Include="PlayerGraphics.h">
       <Filter>Header Files\Actor\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsBody.h">
-      <Filter>Header Files\Physics</Filter>
     </ClInclude>
     <ClInclude Include="PhysicsEngine.h">
       <Filter>Header Files\Physics</Filter>
@@ -258,9 +243,6 @@
       <Filter>Header Files\Audio</Filter>
     </ClInclude>
     <ClInclude Include="AudioRegistry.h">
-      <Filter>Header Files\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Music.h">
       <Filter>Header Files\Audio</Filter>
     </ClInclude>
     <ClInclude Include="Sound.h">

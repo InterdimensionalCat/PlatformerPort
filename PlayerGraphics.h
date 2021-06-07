@@ -1,7 +1,7 @@
 #pragma once
-#include "LevelData.h"
 #include "Animation.h"
 
+class LevelData;
 class Player;
 enum class ActionState;
 

@@ -1,146 +1,37 @@
 #pragma once
-#include "Tilemap.h"
-#include "LevelRegistry.h"
-#include "TIleRegistry.h"
+
 #include "Window.h"
-#include "Parallax.h"
-#include "Camera.h"
-#include "InputHandle.h"
-#include "PHysicsEngine.h"
-#include "AnimationRegistry.h"
-#include "AudioRegistry.h"
-#include "AudioEngine.h"
+
+class Tilemap;
+class Parallax;
+class Camera;
+class InputHandle;
+class PhysicsEngine;
+class AudioEngine;
+class Actor;
 
 class Scene
 {
 public:
-	Scene() {
-		init();
-		auto& firstLevel = getLevelData(1);
-		tilemap = std::make_shared<Tilemap>(firstLevel);
-		parallaxEngine = std::make_unique<Parallax>(firstLevel);
-		input = std::make_shared<InputHandle>();
+	Scene();
 
-		actors = firstLevel.loadActors(this);
+	~Scene();
 
-		engine = std::make_shared<PhysicsEngine>(firstLevel);
+	void update();
 
-		camera = std::make_unique<Camera>(firstLevel, actors.at(0));
+	void removeActor(Actor* actor);
 
-		audio = std::make_shared<AudioEngine>();
-		audio->playMusic("FlatZone", 10.0f);
-	}
+	void cleanupActors();
 
-	~Scene() {
-		clearAnimRegistry();
-		clearAudioRegistry();
-	}
+	void draw(const float interpol);
 
-	void update() {
-		//window.updateInput();
+	void setChangeLevel();
 
-		if (!input->updateInput(*window.window)) {
-			Settings::setSetting<bool>("running", false);
-		}
-		//player->update();
+	void changeLevel();
 
-		for (auto& actor : actors) {
-			actor->update();
-		}
+	void setResetLevel();
 
-		//auto actors = std::vector<std::shared_ptr<Actor>>{ player };
-
-		engine->update(actors, *tilemap);
-
-		camera->updateWindow(window);
-		parallaxEngine->move(*camera);
-
-		if (input->isPressed(sf::Keyboard::R)) {
-			setResetLevel();
-		}
-
-		if (input->isPressed(sf::Keyboard::Num1)) {
-			setChangeLevel();
-		}
-
-		cleanupActors();
-
-		if (changeLevelFlag) {
-			changeLevel();
-		}
-
-		if (resetLevelFlag) {
-			resetLevel();
-		}
-	}
-
-	void removeActor(Actor* actor) {
-		removeActors.push_back(actor);
-	}
-
-	void cleanupActors() {
-
-		for (auto actor : removeActors) {
-			for (size_t i = 0; i < actors.size(); i++) {
-				if (actors.at(i).get() == actor) {
-					actors.erase(actors.begin() + i);
-					continue;
-				}
-			}
-		}
-
-		removeActors.clear();
-	}
-
-	void draw(const float interpol) {
-
-		window.preRender(interpol);
-
-		parallaxEngine->draw(window);
-		tilemap->draw(window);
-		//player->draw(window);
-		for (const auto& actor : actors) {
-			actor->draw(window);
-		}
-
-		window.postRender();
-	}
-
-	void setChangeLevel() {
-		audio->playSound("PlayerWin", 20.0f);
-		changeLevelFlag = true;
-	}
-
-	void changeLevel() {
-		changeLevelFlag = false;
-
-		if (currentLevel + 1 > numLevels) {
-			Settings::setSetting<bool>("running", false);
-			return;
-		}
-
-		auto& newLevelData = getLevelData(++currentLevel);
-
-		tilemap = std::make_shared<Tilemap>(newLevelData);
-		parallaxEngine = std::make_unique<Parallax>(newLevelData);
-		actors = newLevelData.loadActors(this);
-		camera = std::make_unique<Camera>(newLevelData, actors.at(0));
-	}
-
-	void setResetLevel() {
-		resetLevelFlag = true;
-	}
-
-	void resetLevel() {
-		resetLevelFlag = false;
-
-		auto& newLevelData = getLevelData(currentLevel);
-
-		tilemap = std::make_shared<Tilemap>(newLevelData);
-		parallaxEngine = std::make_unique<Parallax>(newLevelData);
-		actors = newLevelData.loadActors(this);
-		camera = std::make_unique<Camera>(newLevelData, actors.at(0));
-	}
+	void resetLevel();
 
 	std::shared_ptr<AudioEngine> audio;
 
@@ -148,12 +39,7 @@ private:
 
 	friend class LevelData;
 
-	void init() {
-		RegisterTiles();
-		RegisterLevels();
-		RegisterAnimations();
-		RegisterAudio();
-	}
+	void init();
 
 	//tilemap
 	std::shared_ptr<Tilemap> tilemap;

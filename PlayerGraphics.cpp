@@ -2,6 +2,7 @@
 #include "PlayerGraphics.h"
 #include "Player.h"
 #include "AnimationRegistry.h"
+#include "LevelData.h"
 
 PlayerGraphics::PlayerGraphics(const LevelData& data) : anim(getAnimFromName("PlayerIdle")) {}
 

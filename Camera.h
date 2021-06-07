@@ -1,7 +1,12 @@
 #pragma once
-#include "Window.h"
-#include "LevelData.h"
-#include "Actor.h"
+
+
+namespace ic {
+	class Window;
+}
+
+class LevelData;
+class Actor;
 
 enum class CameraMode {
 	Controlled,

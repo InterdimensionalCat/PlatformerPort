@@ -1,9 +1,11 @@
 #pragma once
-#include "Window.h"
-#include "Component.h"
 
+namespace ic {
+	class Window;
+}
 
 class Tile;
+class Scene;
 
 enum class CollisionType {
 	Wall,
@@ -14,69 +16,45 @@ enum class CollisionType {
 class Actor
 {
 public:
-	Actor(const std::string& name) : name(name) {}
+	Actor(const std::string& name);
 	virtual void update() = 0;
 	virtual void draw(ic::Window& window) const = 0;
 	virtual void onCollision(std::shared_ptr<Actor> actor) = 0;
 	virtual void onTileCollision(const Tile& tile, const CollisionType& type) = 0;
 	virtual void setAirborne(const bool airborne) = 0;
-	virtual bool isAirborne() { return false; }
-	virtual bool collidable() { return true; }
-	virtual void despawn() {}
+
+	virtual bool isAirborne();
+	virtual bool collidable();
+	virtual void despawn();
 	std::string name;
 
-	const std::string& getName() const { return name; }
+	const std::string& getName() const;
 
 
-	virtual sf::FloatRect getPosAdjustedAABB() {
-		return sf::FloatRect(hitbox.left + pos.x, hitbox.top + pos.y, hitbox.width, hitbox.height);
-	}
+	virtual sf::FloatRect getPosAdjustedAABB();
 
 
-	void setPosX(const float newx) {
-		pos.x = newx;
-	}
+	void setPosX(const float newx);
 
-	void setPosY(const float newy) {
-		pos.y = newy;
-	}
+	void setPosY(const float newy);
 
-	void setVelX(const float newVelX) {
-		vel.x = newVelX;
-	}
+	void setVelX(const float newVelX);
 
-	void setVelY(const float newVelY) {
-		vel.y = newVelY;
-	}
+	void setVelY(const float newVelY);
 
-	void moveX(const float motionX) {
-		vel.x += motionX;
-	}
+	void moveX(const float motionX);
 
-	void moveY(const float motionY) {
-		vel.y += motionY;
-	}
+	void moveY(const float motionY);
 
-	void move(const float motionX, const float motionY) {
-		moveX(motionX);
-		moveY(motionY);
-	}
+	void move(const float motionX, const float motionY);
 
-	float getPosX() {
-		return pos.x;
-	}
+	float getPosX();
 
-	float getPosY() {
-		return pos.y;
-	}
+	float getPosY();
 
-	float getVelX() {
-		return vel.x;
-	}
+	float getVelX();
 
-	float getVelY() {
-		return vel.y;
-	}
+	float getVelY();
 
 
 	float collisionTolerenceY = 0.0f;

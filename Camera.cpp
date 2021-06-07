@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "Camera.h"
+#include "Window.h"
+#include "LevelData.h"
+#include "Actor.h"
 
 
 Camera::Camera(const LevelData& data, std::shared_ptr<Actor> followTarget) : Camera(data, CameraMode::Follow) {

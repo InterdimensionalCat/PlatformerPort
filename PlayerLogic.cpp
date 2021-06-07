@@ -2,6 +2,9 @@
 #include "PlayerLogic.h"
 #include "InputHandle.h"
 #include "Player.h"
+#include "LevelData.h"
+#include "Scene.h"
+#include "AudioEngine.h"
 
 PlayerLogic::PlayerLogic(const LevelData& data) {
 
