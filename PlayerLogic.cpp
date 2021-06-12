@@ -1,7 +1,10 @@
 #include "stdafx.h"
 #include "PlayerLogic.h"
-#include "InputHandle.h"
+#include "Input.h"
 #include "Player.h"
+#include "LevelData.h"
+#include "Scene.h"
+#include "AudioEngine.h"
 
 PlayerLogic::PlayerLogic(const LevelData& data) {
 
@@ -140,6 +143,10 @@ void PlayerLogic::updateAirborne() {
 
 	//shorten jump
 	shortenJump();
+
+	if (input->isDown(sf::Keyboard::LShift)) {
+		jump(jumpForce);
+	}
 
 	checkSpeedBounds(maxSpeedX, maxSpeedY);
 }

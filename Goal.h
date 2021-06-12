@@ -1,43 +1,36 @@
 #pragma once
 #include "Actor.h"
-#include "LevelData.h"
-#include "Scene.h"
+#include "Texture.h"
+
+class Window;
+
+class LevelData;
+class Scene;
+class Tile;
+enum class CollisionType;
 
 class Goal :
     public Actor
 {
 public:
-    Goal(const LevelData& data, Scene* scene) : Actor("Goal"), scene(scene), tex("EntityGoal") {
-        pos = data.goalPos;
-        hitbox = sf::FloatRect(0, 0, 1.0f, 1.0f);
-        spr.setTexture(tex.getTexture());
-        spr.setPosition(toPixels(pos.x), toPixels(pos.y));
-    }
+    Goal(const LevelData& data, Scene* scene);
 
-    void update() override {
+    void update() override;
 
-    }
+    void draw(Window& window) const override;
 
-    void draw(ic::Window& window) const override {
-        window.window->draw(spr);
-    }
-
-    virtual void setAirborne(const bool airborne) {}
+    virtual void setAirborne(const bool airborne);
 
 
-    void onCollision(std::shared_ptr<Actor> actor) {
-        if (actor->getName() == "Player") {
-            scene->setChangeLevel();
-        }
-    }
+    void onCollision(std::shared_ptr<Actor> actor);
 
-    void onTileCollision(const Tile& tile, const CollisionType& type) override {}
+    void onTileCollision(const Tile& tile, const CollisionType& type) override;
 
-    bool collidable() override { return false; }
+    bool collidable() override;
 
 private:
     Scene* scene;
     sf::Sprite spr;
-    ic::Texture tex;
+    Texture tex;
 };
 

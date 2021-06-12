@@ -1,8 +1,9 @@
 #pragma once
-#include "LevelData.h"
+
+class LevelData;
 
 class Player;
-class InputHandle;
+class KeyboardInput;
 
 enum class MoveResult {
 	Still,
@@ -55,7 +56,8 @@ public:
 	int maxAirborneTimer = 5;
 
 	int groundedAudioTimer = 0;
-	float audioCycleMod = 60.0f;
+	//float audioCycleMod = 60.0f;
+	float audioCycleMod = 30.0f;
 	bool stepFlag = true;
 
 	bool jumpFlag = false;
@@ -65,6 +67,6 @@ public:
 	//sf::Vector2f vel = sf::Vector2f(0, 0);
 
 	Player* player;
-	std::shared_ptr<InputHandle> input;
+	std::shared_ptr<KeyboardInput> input;
 };
 

@@ -13,8 +13,12 @@ public:
 
 		StandardSettings() {
 			setSetting("Title", std::string("PlatformerPort"));
-			setSetting("Width", 1280);
-			setSetting("Height", 960);
+			//setSetting("Width", 1280);
+			//setSetting("Height", 960);
+
+			setSetting("Width", 1920);
+			setSetting("Height", 1080);
+
 			setSetting("targetFPS", 60.0f);
 			setSetting("targetDT", 1.0f / 60.0f);
 			setSetting("debug", false);

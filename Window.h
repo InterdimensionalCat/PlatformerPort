@@ -1,70 +1,32 @@
 #pragma once
 
-namespace ic {
-	class Window
-	{
-	public:
+class WindowEventListener;
 
-		Window() {
+class Window
+{
+public:
 
-			//creates an SFML window using the width, height, and name specified in the game Settings
-			window = std::make_unique<sf::RenderWindow>(
-				sf::VideoMode(Settings::getSetting<int>("Width"), Settings::getSetting<int>("Height")),
-				Settings::getSetting<std::string>("Title")
-				);
+	Window();
 
-			if (Settings::getSetting<bool>("vsync")) {
-				window->setVerticalSyncEnabled(true);
-			}
-			else {
-				window->setFramerateLimit((unsigned int)Settings::getSetting<float>("targetFPS"));
-			}
+	Window(const Window& other) = delete;
+	Window& operator=(const Window& rhs) = delete;
 
-			//causes keypresses to only send one window event
-			window->setKeyRepeatEnabled(false);
-		}
+	~Window();
 
-		~Window() {
-			window->close();
-		}
+	bool updateInput();
 
-		void updateInput() {
-			
-			
-				//poll an event
-				sf::Event event;
-				while (window->pollEvent(event))
-				{
-			
-					if (event.type == sf::Event::Closed) {
-						Settings::setSetting<bool>("running", false);
-					}
-			
-					if (event.type == sf::Event::KeyPressed) {
-						if (event.key.code == sf::Keyboard::Escape) {
-							Settings::setSetting<bool>("running", false);
-						}
-					}
-			
-					if (event.type == sf::Event::MouseButtonPressed) {
-
-					}
-				}
-		}
-
-		void preRender(const float interpol) {
-			this->interpol = interpol;
-			window->clear(sf::Color(255, 255, 255, 255));
-		}
+	void preRender(const float interpol);
 
 
-		void postRender() {
-			window->display();
-		}
+	void postRender();
 
-		float interpol = 0.0f;
-		sf::RenderStates states = sf::RenderStates::Default;
-		std::unique_ptr<sf::RenderWindow> window;
-	};
-}
+	void registerWindowEventListener(std::shared_ptr<WindowEventListener> listener);
+
+	float interpol = 0.0f;
+	sf::RenderStates states = sf::RenderStates::Default;
+	std::unique_ptr<sf::RenderWindow> window;
+
+private:
+	std::vector< std::shared_ptr<WindowEventListener>> listeners;
+};
 

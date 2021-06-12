@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "Camera.h"
+#include "Window.h"
+#include "LevelData.h"
+#include "Actor.h"
 
 
 Camera::Camera(const LevelData& data, std::shared_ptr<Actor> followTarget) : Camera(data, CameraMode::Follow) {
@@ -24,7 +27,7 @@ Camera::Camera(const LevelData& data, const CameraMode& mode) : mode(mode) {
 	boundsInPixels = sf::Vector2f(toPixels(data.levelWidth), toPixels(data.levelHeight));
 }
 
-void Camera::updateWindow(ic::Window& window) {
+void Camera::updateWindow(Window& window) {
 	switch (mode) {
 	case CameraMode::Controlled:
 		controlled(window);
@@ -38,13 +41,13 @@ void Camera::updateWindow(ic::Window& window) {
 	}
 }
 
-void Camera::reset(ic::Window& window, const sf::Vector2f pixelResetPos) {
+void Camera::reset(Window& window, const sf::Vector2f pixelResetPos) {
 	auto resetView = window.window->getDefaultView();
 	resetView.move(pixelResetPos);
 	window.window->setView(resetView);
 }
 
-void Camera::changeViewMode(const CameraMode& newmode, sf::Vector2f newpos, ic::Window& window) {
+void Camera::changeViewMode(const CameraMode& newmode, sf::Vector2f newpos, Window& window) {
 	reset(window, newpos);
 	mode = newmode;
 }
@@ -68,7 +71,7 @@ void Camera::checkBounds() {
 
 }
 
-void Camera::controlled(ic::Window& window) {
+void Camera::controlled(Window& window) {
 
 	window.window->setView(window.window->getDefaultView());
 	auto newview = window.window->getView();
@@ -96,7 +99,7 @@ void Camera::controlled(ic::Window& window) {
 	window.window->setView(newview);
 }
 
-void Camera::follow(ic::Window& window) {
+void Camera::follow(Window& window) {
 
 	window.window->setView(window.window->getDefaultView());
 	auto newview = window.window->getView();
@@ -157,6 +160,6 @@ void Camera::follow(ic::Window& window) {
 	window.window->setView(newview);
 }
 
-void Camera::stationary(ic::Window& window) {
+void Camera::stationary(Window& window) {
 
 }
