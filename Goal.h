@@ -2,9 +2,7 @@
 #include "Actor.h"
 #include "Texture.h"
 
-namespace ic {
-    class Window;
-}
+class Window;
 
 class LevelData;
 class Scene;
@@ -19,7 +17,7 @@ public:
 
     void update() override;
 
-    void draw(ic::Window& window) const override;
+    void draw(Window& window) const override;
 
     virtual void setAirborne(const bool airborne);
 
@@ -33,6 +31,6 @@ public:
 private:
     Scene* scene;
     sf::Sprite spr;
-    ic::Texture tex;
+    Texture tex;
 };
 

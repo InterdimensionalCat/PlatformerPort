@@ -2,9 +2,7 @@
 #include "Actor.h"
 #include "PlayerGraphics.h"
 
-namespace ic {
-	class Window;
-}
+class Window;
 
 class LevelData;
 class PlayerGraphics;
@@ -26,7 +24,7 @@ public:
 
 	void update() override;
 
-	void draw(ic::Window& window) const override;
+	void draw(Window& window) const override;
 
 	void changeState(const ActionState& newstate);
 

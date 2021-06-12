@@ -14,13 +14,14 @@ Parallax::Parallax(const LevelData& level) {
 	while (fs::exists(filepath / (level.parallaxTextureName + "_" + std::to_string(bgCounter) + ".png"))) {
 		layers.push_back(ParallaxLayer(
 			level.parallaxTextureName + "_" + std::to_string(bgCounter)
-			, level.baseScrollPercent + (float)bgCounter * level.scrollGrowth));
+			, level.baseScrollPercent + (float)bgCounter * level.scrollGrowth, 
+			level.scrollY + (float)bgCounter * level.yGrowth));
 		bgCounter++;
 	}
 }
 
 Parallax::ParallaxLayer::ParallaxLayer(const std::string& texture, const float repetitionPercentX, const float repetitionPercentY) :
-	tex(ic::Texture(texture)), repetitionPercentX(repetitionPercentX), repetitionPercentY(repetitionPercentY) {
+	tex(Texture(texture)), repetitionPercentX(repetitionPercentX), repetitionPercentY(repetitionPercentY) {
 	tex.getTexture().setRepeated(true);
 	sprite.setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(Settings::getSetting<int>("Width"), Settings::getSetting<int>("Height"))));
 	sprite.setTexture(tex.getTexture());
@@ -49,7 +50,7 @@ void Parallax::ParallaxLayer::move(Camera& camera, const float percentX, const f
 	sprite.setPosition(sf::Vector2f(0, 0));
 	sprite.move(camera.scrollpos);
 }
-void Parallax::ParallaxLayer::draw(ic::Window& window) const {
+void Parallax::ParallaxLayer::draw(Window& window) const {
 	window.window->draw(sprite, window.states);
 }
 
@@ -75,7 +76,7 @@ void Parallax::move(Camera& camera) {
 	//}
 }
 
-void Parallax::draw(ic::Window& window) const {
+void Parallax::draw(Window& window) const {
 	for (auto& layer : layers) {
 		layer.draw(window);
 	}

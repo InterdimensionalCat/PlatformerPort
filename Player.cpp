@@ -30,7 +30,7 @@ void Player::update() {
 	graphics->update();
 }
 
-void Player::draw(ic::Window& window) const {
+void Player::draw(Window& window) const {
 	graphics->draw(window);
 }
 

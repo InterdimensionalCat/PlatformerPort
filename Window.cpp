@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Window.h"
-
-using namespace ic;
+#include "WindowEventListener.h"
 
 Window::Window() {
 
@@ -23,10 +22,11 @@ Window::Window() {
 }
 
 Window::~Window() {
+	listeners.clear();
 	window->close();
 }
 
-void Window::updateInput() {
+bool Window::updateInput() {
 
 
 	//poll an event
@@ -34,20 +34,30 @@ void Window::updateInput() {
 	while (window->pollEvent(event))
 	{
 
+		for (auto& listener : listeners) {
+			if (listener->handleWindowEvent(event)) {
+				continue;
+			}
+		}
+
 		if (event.type == sf::Event::Closed) {
-			Settings::setSetting<bool>("running", false);
+			//Settings::setSetting<bool>("running", false);
+			return false;
 		}
 
 		if (event.type == sf::Event::KeyPressed) {
 			if (event.key.code == sf::Keyboard::Escape) {
-				Settings::setSetting<bool>("running", false);
+				//Settings::setSetting<bool>("running", false);
+				return false;
 			}
 		}
 
-		if (event.type == sf::Event::MouseButtonPressed) {
-
+		if (event.key.code == sf::Keyboard::I) {
+			Settings::setSetting<bool>("debug", !Settings::getSetting<bool>("debug"));
 		}
 	}
+
+	return true;
 }
 
 void Window::preRender(const float interpol) {
@@ -58,4 +68,8 @@ void Window::preRender(const float interpol) {
 
 void Window::postRender() {
 	window->display();
+}
+
+void Window::registerWindowEventListener(std::shared_ptr<WindowEventListener> listener) {
+	listeners.push_back(listener);
 }

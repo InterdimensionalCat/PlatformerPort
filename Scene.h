@@ -5,7 +5,7 @@
 class Tilemap;
 class Parallax;
 class Camera;
-class InputHandle;
+class KeyboardInput;
 class PhysicsEngine;
 class AudioEngine;
 class Actor;
@@ -50,15 +50,15 @@ private:
 	//background layers
 	std::unique_ptr<Parallax> parallaxEngine;
 
-	std::shared_ptr<InputHandle> input;
-
 	std::shared_ptr<PhysicsEngine> engine;
 
 	std::vector<std::shared_ptr<Actor>> actors;
 
 	std::vector<Actor*> removeActors;
 
-	ic::Window window;
+	std::shared_ptr<Window> window;
+
+	std::shared_ptr<KeyboardInput> input;
 
 	bool changeLevelFlag = false;
 	bool resetLevelFlag = false;

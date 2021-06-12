@@ -1,8 +1,6 @@
 #pragma once
 
-namespace ic {
-	class Window;
-}
+class Window;
 
 class Tile;
 class Scene;
@@ -18,7 +16,7 @@ class Actor
 public:
 	Actor(const std::string& name);
 	virtual void update() = 0;
-	virtual void draw(ic::Window& window) const = 0;
+	virtual void draw(Window& window) const = 0;
 	virtual void onCollision(std::shared_ptr<Actor> actor) = 0;
 	virtual void onTileCollision(const Tile& tile, const CollisionType& type) = 0;
 	virtual void setAirborne(const bool airborne) = 0;

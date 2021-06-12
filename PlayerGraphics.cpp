@@ -50,7 +50,7 @@ void PlayerGraphics::update() {
 }
 
 
-void PlayerGraphics::draw(ic::Window& window) {
+void PlayerGraphics::draw(Window& window) {
 
     anim.draw(window);
 

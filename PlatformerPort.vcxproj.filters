@@ -67,6 +67,12 @@
     <Filter Include="Source Files\Audio">
       <UniqueIdentifier>{9b75b2ad-2fca-418f-b132-c6e24c30f6dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Window">
+      <UniqueIdentifier>{a318bf05-49e5-474c-a5ae-a04868cffb81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Window">
+      <UniqueIdentifier>{5f3b4691-118f-44da-9e6e-52e7d159221c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -105,9 +111,6 @@
     <ClCompile Include="LevelRegistry.cpp">
       <Filter>Source Files\Level</Filter>
     </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Parallax.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
@@ -120,7 +123,7 @@
     <ClCompile Include="EventQueue.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
-    <ClCompile Include="InputHandle.cpp">
+    <ClCompile Include="Input.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
@@ -159,6 +162,15 @@
     <ClCompile Include="Sound.cpp">
       <Filter>Source Files\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="WindowEventListener.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorEvent.cpp">
+      <Filter>Source Files\Actor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -194,9 +206,6 @@
     <ClInclude Include="LevelRegistry.h">
       <Filter>Header Files\Level</Filter>
     </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Parallax.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
@@ -209,7 +218,7 @@
     <ClInclude Include="EventQueue.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
-    <ClInclude Include="InputHandle.h">
+    <ClInclude Include="Input.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
@@ -247,6 +256,15 @@
     </ClInclude>
     <ClInclude Include="Sound.h">
       <Filter>Header Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowEventListener.h">
+      <Filter>Header Files\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Header Files\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorEvent.h">
+      <Filter>Header Files\Actor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

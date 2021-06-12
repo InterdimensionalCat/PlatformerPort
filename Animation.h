@@ -3,9 +3,8 @@
 
 #include "Texture.h"
 
-namespace ic {
-	class Window;
-}
+
+class Window;
 
 //Animation.h
 /*
@@ -22,9 +21,6 @@ namespace ic {
   time for a single animation, and if it ever becomes a problem I can probably rewrite it so that animations can be daisy chained
   together like a linked list
 */
-
-class GameTransform;
-class Animator;
 
 class Animation
 {
@@ -43,7 +39,7 @@ public:
 	//top left corner
 	void setPositition(const sf::Vector2f& posInPixels);
 
-	void draw(ic::Window& window);
+	void draw(Window& window);
 	void advanceFrame();
 
 	std::string getName() const { return name; };
@@ -53,7 +49,7 @@ public:
 
 	sf::Sprite frame;
 
-	ic::Texture tex;
+	Texture tex;
 	int framerate;
 	int frameNum;
 	int numFrames;

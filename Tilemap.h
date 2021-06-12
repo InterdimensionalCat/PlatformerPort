@@ -3,9 +3,7 @@
 #include "Texture.h"
 #include "LevelData.h"
 
-namespace ic {
-	class Window;
-}
+class Window;
 
 class Tilemap
 {
@@ -15,7 +13,7 @@ public:
 	float getWidth() const;
 	float getHeight() const;
 
-	void draw(ic::Window& window) const;
+	void draw(Window& window) const;
 
 	std::vector<Tile> getTilesWithinArea(const sf::FloatRect& hitbox);
 
@@ -27,7 +25,7 @@ private:
 	//x, y order
 	std::vector<std::vector<Tile>> tiles;
 
-	std::unique_ptr<ic::Texture> tileset;
+	std::unique_ptr<Texture> tileset;
 
 	std::unique_ptr<sf::RenderTexture> rendertex;
 

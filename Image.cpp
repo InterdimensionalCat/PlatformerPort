@@ -2,9 +2,7 @@
 #include "Image.h"
 #include "Texture.h"
 
-using namespace ic;
-
-Image::Image(const ic::Texture& tex) : image(std::make_shared<sf::Image>(tex.getTexture().copyToImage())) {
+Image::Image(const Texture& tex) : image(std::make_shared<sf::Image>(tex.getTexture().copyToImage())) {
 
 }
 

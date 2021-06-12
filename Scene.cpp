@@ -6,7 +6,7 @@
 #include "Window.h"
 #include "Parallax.h"
 #include "Camera.h"
-#include "InputHandle.h"
+#include "Input.h"
 #include "PhysicsEngine.h"
 #include "AnimationRegistry.h"
 #include "AudioRegistry.h"
@@ -16,9 +16,12 @@
 Scene::Scene() {
 	init();
 	auto& firstLevel = getLevelData(1);
+	window = std::make_shared<Window>();
 	tilemap = std::make_shared<Tilemap>(firstLevel);
 	parallaxEngine = std::make_unique<Parallax>(firstLevel);
-	input = std::make_shared<InputHandle>();
+	//input = std::make_shared<KeyboardInput>(*window);
+	input = std::make_shared<KeyboardInput>();
+	window->registerWindowEventListener(input);
 
 	actors = firstLevel.loadActors(this);
 
@@ -38,20 +41,24 @@ Scene::~Scene() {
 void Scene::update() {
 	//window.updateInput();
 
-	if (!input->updateInput(*window.window)) {
+	input->update(*window);
+
+	if (!window->updateInput()) {
 		Settings::setSetting<bool>("running", false);
+		return;
 	}
-	//player->update();
 
 	for (auto& actor : actors) {
 		actor->update();
 	}
 
+
+
 	//auto actors = std::vector<std::shared_ptr<Actor>>{ player };
 
 	engine->update(actors, *tilemap);
 
-	camera->updateWindow(window);
+	camera->updateWindow(*window);
 	parallaxEngine->move(*camera);
 
 	if (input->isPressed(sf::Keyboard::R)) {
@@ -93,16 +100,16 @@ void Scene::cleanupActors() {
 
 void Scene::draw(const float interpol) {
 
-	window.preRender(interpol);
+	window->preRender(interpol);
 
-	parallaxEngine->draw(window);
-	tilemap->draw(window);
+	parallaxEngine->draw(*window);
+	tilemap->draw(*window);
 	//player->draw(window);
 	for (const auto& actor : actors) {
-		actor->draw(window);
+		actor->draw(*window);
 	}
 
-	window.postRender();
+	window->postRender();
 }
 
 void Scene::setChangeLevel() {

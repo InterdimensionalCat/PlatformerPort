@@ -5,7 +5,7 @@
 #include "Window.h"
 
 MovingPlatform::MovingPlatform(const LevelData& data, const float spawnX, const float spawnY, const float range, const PlatformType type)
-	: Actor("MovingPlatform"), range(range), type(type), tex("movingTile") {
+	: Actor("MovingPlatform"), range(range), type(type), tex("movingTileAstro") {
 
 	scene = data.scene;
 
@@ -58,7 +58,7 @@ void MovingPlatform::update() {
 	spr.setPosition(toPixels(pos.x), toPixels(pos.y));
 }
 
-void MovingPlatform::draw(ic::Window& window) const {
+void MovingPlatform::draw(Window& window) const {
 	window.window->draw(spr);
 }
 

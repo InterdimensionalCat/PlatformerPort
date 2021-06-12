@@ -29,8 +29,6 @@ sf::SoundSource::Status AudioEngine::getStatusOfSound(const std::string& soundNa
 
 void AudioEngine::playSound(const std::string& soundName, const float volume, const float pitch, const bool repeat) {
 	currentSounds.emplace(soundName, Sound(soundName));
-	//currentSounds.emplace_back(Sound(soundName));
-	//auto& soundToPlay = currentSounds.at(currentSounds.size() - 1);
 	Sound& soundToPlay = currentSounds.find(soundName)->second;
 	soundToPlay.setVolume(volume);
 	soundToPlay.setPitch(pitch);

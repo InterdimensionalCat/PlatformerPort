@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "Texture.h"
 
-using namespace ic;
-
 Texture::Texture(const std::string& filename) : filename(filename) {
 
 	//initialize the sf::Texture file

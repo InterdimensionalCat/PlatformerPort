@@ -16,7 +16,7 @@ void Goal::update() {
 
 }
 
-void Goal::draw(ic::Window& window) const {
+void Goal::draw(Window& window) const {
     window.window->draw(spr);
 }
 

@@ -4,10 +4,7 @@
 class LevelData;
 class Player;
 enum class ActionState;
-
-namespace ic {
-    class Window;
-}
+class Window;
 
 class PlayerGraphics
 {
@@ -17,7 +14,7 @@ public:
     void changeState(const ActionState& state);
 
     void update();
-    void draw(ic::Window& window);
+    void draw(Window& window);
     Player* player;
 
     Animation anim;

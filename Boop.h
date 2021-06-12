@@ -11,7 +11,7 @@ public:
 	Boop(const LevelData& data, const float spawnX, const float spawnY, const float speedX, const float displacement, const bool jumper, const float grv = toMeters(0.5));
 
 	void update();
-	void draw(ic::Window& window) const;
+	void draw(Window& window) const;
 	void onCollision(std::shared_ptr<Actor> actor) override;
 
 	void despawn() override;

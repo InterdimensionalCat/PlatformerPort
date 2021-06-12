@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "PlayerLogic.h"
-#include "InputHandle.h"
+#include "Input.h"
 #include "Player.h"
 #include "LevelData.h"
 #include "Scene.h"
@@ -143,6 +143,10 @@ void PlayerLogic::updateAirborne() {
 
 	//shorten jump
 	shortenJump();
+
+	if (input->isDown(sf::Keyboard::LShift)) {
+		jump(jumpForce);
+	}
 
 	checkSpeedBounds(maxSpeedX, maxSpeedY);
 }

@@ -4,9 +4,6 @@
 
 class Scene;
 class LevelData;
-//namespace ic {
-//	Window;
-//}
 
 enum class PlatformType {
 	Vertical,
@@ -29,7 +26,7 @@ public:
 
 	void update() override;
 
-	void draw(ic::Window& window) const override;
+	void draw(Window& window) const override;
 
 	void moveHorz();
 
@@ -45,7 +42,7 @@ public:
 
 	bool collidable() override;
 
-	ic::Texture tex;
+	Texture tex;
 	sf::Sprite spr;
 
 	sf::Vector2f spawnpos;

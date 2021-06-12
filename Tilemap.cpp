@@ -32,7 +32,7 @@ void Tilemap::loadMap(const LevelData& map) {
 		}
 	}
 
-	tileset = std::make_unique<ic::Texture>(map.tilesetname);
+	tileset = std::make_unique<Texture>(map.tilesetname);
 
 #pragma warning( push )
 #pragma warning( disable : 4244 )
@@ -91,7 +91,7 @@ float Tilemap::getHeight() const {
 	return height;
 }
 
-void Tilemap::draw(ic::Window& window) const
+void Tilemap::draw(Window& window) const
 {
     // apply the transform
     //window.states.transform *= getTransform();

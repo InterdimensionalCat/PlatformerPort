@@ -16,6 +16,8 @@
 #include <map>
 #include <vector>
 #include <array>
+#include <functional>
+#include <queue>
 
 namespace fs = std::filesystem;
 

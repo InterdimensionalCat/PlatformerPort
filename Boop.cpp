@@ -29,7 +29,7 @@ void Boop::update() {
 
 	updateAnim();
 }
-void Boop::draw(ic::Window& window) const {
+void Boop::draw(Window& window) const {
 	anim.draw(window);
 }
 void Boop::onCollision(std::shared_ptr<Actor> actor) {
