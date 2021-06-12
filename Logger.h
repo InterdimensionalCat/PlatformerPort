@@ -7,7 +7,9 @@ public:
     public:
         template<typename T>
         const StandardLogger& operator<<(const T& message) const {
+#ifdef _DEBUG
             std::cout << message;
+#endif
             return *this;
         }
     };
