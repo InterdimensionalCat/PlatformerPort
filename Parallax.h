@@ -3,12 +3,11 @@
 
 class Window;
 class Camera;
-class LevelData;
 
 class Parallax
 {
 public:
-	Parallax(const LevelData& level);
+	Parallax(const std::string& basename, const float baseX, const float baseY, const float growthX, const float growthY);
 
 	class ParallaxLayer {
 	public:

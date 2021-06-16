@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Window.h"
+#include "MapParser.h"
 
 class Tilemap;
 class Parallax;
@@ -38,8 +39,12 @@ public:
 private:
 
 	friend class LevelData;
+	friend class MapParser;
+	friend class Player;
 
 	void init();
+
+	MapParser parser;
 
 	//tilemap
 	std::shared_ptr<Tilemap> tilemap;

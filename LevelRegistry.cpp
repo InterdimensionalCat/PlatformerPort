@@ -16,7 +16,9 @@ void RegisterLevels() {
 	//registerLevel(LevelData("level_2", "SpriteMap1", "background", 100, 15, 2.1f, 0.07f));
 	//registerLevel(LevelData("level_3", "SpriteMap1", "background", 20, 200, 1.0f, 0.02f));
 
-	registerLevel(LevelData("level_F1", "astronautTiles", "level1bg", 30, 25, 1.0f, 0.02f));
+	registerLevel(LevelData("level_F1", "astronautTiles", "level1bg", 40, 40, 1.1f, 0.05f, 1.3f, 0.10f));
+
+	//registerLevel(LevelData("level_F1", "astronautTiles", "level1bg", 30, 25, 1.0f, 0.02f));
 	registerLevel(LevelData("level_F2", "astronautTiles", "level1bg", 100, 20, 2.1f, 0.03f));
 	registerLevel(LevelData("level_F3", "astronautTiles", "level1bg", 30, 200, 1.0f, 0.02f, 2.1f, 0.5f));
 }

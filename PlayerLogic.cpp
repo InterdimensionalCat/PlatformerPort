@@ -6,7 +6,7 @@
 #include "Scene.h"
 #include "AudioEngine.h"
 
-PlayerLogic::PlayerLogic(const LevelData& data) {
+PlayerLogic::PlayerLogic(const ActorData& data) {
 
 }
 

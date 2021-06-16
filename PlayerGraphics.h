@@ -1,15 +1,15 @@
 #pragma once
 #include "Animation.h"
 
-class LevelData;
 class Player;
 enum class ActionState;
 class Window;
+class ActorData;
 
 class PlayerGraphics
 {
 public:
-    PlayerGraphics(const LevelData& data);
+    PlayerGraphics(const ActorData& data);
 
     void changeState(const ActionState& state);
 

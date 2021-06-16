@@ -18,9 +18,9 @@ class Camera
 {
 public:
 
-	Camera(const LevelData& data, std::shared_ptr<Actor> followTarget);
+	Camera(const float width, const float height, std::shared_ptr<Actor> followTarget);
 
-	Camera(const LevelData& data, const CameraMode& mode = CameraMode::Controlled);
+	Camera(const float width, const float height, const CameraMode& mode = CameraMode::Controlled);
 	void updateWindow(Window& window);
 
 	void reset(Window& window, const sf::Vector2f pixelResetPos = sf::Vector2f(0, 0));

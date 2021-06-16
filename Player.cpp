@@ -5,8 +5,9 @@
 #include "PlayerGraphics.h"
 #include "Scene.h"
 #include "AudioEngine.h"
+#include "ActorData.h"
 
-Player::Player(const LevelData& data) : Actor("Player"),
+Player::Player(const ActorData& data) : Actor("Player"),
 graphics(std::make_unique<PlayerGraphics>(data)),
 logic(std::make_unique<PlayerLogic>(data)) {
 
@@ -14,9 +15,12 @@ logic(std::make_unique<PlayerLogic>(data)) {
 
 	graphics->player = this;
 	logic->player = this;
+	logic->input = scene->input;
 	hitbox = sf::FloatRect(0, 0, toMeters(64 - 25), toMeters(64 - 10));
 	//pos = sf::Vector2f(0, 0);
-	pos = data.playerSpawnPos;
+	pos = sf::Vector2f(toMeters(data.findKey<float>("x")), toMeters(data.findKey<float>("y")));
+	pos.y -= 2.0f;
+	//pos.y = 0.0f;
 	vel = sf::Vector2f(0, 0);
 }
 

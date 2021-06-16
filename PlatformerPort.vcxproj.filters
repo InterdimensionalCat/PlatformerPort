@@ -73,6 +73,12 @@
     <Filter Include="Source Files\Window">
       <UniqueIdentifier>{5f3b4691-118f-44da-9e6e-52e7d159221c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Tileson">
+      <UniqueIdentifier>{7c91dd07-caf9-4fbc-9d8a-0e0c1db5c0fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Nlohmann">
+      <UniqueIdentifier>{26d44750-32db-4c29-a8b0-6e92079ac80b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -171,6 +177,12 @@
     <ClCompile Include="ActorEvent.cpp">
       <Filter>Source Files\Actor</Filter>
     </ClCompile>
+    <ClCompile Include="MapParser.cpp">
+      <Filter>Source Files\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorData.cpp">
+      <Filter>Source Files\Actor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -264,6 +276,18 @@
       <Filter>Header Files\Window</Filter>
     </ClInclude>
     <ClInclude Include="ActorEvent.h">
+      <Filter>Header Files\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="tileson.hpp">
+      <Filter>Header Files\Tileson</Filter>
+    </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>Header Files\Nlohmann</Filter>
+    </ClInclude>
+    <ClInclude Include="MapParser.h">
+      <Filter>Header Files\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorData.h">
       <Filter>Header Files\Actor</Filter>
     </ClInclude>
   </ItemGroup>

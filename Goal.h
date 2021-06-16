@@ -4,7 +4,7 @@
 
 class Window;
 
-class LevelData;
+class ActorData;
 class Scene;
 class Tile;
 enum class CollisionType;
@@ -13,7 +13,7 @@ class Goal :
     public Actor
 {
 public:
-    Goal(const LevelData& data, Scene* scene);
+    Goal(const ActorData& data);
 
     void update() override;
 

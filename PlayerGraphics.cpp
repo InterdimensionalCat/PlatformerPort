@@ -4,7 +4,7 @@
 #include "AnimationRegistry.h"
 #include "LevelData.h"
 
-PlayerGraphics::PlayerGraphics(const LevelData& data) : anim(getAnimFromName("PlayerIdle")) {}
+PlayerGraphics::PlayerGraphics(const ActorData& data) : anim(getAnimFromName("PlayerIdle")) {}
 
 void PlayerGraphics::changeState(const ActionState& state) {
 

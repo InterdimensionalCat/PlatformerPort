@@ -4,10 +4,29 @@
 #include "AnimationRegistry.h"
 #include "Scene.h"
 #include "AudioEngine.h"
+#include "ActorData.h"
 
 
-Boop::Boop(const LevelData& data, const float spawnX, const float spawnY, const float speedX, const float displacement, const bool jumper, const float grv)
-	: Actor("Boop"), spawnPointX(spawnX), speedX(speedX), displacement(displacement), jumper(jumper), anim(getAnimFromName("BoopAnim")), grv(grv) {
+Boop::Boop(const ActorData& data)
+	: Actor("Boop"), anim(getAnimFromName("BoopAnim")) {
+	auto spawnX = toMeters(data.findKey<float>("x"));
+	auto spawnY = toMeters(data.findKey<float>("y")) - 1.0f;
+
+	auto DisplacementLeft = toMeters(data.findKey<float>("DisplacementLeft"));
+	auto DisplacementRight = toMeters(data.findKey<float>("DisplacementRight"));
+
+	grv = toMeters(data.findKey<float>("gravity"));
+
+	jumper = data.findKey<bool>("jumper");
+
+	speedX = toMeters(data.findKey<float>("speed"));
+
+	scene = data.scene;
+
+	auto diff = DisplacementRight - DisplacementLeft;
+
+	spawnPointX = spawnX + diff / 2.0f;
+	displacement = (DisplacementRight + DisplacementLeft) / 2.0f;
 	pos = sf::Vector2f(spawnX, spawnY);
 	hitbox = sf::FloatRect(0, 0, 1.0f, 1.0f);
 	scene = data.scene;

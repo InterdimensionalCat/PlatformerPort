@@ -1,21 +1,20 @@
 #include "stdafx.h"
 #include "Parallax.h"
 #include "Window.h"
-#include "LevelData.h"
 #include "Camera.h"
 
 
-Parallax::Parallax(const LevelData& level) {
+Parallax::Parallax(const std::string& basename, const float baseX, const float baseY, const float growthX, const float growthY) {
 	int bgCounter = 1;
 	fs::path filepath(fs::current_path());
 	filepath /= "resources";
 	filepath /= "textures";
 
-	while (fs::exists(filepath / (level.parallaxTextureName + "_" + std::to_string(bgCounter) + ".png"))) {
+	while (fs::exists(filepath / (basename + "_" + std::to_string(bgCounter) + ".png"))) {
 		layers.push_back(ParallaxLayer(
-			level.parallaxTextureName + "_" + std::to_string(bgCounter)
-			, level.baseScrollPercent + (float)bgCounter * level.scrollGrowth, 
-			level.scrollY + (float)bgCounter * level.yGrowth));
+			basename + "_" + std::to_string(bgCounter)
+			, baseX + (float)bgCounter * growthX, 
+			baseY + (float)bgCounter * growthY));
 		bgCounter++;
 	}
 }

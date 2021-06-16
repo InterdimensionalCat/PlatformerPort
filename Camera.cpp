@@ -5,7 +5,7 @@
 #include "Actor.h"
 
 
-Camera::Camera(const LevelData& data, std::shared_ptr<Actor> followTarget) : Camera(data, CameraMode::Follow) {
+Camera::Camera(const float width, const float height, std::shared_ptr<Actor> followTarget) : Camera(width, height, CameraMode::Follow) {
 	Camera::followTarget = followTarget;
 
 	auto targetHitbox = followTarget->getPosAdjustedAABB();
@@ -23,8 +23,8 @@ Camera::Camera(const LevelData& data, std::shared_ptr<Actor> followTarget) : Cam
 	checkBounds();
 }
 
-Camera::Camera(const LevelData& data, const CameraMode& mode) : mode(mode) {
-	boundsInPixels = sf::Vector2f(toPixels(data.levelWidth), toPixels(data.levelHeight));
+Camera::Camera(const float width, const float height, const CameraMode& mode) : mode(mode) {
+	boundsInPixels = sf::Vector2f(width, height);
 }
 
 void Camera::updateWindow(Window& window) {

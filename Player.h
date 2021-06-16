@@ -4,7 +4,7 @@
 
 class Window;
 
-class LevelData;
+class ActorData;
 class PlayerGraphics;
 class PlayerLogic;
 
@@ -18,7 +18,7 @@ enum class ActionState {
 class Player : public Actor
 {
 public:
-	Player(const LevelData& data);
+	Player(const ActorData& data);
 
 	void despawn() override;
 

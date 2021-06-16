@@ -2,13 +2,13 @@
 #include "Actor.h"
 #include "Animation.h"
 
-class LevelData;
+class ActorData;
 
 class Boop :
 	public Actor
 {
 public:
-	Boop(const LevelData& data, const float spawnX, const float spawnY, const float speedX, const float displacement, const bool jumper, const float grv = toMeters(0.5));
+	Boop(const ActorData& data);
 
 	void update();
 	void draw(Window& window) const;

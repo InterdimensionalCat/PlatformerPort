@@ -127,7 +127,7 @@
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\SFML\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;opengl32.lib;freetype.lib;sfml-window-s-d.lib;winmm.lib;gdi32.lib;sfml-audio-s-d.lib;openal32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;sfml-network-s-d.lib;ws2_32.lib;sfml-system-s-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -158,6 +158,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="ActorData.cpp" />
     <ClCompile Include="ActorEvent.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AnimationRegistry.cpp" />
@@ -173,6 +174,7 @@
     <ClCompile Include="LevelRegistry.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MapParser.cpp" />
     <ClCompile Include="MovingPlatform.cpp" />
     <ClCompile Include="Parallax.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
@@ -195,6 +197,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="ActorData.h" />
     <ClInclude Include="ActorEvent.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AnimationRegistry.h" />
@@ -206,9 +209,11 @@
     <ClInclude Include="Goal.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="LevelData.h" />
     <ClInclude Include="LevelRegistry.h" />
     <ClInclude Include="Logger.h" />
+    <ClInclude Include="MapParser.h" />
     <ClInclude Include="MovingPlatform.h" />
     <ClInclude Include="Parallax.h" />
     <ClInclude Include="PhysicsEngine.h" />
@@ -223,6 +228,7 @@
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Tilemap.h" />
     <ClInclude Include="TileRegistry.h" />
+    <ClInclude Include="tileson.hpp" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowEventListener.h" />
   </ItemGroup>

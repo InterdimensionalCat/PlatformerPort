@@ -3,10 +3,11 @@
 #include "LevelData.h"
 #include "Scene.h"
 #include "Window.h"
+#include "ActorData.h"
 
 
-Goal::Goal(const LevelData& data, Scene* scene) : Actor("Goal"), scene(scene), tex("EntityGoal") {
-    pos = data.goalPos;
+Goal::Goal(const ActorData& data) : Actor("Goal"), scene(data.scene), tex("EntityGoal") {
+    pos = sf::Vector2f(toMeters(data.findKey<float>("x")), toMeters(data.findKey<float>("y")) - 1.0f);
     hitbox = sf::FloatRect(0, 0, 1.0f, 1.0f);
     spr.setTexture(tex.getTexture());
     spr.setPosition(toPixels(pos.x), toPixels(pos.y));

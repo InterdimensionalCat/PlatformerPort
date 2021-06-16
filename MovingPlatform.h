@@ -3,7 +3,7 @@
 #include "Texture.h"
 
 class Scene;
-class LevelData;
+class ActorData;
 
 enum class PlatformType {
 	Vertical,
@@ -16,7 +16,7 @@ class MovingPlatform :
 {
 public:
 
-	MovingPlatform(const LevelData& data, const float spawnX, const float spawnY, const float range, const PlatformType type);
+	MovingPlatform(const ActorData& data);
 
 	sf::FloatRect getPosAdjustedAABB() override;
 

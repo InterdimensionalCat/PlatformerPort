@@ -3,12 +3,15 @@
 #include "Texture.h"
 #include "LevelData.h"
 
+
 class Window;
 
 class Tilemap
 {
 public:
-	Tilemap(const LevelData& firstMap);
+	//Tilemap(const LevelData& firstMap);
+	Tilemap();
+	void loadMap(const tson::Map& map, const std::map<std::tuple<int, int>, tson::Tile*>& tiledata);
 	void loadMap(const LevelData& map);
 	float getWidth() const;
 	float getHeight() const;
@@ -31,7 +34,7 @@ private:
 
 	sf::VertexArray vertices;
 
-	LevelData currentMap;
+	//LevelData currentMap;
 	float width = 0;
 	float height = 0;
 };

@@ -4,6 +4,7 @@ class LevelData;
 
 class Player;
 class KeyboardInput;
+class ActorData;
 
 enum class MoveResult {
 	Still,
@@ -14,7 +15,7 @@ enum class MoveResult {
 class PlayerLogic
 {
 public:
-	PlayerLogic(const LevelData& data);
+	PlayerLogic(const ActorData& data);
 	void update();
 	void updateStill();
 	void updateRun();

@@ -3,25 +3,63 @@
 #include "LevelData.h"
 #include "Scene.h"
 #include "Window.h"
+#include "ActorData.h"
 
-MovingPlatform::MovingPlatform(const LevelData& data, const float spawnX, const float spawnY, const float range, const PlatformType type)
-	: Actor("MovingPlatform"), range(range), type(type), tex("movingTileAstro") {
+MovingPlatform::MovingPlatform(const ActorData& data)
+	: Actor("MovingPlatform"), tex("movingTileAstro") {
 
 	scene = data.scene;
 
+	auto spawnX = toMeters(data.findKey<float>("x"));
+	auto spawnY = toMeters(data.findKey<float>("y")) - 1.0f;
+
 	pos = sf::Vector2f(spawnX, spawnY);
 
-	spawnpos = pos;
+	auto typeString = data.findKey<std::string>("PlatformType");
+	if (typeString == "HorizontalMoving") {
+		type = PlatformType::Horizontal;
+	}
+	else {
+		if (typeString == "VerticalMoving") {
+			type = PlatformType::Vertical;
+		}
+		else {
+			type = PlatformType::Falling;
+		}
+	}
+
 	spr.setTexture(tex.getTexture());
 	spr.setPosition(toPixels(pos.x), toPixels(pos.y));
 	switch (type) {
 	case PlatformType::Vertical:
 		vel = sf::Vector2f(0, speedY);
 		hitbox = sf::FloatRect(0, 0, toMeters(128.0f), toMeters(20.0f));
+		{
+			float DisplacementUp = toMeters(data.findKey<float>("DisplacementUp"));
+			float DisplacementDown = toMeters(data.findKey<float>("DisplacementDown"));
+			float diffvert = DisplacementUp - DisplacementDown;
+
+			spawnpos = sf::Vector2f(spawnX, spawnY - diffvert / 2.0f);
+			range = (DisplacementUp + DisplacementDown) / 2.0f;
+		}
+
+
+
 		break;
 	case PlatformType::Horizontal:
 		vel = sf::Vector2f(speedX, 0);
 		hitbox = sf::FloatRect(0, 0, toMeters(128.0f), toMeters(20.0f));
+		{
+			float DisplacementLeft = toMeters(data.findKey<float>("DisplacementLeft"));
+			float DisplacementRight = toMeters(data.findKey<float>("DisplacementRight"));
+			float diffhorz = DisplacementRight - DisplacementLeft;
+
+			spawnpos = sf::Vector2f(spawnX + diffhorz / 2.0f, spawnY);
+			range = (DisplacementRight + DisplacementLeft) / 2.0f;
+		}
+
+		
+
 		break;
 	case PlatformType::Falling:
 		vel = sf::Vector2f(0, 0);
@@ -63,7 +101,7 @@ void MovingPlatform::draw(Window& window) const {
 }
 
 void MovingPlatform::moveHorz() {
-	auto min = spawnpos.x;
+	auto min = spawnpos.x - range;
 	auto max = spawnpos.x + range;
 	if (pos.x + speedX >= max) {
 		vel.x = -speedX;
@@ -77,7 +115,7 @@ void MovingPlatform::moveHorz() {
 }
 
 void MovingPlatform::moveVert() {
-	auto min = spawnpos.y;
+	auto min = spawnpos.y - range;
 	auto max = spawnpos.y + range;
 	if (pos.y + speedY >= max) {
 		vel.y = -speedY;

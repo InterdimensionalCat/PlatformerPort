@@ -13,7 +13,7 @@ public:
 		const uint32_t tilesetX,
 		const uint32_t tilesetY);
 
-	const sf::Color& getID() const;
+	const uint32_t getID() const;
 
 	const TileType& getType() const;
 
@@ -25,7 +25,7 @@ private:
 
 	friend class Tile;
 
-	sf::Color id;
+	uint32_t id;
 	TileType type;
 	uint32_t tilesetX;
 	uint32_t tilesetY;
@@ -46,7 +46,7 @@ public:
 
 	bool isBotActive() const;
 
-	const sf::Color& getID() const;
+	const uint32_t getID() const;
 
 	const TileType& getType() const;
 

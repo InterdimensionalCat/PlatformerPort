@@ -72,8 +72,7 @@ void stop() {
 }
 
 
-//int main(int argc, char* argv[])
-int WinMain()
+int main(int argc, char* argv[])
 {
 
 	std::cout.flush();

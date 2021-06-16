@@ -18,8 +18,12 @@
 #include <array>
 #include <functional>
 #include <queue>
+#include <optional>
+#include "json.hpp"
+#include "tileson.hpp"
 
 namespace fs = std::filesystem;
+using json = nlohmann::json;
 
 //windows specifc macros/setup
 #ifdef _WIN32

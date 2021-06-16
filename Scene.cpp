@@ -17,17 +17,22 @@ Scene::Scene() {
 	init();
 	auto& firstLevel = getLevelData(1);
 	window = std::make_shared<Window>();
-	tilemap = std::make_shared<Tilemap>(firstLevel);
-	parallaxEngine = std::make_unique<Parallax>(firstLevel);
+	//tilemap = std::make_shared<Tilemap>(firstLevel);
+	tilemap = std::make_shared<Tilemap>();
+
+	//parallaxEngine = std::make_unique<Parallax>(firstLevel);
 	//input = std::make_shared<KeyboardInput>(*window);
 	input = std::make_shared<KeyboardInput>();
 	window->registerWindowEventListener(input);
 
-	actors = firstLevel.loadActors(this);
+	MapParser::parseMap("newLevel_1", *this);
+
+	//actors = firstLevel.loadActors(this);
 
 	engine = std::make_shared<PhysicsEngine>(firstLevel);
 
-	camera = std::make_unique<Camera>(firstLevel, actors.at(0));
+	//camera = std::make_unique<Camera>(firstLevel, CameraMode::Controlled);
+	//camera = std::make_unique<Camera>(firstLevel, actors.at(0));
 
 	audio = std::make_shared<AudioEngine>();
 	audio->playMusic("FlatZone", 10.0f);
@@ -125,12 +130,14 @@ void Scene::changeLevel() {
 		return;
 	}
 
-	auto& newLevelData = getLevelData(++currentLevel);
+	//auto& newLevelData = getLevelData(++currentLevel);
 
-	tilemap = std::make_shared<Tilemap>(newLevelData);
-	parallaxEngine = std::make_unique<Parallax>(newLevelData);
-	actors = newLevelData.loadActors(this);
-	camera = std::make_unique<Camera>(newLevelData, actors.at(0));
+	//tilemap = std::make_shared<Tilemap>();
+
+	//tilemap = std::make_shared<Tilemap>(newLevelData);
+	//parallaxEngine = std::make_unique<Parallax>(newLevelData);
+	//actors = newLevelData.loadActors(this);
+	//camera = std::make_unique<Camera>(newLevelData, actors.at(0));
 }
 
 void Scene::setResetLevel() {
@@ -142,10 +149,12 @@ void Scene::resetLevel() {
 
 	auto& newLevelData = getLevelData(currentLevel);
 
-	tilemap = std::make_shared<Tilemap>(newLevelData);
-	parallaxEngine = std::make_unique<Parallax>(newLevelData);
-	actors = newLevelData.loadActors(this);
-	camera = std::make_unique<Camera>(newLevelData, actors.at(0));
+	tilemap = std::make_shared<Tilemap>();
+
+	//parallaxEngine = std::make_unique<Parallax>(newLevelData);
+	actors.clear();
+	MapParser::parseMap("newLevel_1", *this);
+	//camera = std::make_unique<Camera>(newLevelData, actors.at(0));
 }
 
 
