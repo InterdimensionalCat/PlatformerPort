@@ -9,9 +9,8 @@ class Window;
 class Tilemap
 {
 public:
-	//Tilemap(const LevelData& firstMap);
 	Tilemap();
-	void loadMap(const tson::Map& map, const std::map<std::tuple<int, int>, tson::Tile*>& tiledata);
+	void loadMap(const float widthTiles, const float heightTiles, const std::vector<tmx::TileLayer::Tile>& tiledata, const tmx::Tileset& tileset);
 	void loadMap(const LevelData& map);
 	float getWidth() const;
 	float getHeight() const;

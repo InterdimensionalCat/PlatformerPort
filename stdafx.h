@@ -20,7 +20,11 @@
 #include <queue>
 #include <optional>
 #include "json.hpp"
-#include "tileson.hpp"
+
+#include <tmxlite/Map.hpp>
+#include <tmxlite/Layer.hpp>
+#include <tmxlite/TileLayer.hpp>
+#include <tmxlite/ObjectGroup.hpp>
 
 namespace fs = std::filesystem;
 using json = nlohmann::json;

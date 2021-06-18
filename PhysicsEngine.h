@@ -15,7 +15,7 @@ class PhysicsEngine
 	typedef std::vector<std::shared_ptr<Actor>> Bodies;
 	typedef std::shared_ptr<Actor> Body;
 public:
-	PhysicsEngine(const LevelData& data);
+	PhysicsEngine(Scene* scene);
 	void update(Bodies& bodies, Tilemap& tilemap);
 	void updatePositions(Bodies& bodies);
 

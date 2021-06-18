@@ -19,58 +19,97 @@ void MapParser::parseMap(const std::string& mapName, Scene& scene) {
 	mappath /= "resources";
 	mappath /= "maps";
 	mappath /= mapName;
-	mappath += ".json";
+	mappath += ".tmx";
 
-	tson::Tileson t;
-	std::unique_ptr<tson::Map> map = t.parse(mappath);
+	tmx::Map map;
+	if (map.load(mappath.string())) {
+			
 
-	if (map->getStatus() == tson::ParseStatus::OK)
-	{
+		float widthPixels  = (float)(toPixels((float)map.getLayers().at(0)->getSize().x));
+		float heightPixels = (float)(toPixels((float)map.getLayers().at(0)->getSize().y));
 
-		float widthPixels = toPixels((float)map->getSize().x);
-		float heightPixels = toPixels((float)map->getSize().y);
+		scene.tilemap = std::make_shared<Tilemap>();
 
-		for (auto& layer : map->getLayers())
+		scene.actors.clear();
+
+		for (auto& layer : map.getLayers())
 		{
-			if (layer.getType() == tson::LayerType::ObjectGroup)
-			{
-				loadActors(layer, scene);
+			if (layer->getType() == tmx::Layer::Type::Object) {
+
+				auto& objlayer = layer->getLayerAs<tmx::ObjectGroup>();
+				loadActors(objlayer, scene);
 			}
 
-			if (layer.getType() == tson::LayerType::TileLayer) {
-				auto& data = layer.getTileData();
-				scene.tilemap->loadMap(*map, data);
+			if (layer->getType() == tmx::Layer::Type::Tile) {
+				auto& tileLayer = layer->getLayerAs<tmx::TileLayer>();
+				auto tiles = tileLayer.getTiles();
+				auto firstTileNum = tiles.at(0).ID;
+
+				std::string tilesetname;
+				for (auto& property : tileLayer.getProperties()) {
+					if (property.getName() == "tilesetname") {
+						tilesetname = property.getStringValue();
+						break;
+					}
+				}
+
+				for (size_t i = 0; i < map.getTilesets().size(); i++) {
+					auto set = map.getTilesets().at(i);
+
+					if (set.getName() == tilesetname) {
+						scene.tilemap->loadMap(toMeters(widthPixels), toMeters(heightPixels), tiles, set);
+						continue;
+					}
+				}
 			}
 		}
 
-		loadParallax(*map, scene);
-
+		loadParallax(map, scene);
 		scene.camera = std::make_unique<Camera>(widthPixels, heightPixels, scene.actors.at(0));
 	}
-	else //Error occured
-	{
-		Logger::get() << "Map loading error occured: " << map->getStatusMessage() << "\n";
+	else {
+		Logger::get() << "Map loading error occured\n";
 		throw std::exception();
 	}
-
 }
 
-void MapParser::loadParallax(tson::Map& map, Scene& scene) {
-	auto parallaxname = std::any_cast<std::string>(map.getProp("BackgroundName")->getValue());
+void MapParser::loadParallax(tmx::Map& map, Scene& scene) {
+	std::string parallaxname;
+	float baseX;
+	float baseY;
+	float growthX;
+	float growthY;
 
-	auto baseX = std::any_cast<float>(map.getProp("baseParallaxX")->getValue());
-	auto baseY = std::any_cast<float>(map.getProp("baseParallaxY")->getValue());
+	for (auto& property : map.getProperties()) {
+		if (property.getName() == "BackgroundName") {
+			parallaxname = property.getStringValue();
+		}
 
-	auto growthX = std::any_cast<float>(map.getProp("growthParallaxX")->getValue());
-	auto growthY = std::any_cast<float>(map.getProp("growthParallaxY")->getValue());
+		if (property.getName() == "baseParallaxX") {
+			baseX = property.getFloatValue();
+		}
+
+		if (property.getName() == "baseParallaxY") {
+			baseY = property.getFloatValue();
+		}
+
+		if (property.getName() == "growthParallaxX") {
+			growthX = property.getFloatValue();
+		}
+
+		if (property.getName() == "growthParallaxY") {
+			growthY = property.getFloatValue();
+		}
+	}
 
 	scene.parallaxEngine = std::make_unique<Parallax>(parallaxname, baseX, baseY, growthX, growthY);
 }
 
-json propertiesToJson(tson::Object& obj) {
+
+json propertiesToJson(const tmx::Object& obj) {
 	json val;
 
-	tson::PropertyCollection& properties = obj.getProperties();
+	auto& properties = obj.getProperties();
 
 	auto& x = obj.getPosition().x;
 	auto& y = obj.getPosition().y;
@@ -78,42 +117,44 @@ json propertiesToJson(tson::Object& obj) {
 	val["x"] = x;
 	val["y"] = y;
 
-	for (auto& property : properties.get()) {
-		switch (property->getType()) {
-		case tson::Type::Boolean:
-			val[property->getName()] = std::any_cast<bool>(property->getValue());
+	for (auto& property : properties) {
+		switch (property.getType()) {
+		case tmx::Property::Type::Boolean:
+			val[property.getName()] = property.getBoolValue();
 			break;
-		case tson::Type::Float:
-			val[property->getName()] = std::any_cast<float>(property->getValue());
+		case tmx::Property::Type::Float:
+			val[property.getName()] = property.getFloatValue();
 			break;
-		case tson::Type::Int:
-			val[property->getName()] = std::any_cast<int>(property->getValue());
+		case tmx::Property::Type::Int:
+			val[property.getName()] = property.getIntValue();
 			break;
-		case tson::Type::String:
-			val[property->getName()] = std::any_cast<std::string>(property->getValue());
+		case tmx::Property::Type::String:
+			val[property.getName()] = property.getStringValue();
 			break;
 		default:
-			val[property->getName()] = std::any_cast<std::string>(property->getValue());
+			val[property.getName()] = property.getStringValue();
 		}
 	}
 
 	return val;
 }
 
-void MapParser::loadActors(tson::Layer& layer, Scene& scene) {
+void MapParser::loadActors(tmx::ObjectGroup& layer, Scene& scene) {
 
-	auto players = layer.getObjectsByName("Player");
-
-	auto& player = players.at(0);
 	auto& actors = scene.actors;
 
-	auto playerJson = propertiesToJson(player);
+	auto& objects = layer.getObjects();
 
-	auto dat = ActorData(playerJson, &scene);
+	//find player first
+	for (auto& obj : objects) {
+		if (obj.getName() == "Player") {
+			auto playerJson = propertiesToJson(obj);
+			auto dat = ActorData(playerJson, &scene);
+			actors.push_back(std::make_shared<Player>(dat));
+		}
+	}
 
-	actors.push_back(std::make_shared<Player>(dat));
-
-	for (auto& obj : layer.getObjects()) {
+	for (auto& obj : objects) {
 		if (obj.getName() == "Goal") {
 			ActorData data(propertiesToJson(obj), &scene);
 			actors.push_back(std::make_shared<Goal>(data));

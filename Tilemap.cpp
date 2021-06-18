@@ -5,17 +5,12 @@
 #include "TileRegistry.h"
 #include "Window.h"
 #include "LevelData.h"
-#include "tileson.hpp"
-
-//Tilemap::Tilemap(const LevelData& firstMap) : currentMap(firstMap), rendertex(std::make_unique<sf::RenderTexture>()) {
-//	loadMap(firstMap);
-//}
 
 Tilemap::Tilemap() : rendertex(std::make_unique<sf::RenderTexture>()) {}
 
-void Tilemap::loadMap(const tson::Map& map, const std::map<std::tuple<int, int>, tson::Tile*>& tiledata) {
-    width =  (float)map.getSize().x;
-    height = (float)map.getSize().y;
+void Tilemap::loadMap(const float widthTiles, const float heightTiles, const std::vector<tmx::TileLayer::Tile>& tiledata, const tmx::Tileset& tilesetdata) {
+    width =  widthTiles;
+    height = heightTiles;
 
     rendertex->create((unsigned int)toPixels(width), (unsigned int)toPixels(height));
 
@@ -24,16 +19,13 @@ void Tilemap::loadMap(const tson::Map& map, const std::map<std::tuple<int, int>,
         column.resize((size_t)height);
     }
 
-    std::string tilesetname;
+    std::string tilesetname = tilesetdata.getName();
 
-    for (auto& [coords, tile] : tiledata) {
-        if (tile != nullptr) {
-            uint32_t x = (uint32_t)std::get<0>(coords);
-            uint32_t y = (uint32_t)std::get<1>(coords);
-
-            setTile(x, y, getTileFromID(tile->getId()));
-            tilesetname = tile->getTileset()->getName();
-        }
+    for (size_t i = 0; i < tiledata.size(); i++) {
+        auto& tile = tiledata.at(i);
+        uint32_t x = (uint32_t)i % (uint32_t)width;
+        uint32_t y = (uint32_t)i / (uint32_t)width;
+        setTile(x, y, getTileFromID(tile.ID));
     }
 
     	tileset = std::make_unique<Texture>(tilesetname);

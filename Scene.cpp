@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Scene.h"
 #include "Tilemap.h"
-#include "LevelRegistry.h"
 #include "TileRegistry.h"
 #include "Window.h"
 #include "Parallax.h"
@@ -15,37 +14,26 @@
 
 Scene::Scene() {
 	init();
-	auto& firstLevel = getLevelData(1);
 	window = std::make_shared<Window>();
-	//tilemap = std::make_shared<Tilemap>(firstLevel);
-	tilemap = std::make_shared<Tilemap>();
-
-	//parallaxEngine = std::make_unique<Parallax>(firstLevel);
-	//input = std::make_shared<KeyboardInput>(*window);
 	input = std::make_shared<KeyboardInput>();
 	window->registerWindowEventListener(input);
 
-	MapParser::parseMap("newLevel_1", *this);
+	parser.parseMap(levelBaseName + "_" + std::to_string(currentLevel), *this);
 
-	//actors = firstLevel.loadActors(this);
 
-	engine = std::make_shared<PhysicsEngine>(firstLevel);
-
-	//camera = std::make_unique<Camera>(firstLevel, CameraMode::Controlled);
-	//camera = std::make_unique<Camera>(firstLevel, actors.at(0));
+	engine = std::make_shared<PhysicsEngine>(this);
 
 	audio = std::make_shared<AudioEngine>();
 	audio->playMusic("FlatZone", 10.0f);
 }
 
 Scene::~Scene() {
+	actors.clear();
 	clearAnimRegistry();
 	clearAudioRegistry();
 }
 
 void Scene::update() {
-	//window.updateInput();
-
 	input->update(*window);
 
 	if (!window->updateInput()) {
@@ -57,9 +45,6 @@ void Scene::update() {
 		actor->update();
 	}
 
-
-
-	//auto actors = std::vector<std::shared_ptr<Actor>>{ player };
 
 	engine->update(actors, *tilemap);
 
@@ -125,19 +110,19 @@ void Scene::setChangeLevel() {
 void Scene::changeLevel() {
 	changeLevelFlag = false;
 
-	if (currentLevel + 1 > numLevels) {
+	currentLevel++;
+	
+	fs::path filepath(fs::current_path());
+	filepath /= "resources";
+	filepath /= "maps";
+
+	if (fs::exists(filepath / (levelBaseName + "_" + std::to_string(currentLevel) + ".json"))) {
+		parser.parseMap(levelBaseName + "_" + std::to_string(currentLevel), *this);
+	}
+	else {
 		Settings::setSetting<bool>("running", false);
 		return;
 	}
-
-	//auto& newLevelData = getLevelData(++currentLevel);
-
-	//tilemap = std::make_shared<Tilemap>();
-
-	//tilemap = std::make_shared<Tilemap>(newLevelData);
-	//parallaxEngine = std::make_unique<Parallax>(newLevelData);
-	//actors = newLevelData.loadActors(this);
-	//camera = std::make_unique<Camera>(newLevelData, actors.at(0));
 }
 
 void Scene::setResetLevel() {
@@ -146,22 +131,13 @@ void Scene::setResetLevel() {
 
 void Scene::resetLevel() {
 	resetLevelFlag = false;
-
-	auto& newLevelData = getLevelData(currentLevel);
-
-	tilemap = std::make_shared<Tilemap>();
-
-	//parallaxEngine = std::make_unique<Parallax>(newLevelData);
-	actors.clear();
-	MapParser::parseMap("newLevel_1", *this);
-	//camera = std::make_unique<Camera>(newLevelData, actors.at(0));
+	parser.parseMap(levelBaseName + "_" + std::to_string(currentLevel), *this);
 }
 
 
 
 void Scene::init() {
 	RegisterTiles();
-	RegisterLevels();
 	RegisterAnimations();
 	RegisterAudio();
 }

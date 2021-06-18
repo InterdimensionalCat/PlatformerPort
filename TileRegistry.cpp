@@ -24,6 +24,7 @@ void RegisterTiles() {
 	for (int y = 1; y <= 4; y++) {
 		for (int x = 1; x <= 4; x++) {
 			if (count == 1) {
+				RegisterTile(std::make_shared<TileBase>(0,     TileType::Air, x, y));
 				RegisterTile(std::make_shared<TileBase>(count, TileType::Air, x, y));
 			}
 			else {

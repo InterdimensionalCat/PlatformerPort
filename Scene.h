@@ -39,12 +39,10 @@ public:
 private:
 
 	friend class LevelData;
-	friend class MapParser;
 	friend class Player;
+	friend class MapParser;
 
 	void init();
-
-	MapParser parser;
 
 	//tilemap
 	std::shared_ptr<Tilemap> tilemap;
@@ -65,11 +63,13 @@ private:
 
 	std::shared_ptr<KeyboardInput> input;
 
+	MapParser parser;
+
 	bool changeLevelFlag = false;
 	bool resetLevelFlag = false;
 
 	int currentLevel = 1;
 
-	int numLevels = 3;
+	std::string levelBaseName = "newLevel";
 };
 

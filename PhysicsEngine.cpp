@@ -5,7 +5,7 @@
 #include "Tile.h"
 #include "LevelData.h"
 
-PhysicsEngine::PhysicsEngine(const LevelData& data) : scene(data.scene) {
+PhysicsEngine::PhysicsEngine(Scene* scene) : scene(scene){
 
 }
 
