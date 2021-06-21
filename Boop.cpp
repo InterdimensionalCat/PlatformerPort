@@ -79,11 +79,11 @@ void Boop::onCollision(std::shared_ptr<Actor> actor) {
 
 void Boop::despawn() {
 
-	if (scene->audio->getStatusOfSound("BoopDeath") != sf::SoundSource::Status::Playing) {
-		scene->audio->playSound("BoopDeath", 15.0f);
+	if (scene->audio.getStatusOfSound("BoopDeath") != sf::SoundSource::Status::Playing) {
+		scene->audio.playSound("BoopDeath", 15.0f);
 	}
 	else {
-		scene->audio->playSound("BoopDeath2", 15.0f);
+		scene->audio.playSound("BoopDeath2", 15.0f);
 	}
 
 	scene->removeActor(this);

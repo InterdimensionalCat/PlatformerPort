@@ -18,6 +18,8 @@ class Camera
 {
 public:
 
+	Camera() {}
+
 	Camera(const float width, const float height, std::shared_ptr<Actor> followTarget);
 
 	Camera(const float width, const float height, const CameraMode& mode = CameraMode::Controlled);

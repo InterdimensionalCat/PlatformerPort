@@ -68,6 +68,6 @@ public:
 	//sf::Vector2f vel = sf::Vector2f(0, 0);
 
 	Player* player;
-	std::shared_ptr<KeyboardInput> input;
+	KeyboardInput* input;
 };
 

@@ -7,6 +7,9 @@ class Camera;
 class Parallax
 {
 public:
+
+	Parallax() {}
+
 	Parallax(const std::string& basename, const float baseX, const float baseY, const float growthX, const float growthY);
 
 	class ParallaxLayer {

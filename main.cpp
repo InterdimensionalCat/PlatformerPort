@@ -24,12 +24,8 @@ void game() {
 	////auto renderer = std::make_unique<Renderer>();
 	////auto audio = std::make_unique<AudioHandle>();
 
-	std::unique_ptr<sf::Clock> timer;
+	std::unique_ptr<sf::Clock> timer = std::make_unique<sf::Clock>();
 	float dt = 0.0f;
-	float currentfps = 0;
-	sf::Clock fpstimer = sf::Clock();
-
-	timer = std::make_unique<sf::Clock>();
 	double accumulator = 0;
 
 	//auto input = std::make_unique<InputHandle>();

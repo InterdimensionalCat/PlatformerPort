@@ -15,7 +15,7 @@ logic(std::make_unique<PlayerLogic>(data)) {
 
 	graphics->player = this;
 	logic->player = this;
-	logic->input = scene->input;
+	logic->input = &scene->input;
 	hitbox = sf::FloatRect(0, 0, toMeters(64 - 25), toMeters(64 - 10));
 	//pos = sf::Vector2f(0, 0);
 	pos = sf::Vector2f(toMeters(data.findKey<float>("x")), toMeters(data.findKey<float>("y")));
@@ -25,7 +25,7 @@ logic(std::make_unique<PlayerLogic>(data)) {
 }
 
 void Player::despawn() {
-	scene->audio->playSound("PlayerDead", 15.0f);
+	scene->audio.playSound("PlayerDead", 15.0f);
 	scene->setResetLevel();
 }
 

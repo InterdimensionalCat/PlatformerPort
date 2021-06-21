@@ -19,6 +19,7 @@
 #include <functional>
 #include <queue>
 #include <optional>
+#include <bitset>
 #include "json.hpp"
 
 #include <tmxlite/Map.hpp>

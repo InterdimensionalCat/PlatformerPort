@@ -220,11 +220,11 @@ bool PlayerLogic::jump(const float jumpForce) {
 		jumpFlag = true;
 
 
-		if (player->scene->audio->getStatusOfSound("PlayerJump1") != sf::SoundSource::Status::Playing) {
-			player->scene->audio->playSound("PlayerJump1", 12.0f);
+		if (player->scene->audio.getStatusOfSound("PlayerJump1") != sf::SoundSource::Status::Playing) {
+			player->scene->audio.playSound("PlayerJump1", 12.0f);
 		}
 		else {
-			player->scene->audio->playSound("PlayerJump2", 12.0f);
+			player->scene->audio.playSound("PlayerJump2", 12.0f);
 		}
 
 		return true;
@@ -250,10 +250,10 @@ void PlayerLogic::updateSFX() {
 
 			if (groundedAudioTimer >= cycle) {
 				if (stepFlag) {
-					player->scene->audio->playSound("PlayerDash1", 10.0f);
+					player->scene->audio.playSound("PlayerDash1", 10.0f);
 				}
 				else {
-					player->scene->audio->playSound("PlayerDash2", 10.0f);
+					player->scene->audio.playSound("PlayerDash2", 10.0f);
 				}
 				groundedAudioTimer = 0;
 				stepFlag = !stepFlag;

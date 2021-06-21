@@ -28,7 +28,7 @@ void MapParser::parseMap(const std::string& mapName, Scene& scene) {
 		float widthPixels  = (float)(toPixels((float)map.getLayers().at(0)->getSize().x));
 		float heightPixels = (float)(toPixels((float)map.getLayers().at(0)->getSize().y));
 
-		scene.tilemap = std::make_shared<Tilemap>();
+		//scene.tilemap = std::make_shared<Tilemap>();
 
 		scene.actors.clear();
 
@@ -57,7 +57,7 @@ void MapParser::parseMap(const std::string& mapName, Scene& scene) {
 					auto set = map.getTilesets().at(i);
 
 					if (set.getName() == tilesetname) {
-						scene.tilemap->loadMap(toMeters(widthPixels), toMeters(heightPixels), tiles, set);
+						scene.tilemap.loadMap(toMeters(widthPixels), toMeters(heightPixels), tiles, set);
 						continue;
 					}
 				}
@@ -65,7 +65,7 @@ void MapParser::parseMap(const std::string& mapName, Scene& scene) {
 		}
 
 		loadParallax(map, scene);
-		scene.camera = std::make_unique<Camera>(widthPixels, heightPixels, scene.actors.at(0));
+		//scene.camera = Camera(widthPixels, heightPixels, scene.actors.at(0));
 	}
 	else {
 		Logger::get() << "Map loading error occured\n";
@@ -102,7 +102,7 @@ void MapParser::loadParallax(tmx::Map& map, Scene& scene) {
 		}
 	}
 
-	scene.parallaxEngine = std::make_unique<Parallax>(parallaxname, baseX, baseY, growthX, growthY);
+	scene.parallaxEngine = Parallax(parallaxname, baseX, baseY, growthX, growthY);
 }
 
 
@@ -150,24 +150,24 @@ void MapParser::loadActors(tmx::ObjectGroup& layer, Scene& scene) {
 		if (obj.getName() == "Player") {
 			auto playerJson = propertiesToJson(obj);
 			auto dat = ActorData(playerJson, &scene);
-			actors.push_back(std::make_shared<Player>(dat));
+			//actors.push_back(std::make_shared<Player>(dat));
 		}
 	}
 
 	for (auto& obj : objects) {
 		if (obj.getName() == "Goal") {
 			ActorData data(propertiesToJson(obj), &scene);
-			actors.push_back(std::make_shared<Goal>(data));
+			//actors.push_back(std::make_shared<Goal>(data));
 		}
 
 		if (obj.getName() == "MovingPlatform") {
 			ActorData data(propertiesToJson(obj), &scene);
-			actors.push_back(std::make_shared<MovingPlatform>(data));
+			//actors.push_back(std::make_shared<MovingPlatform>(data));
 		}
 
 		if (obj.getName() == "Boop") {
 			ActorData data(propertiesToJson(obj), &scene);
-			actors.push_back(std::make_shared<Boop>(data));
+			//actors.push_back(std::make_shared<Boop>(data));
 		}
 	}
 }

@@ -159,13 +159,16 @@
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="ActorData.cpp" />
+    <ClCompile Include="ActorEntry.cpp" />
     <ClCompile Include="ActorEvent.cpp" />
+    <ClCompile Include="ActorID.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AnimationRegistry.cpp" />
     <ClCompile Include="AudioEngine.cpp" />
     <ClCompile Include="AudioRegistry.cpp" />
     <ClCompile Include="Boop.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ComponentPool.cpp" />
     <ClCompile Include="EventQueue.cpp" />
     <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Image.cpp" />
@@ -182,6 +185,7 @@
     <ClCompile Include="PlayerGraphics.cpp" />
     <ClCompile Include="PlayerLogic.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneView.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -198,13 +202,16 @@
   <ItemGroup>
     <ClInclude Include="Actor.h" />
     <ClInclude Include="ActorData.h" />
+    <ClInclude Include="ActorEntry.h" />
     <ClInclude Include="ActorEvent.h" />
+    <ClInclude Include="ActorID.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AnimationRegistry.h" />
     <ClInclude Include="AudioEngine.h" />
     <ClInclude Include="AudioRegistry.h" />
     <ClInclude Include="Boop.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ComponentPool.h" />
     <ClInclude Include="EventQueue.h" />
     <ClInclude Include="Goal.h" />
     <ClInclude Include="Image.h" />
@@ -221,6 +228,7 @@
     <ClInclude Include="PlayerGraphics.h" />
     <ClInclude Include="PlayerLogic.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneView.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="stdafx.h" />
