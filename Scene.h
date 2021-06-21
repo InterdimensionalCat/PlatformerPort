@@ -31,96 +31,99 @@ struct Shape
 
 
 
-class Scene
-{
+class Scene {
 public:
 
-	//template<typename... ComponentTypes>
-	//class SceneView
-	//{
-	//public:
-	//	SceneView(Scene& scene) : scene(&scene)
-	//	{
-	//		if (sizeof...(ComponentTypes) == 0)
-	//		{
-	//			all = true;
-	//		}
-	//		else
-	//		{
-	//			// Unpack the template parameters into an initializer list
-	//			int componentIds[] = { 0, GetId<ComponentTypes>() ... };
-	//			for (int i = 1; i < (sizeof...(ComponentTypes) + 1); i++)
-	//				componentMask.set(componentIds[i]);
-	//		}
-	//	}
+	template<typename... ComponentTypes>
+	class SceneView {
+	public:
+		SceneView(Scene* scene) : scene(scene), all(sizeof...(ComponentTypes) == 0) {
+			if (!all) {
+				viewComponents = { 0, getComponentId<ComponentTypes>() ... };
+			}
+		}
 
-	//	struct Iterator
-	//	{
-	//		Iterator(Scene* scene, EntityIndex index, ComponentMask mask, bool all)
-	//			: scene(scene), index(index), mask(mask), all(all) {}
+		struct Iterator {
+			Iterator(Scene* scene, size_t index, const std::vector<int>& viewComponents, bool all)
+				: scene(scene), index(index), viewComponents(viewComponents), all(all) {}
 
-	//		EntityID operator*() const
-	//		{
-	//			return scene->entities[index].id;
-	//		}
+			std::shared_ptr<ActorEntry> operator*() const {
+				return scene->actors.at(index);
+			}
 
-	//		bool operator==(const Iterator& other) const
-	//		{
-	//			return index == other.index || index == scene->entities.size();
-	//		}
-	//		bool operator!=(const Iterator& other) const
-	//		{
-	//			return index != other.index && index != scene->entities.size();
-	//		}
+			std::shared_ptr<ActorEntry> operator*() {
+				return scene->actors.at(index);
+			}
 
-	//		bool ValidIndex()
-	//		{
-	//			return
-	//				// It's a valid entity ID
-	//				scene->IsEntityValid(scene->entities[index].id) &&
-	//				// It has the correct component mask
-	//				(all || mask == (mask & scene->entities[index].mask));
-	//		}
+			bool operator==(const Iterator& other) const {
+				return index == other.index || index == scene->actors.size();
+			}
+			bool operator!=(const Iterator& other) const {
+				return index != other.index && index != scene->actors.size();
+			}
 
-	//		Iterator& operator++()
-	//		{
-	//			do
-	//			{
-	//				index++;
-	//			} while (index < scene->entities.size() && !ValidIndex());
-	//			return *this;
-	//		}
+			bool ValidIndex() {
+				bool valid = scene->actors.at(index)->isIdValid();
+				if (!valid) return valid;
+				if (all && valid) return valid;
+				for (size_t i = 0; i < viewComponents.size(); i++) {
+					if (!scene->actors.at(index)->hasComponent(viewComponents.at(i))) {
+						valid = false;
+						break;
+					}
+				}
+				return valid;
+			}
+
+			Iterator& operator++() {
+				index++;
+				while (index < scene->actors.size() && !ValidIndex()) {
+					index++;
+				}
+				return *this;
+			}
 
 
+			Scene* scene;
+			size_t index;
+			std::vector<int> viewComponents;
+			bool all;
+		};
 
-	//		EntityIndex index;
-	//		Scene* scene;
-	//		ComponentMask mask;
-	//		bool all = false;
-	//	};
+		const Iterator begin() const {
+			if(all) return Iterator(scene, 0, viewComponents, all);
+			int index = 0;
+			while (index < scene->actors.size()) {
 
-	//	const Iterator begin() const
-	//	{
-	//		int firstIndex = 0;
-	//		while (firstIndex < scene->entities.size() &&
-	//			(componentMask != (componentMask & scene->entities[firstIndex].mask)
-	//				|| !scene->IsEntityValid(scene->entities[firstIndex].id)))
-	//		{
-	//			firstIndex++;
-	//		}
-	//		return Iterator(scene, firstIndex, componentMask, all);
-	//	}
+				if (!scene->actors.at(index)->isIdValid()) continue;
 
-	//	const Iterator end() const
-	//	{
-	//		return Iterator(scene, EntityIndex(scene->entities.size()), componentMask, all);
-	//	}
+				bool validFirst = true;
+				for (size_t i = 0; i < viewComponents.size(); i++) {
+					if (!scene->actors.at(index)->hasComponent(viewComponents.at(i))) {
+						validFirst = false;
+						break;
+					}
+				}
 
+				if (validFirst) {
+					break;
+				}
+				else {
+					index++;
+				}
+			}
+			return Iterator(scene, index, viewComponents, all);
+		}
 
-	//	Scene* scene = nullptr;
-	//	ComponentMask componentMask;
-	//	bool all = false;
-	//};
+		const Iterator end() const
+		{
+			return Iterator(scene, scene->actors.size(), viewComponents, all);
+		}
+
+		std::vector<int> viewComponents; 
+		Scene* scene;
+		bool all;
+	};
 
 	Scene() {
 
@@ -166,9 +169,23 @@ public:
 		for (auto& pool : componentPools) {
 			pool.logData();
 		}
+
+		updateTransforms();
+
+		for (auto& pool : componentPools) {
+			pool.logData();
+		}
 	}
 	~Scene() {}
 
+	void updateTransforms() {
+		for (auto actor : SceneView<Transform, Shape>(this)) {
+			Transform* trans = getComponent<Transform>(actor);
+			//trans->pos.x += 1;
+
+			Logger::get() << "transform X: " << trans->pos.x << "\n";
+		}
+	}
 
 
 	void update() {
@@ -254,73 +271,6 @@ public:
 		entry->createNewEntry(typeName, variantName);
 		return entry;
 	}
-	
-	//template<typename T>
-	//T* Assign(EntityID id)
-	//{
-	//	auto idind = GetEntityIndex(id);
-	//	int componentId = GetId<T>();
-
-	//	if (componentPools.size() <= componentId) // Not enough component pool
-	//	{
-	//		componentPools.resize(componentId + 1, nullptr);
-	//	}
-	//	if (componentPools[componentId] == nullptr) // New component, make a new pool
-	//	{
-	//		componentPools[componentId] = new ComponentPool(sizeof(T));
-	//	}
-
-	//	// Looks up the component in the pool, and initializes it with placement new
-	//	T* component = new (componentPools[componentId]->get(idind)) T();
-
-	//	// Set the bit for this component to true and return the created component
-	//	entities[idind].mask.set(componentId);
-	//	return component;
-	//}
-
-	/*template<typename T>
-	T* Get(EntityID id)
-	{
-		int componentId = GetId<T>();
-		if (!entities[id].mask.test(componentId))
-			return nullptr;
-
-		T* pComponent = static_cast<T*>(componentPools[componentId]->get(id));
-		return pComponent;
-	}*/
-
-	//template<typename T>
-	//void Remove(EntityID id)
-	//{
-	//	// ensures you're not accessing an entity that has been deleted
-	//	if (entities[GetEntityIndex(id)].id != id)
-	//		return;
-
-	//	int componentId = GetId<T>();
-	//	entities[GetEntityIndex(id)].mask.reset(componentId);
-	//}
-
-	/*void DestroyEntity(EntityID id)
-	{
-		EntityID newID = CreateEntityId(EntityIndex(-1), GetEntityVersion(id) + 1);
-		entities[GetEntityIndex(id)].id = newID;
-		entities[GetEntityIndex(id)].mask.reset();
-		freeEntities.push_back(GetEntityIndex(id));
-	}*/
-
-	/*EntityID NewEntity()
-	{
-		if (!freeEntities.empty())
-		{
-			EntityIndex newIndex = freeEntities.back();
-			freeEntities.pop_back();
-			EntityID newID = CreateEntityId(newIndex, GetEntityVersion(entities[newIndex].id));
-			entities[newIndex].id = newID;
-			return entities[newIndex].id;
-		}
-		entities.push_back({ CreateEntityId(EntityIndex(entities.size()), 0), ComponentMask() });
-		return entities.back().id;
-	}*/
 
 	std::vector<std::shared_ptr<ActorEntry>> freeActors;
 	std::vector<ComponentPool> componentPools;
