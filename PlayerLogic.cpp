@@ -145,10 +145,20 @@ void PlayerLogic::updateAirborne() {
 }
 
 void PlayerLogic::shortenJump() {
-	if (!jumpFlag) return;
+	//if (!jumpFlag) return;
 	if (!input->isDown(sf::Keyboard::Space)) {
 		if (player->vel.y < 0) {
 			player->vel.y /= jumpReleaseSpeedMod;
+		}
+	}
+	else {
+		if (player->vel.y >  toMeters(0.5f) && player->vel.y < toMeters(3.0f)) {
+			std::cout << "aaa" << "\n";
+			player->vel.y -= gravity * 0.51;
+		}
+
+		if (player->vel.y < -toMeters(0.5f) && player->vel.y > -toMeters(3.0f)) {
+			player->vel.y -= gravity * 0.51;
 		}
 	}
 }
