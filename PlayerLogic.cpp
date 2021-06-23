@@ -160,7 +160,6 @@ void PlayerLogic::shortenJump() {
 	}
 	else {
 		if (player->vel.y >  toMeters(0.5f) && player->vel.y < toMeters(3.0f)) {
-			std::cout << "aaa" << "\n";
 			player->vel.y -= gravity * 0.51;
 		}
 
