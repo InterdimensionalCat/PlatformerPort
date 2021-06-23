@@ -24,18 +24,19 @@ bool KeyboardInput::handleWindowEvent(const sf::Event& event) {
 }
 
 bool KeyboardInput::isDown(const InputButton key) const {
-	return pressedKeys.find(inputMap.at(key)) != pressedKeys.end();
-}
-
-bool KeyboardInput::isPressed(const InputButton key) const {
 	return sf::Keyboard::isKeyPressed((sf::Keyboard::Key)inputMap.at(key));
 }
 	
-	bool KeyboardInput::isDown(sf::Keyboard::Key key) const {
-		return sf::Keyboard::isKeyPressed(key);
-	}
+
+bool KeyboardInput::isPressed(const InputButton key) const {
+	return pressedKeys.find(inputMap.at(key)) != pressedKeys.end();
+}
+	
+bool KeyboardInput::isDown(sf::Keyboard::Key key) const {
+	return sf::Keyboard::isKeyPressed(key);
+}
 	
 	
-	bool KeyboardInput::isPressed(sf::Keyboard::Key key) const {
-		return pressedKeys.find((int)key) != pressedKeys.end();
-	}
+bool KeyboardInput::isPressed(sf::Keyboard::Key key) const {
+	return pressedKeys.find((int)key) != pressedKeys.end();
+}

@@ -57,7 +57,7 @@ void MapParser::parseMap(const std::string& mapName, Scene& scene) {
 					auto set = map.getTilesets().at(i);
 
 					if (set.getName() == tilesetname) {
-						scene.tilemap.loadMap(toMeters(widthPixels), toMeters(heightPixels), tiles, set);
+						scene.tilemap->loadMap(toMeters(widthPixels), toMeters(heightPixels), tiles, set);
 						continue;
 					}
 				}

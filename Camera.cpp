@@ -3,20 +3,22 @@
 #include "Window.h"
 #include "LevelData.h"
 #include "Actor.h"
+#include "Components.h"
+#include "Scene.h"
+#include "ActorEntry.h"
 
 
-Camera::Camera(const float width, const float height, std::shared_ptr<Actor> followTarget) : Camera(width, height, CameraMode::Follow) {
+Camera::Camera(const float width, const float height, std::shared_ptr<ActorEntry> followTarget, Scene* scene) : Camera(width, height, CameraMode::Follow) {
+	Camera::scene = scene;
 	Camera::followTarget = followTarget;
 
-	auto targetHitbox = followTarget->getPosAdjustedAABB();
+	auto trans = scene->getComponent<Transform>(followTarget);
+	auto hitbox = scene->getComponent<Hitbox>(followTarget);
 
-	//auto targetScrollPos = sf::Vector2f((scrollpos.x + toPixels(targetHitbox.left + targetHitbox.width)) / 2.0f - (float)Settings::getSetting<int>("Width") / 4.0f,
-	//	(scrollpos.y + toPixels(targetHitbox.top + targetHitbox.height)) / 2.0f - (float)Settings::getSetting<int>("Height") / 4.0f);
+	auto targetHitbox = sf::FloatRect(hitbox->rect.left + trans->x, hitbox->rect.top + trans->y, hitbox->rect.width, hitbox->rect.height);
 
 	auto targetScrollPos = sf::Vector2f(toPixels(targetHitbox.left + targetHitbox.width / 2.0f) - (float)Settings::getSetting<int>("Width") / 2.0f,
 		toPixels(targetHitbox.top + targetHitbox.height / 2.0f) - (float)Settings::getSetting<int>("Height") / 2.0f);
-
-	//Logger::get() << targetScrollPos.x << ", " << targetScrollPos.y << "\n";
 
 	scrollpos = targetScrollPos;
 
@@ -104,16 +106,14 @@ void Camera::follow(Window& window) {
 	window.window->setView(window.window->getDefaultView());
 	auto newview = window.window->getView();
 
-	auto targetHitbox = followTarget->getPosAdjustedAABB();
+	auto trans = scene->getComponent<Transform>(followTarget);
+	auto hitbox = scene->getComponent<Hitbox>(followTarget);
 
-	auto targetScrollPos = sf::Vector2f((scrollpos.x + toPixels(targetHitbox.left + targetHitbox.width)) / 2.0f - (float)Settings::getSetting<int>("Width") / 4.0f,
-		(scrollpos.y + toPixels(targetHitbox.top + targetHitbox.height)) / 2.0f - (float)Settings::getSetting<int>("Height") / 4.0f);
+	auto targetHitbox = sf::FloatRect(hitbox->rect.left + trans->x, hitbox->rect.top + trans->y, hitbox->rect.width, hitbox->rect.height);
 
-	//auto targetScrollPos = sf::Vector2f(scrollpos.x + toPixels(targetHitbox.left + targetHitbox.width / 2.0f) - (float)Settings::getSetting<int>("Width") / 2.0f,
-	//	scrollpos.y + toPixels(targetHitbox.top + targetHitbox.height / 2.0f) - (float)Settings::getSetting<int>("Height") / 2.0f);
+	auto targetScrollPos = sf::Vector2f(toPixels(targetHitbox.left + targetHitbox.width / 2.0f) - (float)Settings::getSetting<int>("Width") / 2.0f,
+		toPixels(targetHitbox.top + targetHitbox.height / 2.0f) - (float)Settings::getSetting<int>("Height") / 2.0f);
 
-
-	//Logger::get() << targetScrollPos.x << ", " << targetScrollPos.y << "\n";
 
 	auto dist = targetScrollPos -
 		scrollpos;

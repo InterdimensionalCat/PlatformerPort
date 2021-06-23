@@ -22,6 +22,11 @@ public:
 	void setComponent(const int componentId);
 	void removeComponent(const int componentId);
 private:
+
+	//TODO keep ActorData for the current entry
+	//mark entities as respawnable or nonrespawnable,
+	//so that respawnable entities can respawn from their retained entitydata
+
 	ActorID id;
 	unsigned long long version;
 	const size_t index;

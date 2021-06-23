@@ -6,32 +6,13 @@ class ComponentPool
 {
 public:
 
-    ComponentPool() :
-        elementSize(0),
-        totalSizeElts(0),
-        data(nullptr)
-    {}
+    ComponentPool();
 
-    ComponentPool(const size_t elementSize, const size_t numEntries) : 
-        elementSize(elementSize), 
-        totalSizeElts(numEntries), 
-        data(new byte[elementSize * totalSizeElts])
-    {
-        if (totalSizeElts == 0) {
-            throw std::logic_error("Component pool initalized before any actors were created");
-        }
-    }
+    ComponentPool(const size_t elementSize, const size_t numEntries);
 
-    bool isValid() const {
-        return data != nullptr;
-    }
+    bool isValid() const;
 
-    ComponentPool(const ComponentPool& other) 
-        : elementSize(other.elementSize), 
-        totalSizeElts(other.totalSizeElts),
-        data(new byte[elementSize * totalSizeElts]) {
-        memmove(data, other.data, elementSize * totalSizeElts);
-    }
+    ComponentPool(const ComponentPool& other);
 
     friend void swap(ComponentPool& lhs, ComponentPool& rhs) {
         std::swap(lhs.data, rhs.data);
@@ -39,49 +20,24 @@ public:
         std::swap(lhs.totalSizeElts, rhs.totalSizeElts);
     }
 
-    ComponentPool& operator=(ComponentPool rhs) {
-        swap(*this, rhs);
-        return *this;
-    }
+    ComponentPool& operator=(ComponentPool rhs);
 
-    ~ComponentPool()
-    {
-        if (data != nullptr) {
-            delete[] data;
-            data = nullptr;
-        }
-    }
+    ~ComponentPool();
 
-    void* at(const size_t& index)
-    {
-        if (index < totalSizeElts) {
-            return data + index * elementSize;
-        }
-        else {
-            throw std::out_of_range("ComponentPool index out of range");
-        }
-    }
+    void* at(const size_t& index);
 
-    size_t resize(const size_t scaleFactor) {
-        byte* olddata = data;
-        data = nullptr;
-        data = new byte[elementSize * totalSizeElts * scaleFactor];
-        for (size_t i = 0; i < elementSize * totalSizeElts; i++) {
-            data[i] = olddata[i];
-        }
-        delete[] olddata;
-        totalSizeElts *= scaleFactor;
+    size_t resize(const size_t scaleFactor);
+
+    void logData() const;
+
+    size_t size() const {
         return totalSizeElts;
     }
 
-    void logData() const {
-        for (size_t i = 0; i < totalSizeElts * elementSize; i++) {
-            Logger::get() << std::format("{:b}", data[i]) << " ";
-        }
-        Logger::get() << "\n";
-    }
-
 private:
+
+    friend class Scene;
+
     size_t elementSize;
     size_t totalSizeElts;
     byte* data;

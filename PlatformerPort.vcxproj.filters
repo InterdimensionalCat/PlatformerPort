@@ -76,6 +76,18 @@
     <Filter Include="Header Files\Nlohmann">
       <UniqueIdentifier>{26d44750-32db-4c29-a8b0-6e92079ac80b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Component">
+      <UniqueIdentifier>{6d61de4e-7aa7-4408-ba28-33307dcf5b5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Component">
+      <UniqueIdentifier>{17585392-8a1d-48eb-860d-94a5edf0b919}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\System">
+      <UniqueIdentifier>{7d2a88c0-9875-4d46-9646-44bb088c2a80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\System">
+      <UniqueIdentifier>{dbae4c73-dec6-4878-88f6-1d16197c68dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -183,14 +195,14 @@
     <ClCompile Include="ComponentPool.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="SceneView.cpp">
-      <Filter>Source Files\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="ActorID.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
     <ClCompile Include="ActorEntry.cpp">
       <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="System.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -233,23 +245,11 @@
     <ClInclude Include="Camera.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Actor.h">
-      <Filter>Header Files\Actor</Filter>
-    </ClInclude>
     <ClInclude Include="EventQueue.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>Header Files\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files\Actor\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerLogic.h">
-      <Filter>Header Files\Actor\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerGraphics.h">
-      <Filter>Header Files\Actor\Player</Filter>
     </ClInclude>
     <ClInclude Include="PhysicsEngine.h">
       <Filter>Header Files\Physics</Filter>
@@ -259,15 +259,6 @@
     </ClInclude>
     <ClInclude Include="AnimationRegistry.h">
       <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Goal.h">
-      <Filter>Header Files\Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="MovingPlatform.h">
-      <Filter>Header Files\Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="Boop.h">
-      <Filter>Header Files\Actor</Filter>
     </ClInclude>
     <ClInclude Include="AudioEngine.h">
       <Filter>Header Files\Audio</Filter>
@@ -284,22 +275,13 @@
     <ClInclude Include="Window.h">
       <Filter>Header Files\Window</Filter>
     </ClInclude>
-    <ClInclude Include="ActorEvent.h">
-      <Filter>Header Files\Actor</Filter>
-    </ClInclude>
     <ClInclude Include="json.hpp">
       <Filter>Header Files\Nlohmann</Filter>
     </ClInclude>
     <ClInclude Include="MapParser.h">
       <Filter>Header Files\Level</Filter>
     </ClInclude>
-    <ClInclude Include="ActorData.h">
-      <Filter>Header Files\Actor</Filter>
-    </ClInclude>
     <ClInclude Include="ComponentPool.h">
-      <Filter>Header Files\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneView.h">
       <Filter>Header Files\Scene</Filter>
     </ClInclude>
     <ClInclude Include="ActorID.h">
@@ -307,6 +289,48 @@
     </ClInclude>
     <ClInclude Include="ActorEntry.h">
       <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Components.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="System.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsSystems.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsSystems.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="InputSystems.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerGraphics.h">
+      <Filter>Header Files\Actor\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerLogic.h">
+      <Filter>Header Files\Actor\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\Actor\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorData.h">
+      <Filter>Header Files\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>Header Files\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorEvent.h">
+      <Filter>Header Files\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Boop.h">
+      <Filter>Header Files\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Goal.h">
+      <Filter>Header Files\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="MovingPlatform.h">
+      <Filter>Header Files\Actor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

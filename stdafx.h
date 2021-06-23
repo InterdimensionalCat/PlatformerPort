@@ -44,11 +44,12 @@ using json = nlohmann::json;
  to better diagnose memory leaks. Since I mostly use smart pointers nowadays
  not super helpful anymore
 */
-//#ifdef _DEBUG
+#ifdef _DEBUG
 //#define new new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
-//#else
-//#define new new
-//#endif
+#define DBG_NEW new ( _CLIENT_BLOCK , __FILE__ , __LINE__ )
+#else
+#define DBG_NEW new
+#endif
 
 ///////////////////////////////////////////////////////////
 

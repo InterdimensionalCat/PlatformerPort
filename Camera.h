@@ -1,12 +1,8 @@
 #pragma once
 
-
-
+class Scene;
+class ActorEntry;
 class Window;
-
-
-class LevelData;
-class Actor;
 
 enum class CameraMode {
 	Controlled,
@@ -20,7 +16,7 @@ public:
 
 	Camera() {}
 
-	Camera(const float width, const float height, std::shared_ptr<Actor> followTarget);
+	Camera(const float width, const float height, std::shared_ptr<ActorEntry> followtarget, Scene* scene);
 
 	Camera(const float width, const float height, const CameraMode& mode = CameraMode::Controlled);
 	void updateWindow(Window& window);
@@ -37,10 +33,11 @@ public:
 
 	void stationary(Window& window);
 
-	std::shared_ptr<Actor> followTarget;
+	std::shared_ptr<ActorEntry> followTarget;
 
 	CameraMode mode;
 	sf::Vector2f scrollpos;
 	sf::Vector2f boundsInPixels;
+	Scene* scene;
 };
 
