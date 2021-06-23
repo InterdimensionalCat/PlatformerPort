@@ -2,6 +2,7 @@
 #include "PlayerGraphics.h"
 #include "Player.h"
 #include "AnimationRegistry.h"
+#include "LevelData.h"
 
 PlayerGraphics::PlayerGraphics(const LevelData& data) : anim(getAnimFromName("PlayerIdle")) {}
 
@@ -49,7 +50,7 @@ void PlayerGraphics::update() {
 }
 
 
-void PlayerGraphics::draw(ic::Window& window) {
+void PlayerGraphics::draw(Window& window) {
 
     anim.draw(window);
 

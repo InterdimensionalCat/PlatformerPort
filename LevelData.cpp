@@ -6,6 +6,7 @@
 #include "Actor.h"
 #include "MovingPlatform.h"
 #include "Boop.h"
+#include "PlayerLogic.h"
 
 #pragma warning( push )
 #pragma warning( disable : 4244 )
@@ -75,6 +76,16 @@ void loadLevel3Actors(std::vector<std::shared_ptr<Actor>>& actors, const LevelDa
 
 #pragma warning( pop )
 
+LevelData::LevelData(const std::string& levelname, const std::string& tilesetname, const std::string& parallaxTextureName,
+	const float levelWidth, const float levelHeight,
+	const float baseScrollPercent, const float scrollGrowth, const float scrollY, const float yGrowth)
+	: levelname(levelname), tilesetname(tilesetname), parallaxTextureName(parallaxTextureName),
+	levelWidth(levelWidth), levelHeight(levelHeight),
+	baseScrollPercent(baseScrollPercent), scrollGrowth(scrollGrowth),
+	mapData(Image(levelname)), scrollY(scrollY), yGrowth(yGrowth) {
+	load();
+}
+
 void LevelData::load() {
 	auto width = levelWidth;
 	auto height = levelHeight;
@@ -110,19 +121,19 @@ std::vector<std::shared_ptr<Actor>> LevelData::loadActors(Scene* scene) const {
 
 	//load player first
 	auto player = std::make_shared<Player>(*this);
-	player->logic->input = std::shared_ptr<InputHandle>(scene->input);
+	player->logic->input = std::shared_ptr<KeyboardInput>(scene->input);
 	actors.push_back(player);
 	actors.push_back(std::make_shared<Goal>(*this, scene));
 
-	if (levelname == "level_1") {
+	if (levelname == "level_F1") {
 		loadLevel1Actors(actors, *this);
 	}
 
-	if (levelname == "level_2") {
+	if (levelname == "level_F2") {
 		loadLevel2Actors(actors, *this);
 	}
 
-	if (levelname == "level_3") {
+	if (levelname == "level_F3") {
 		loadLevel3Actors(actors, *this);
 	}
 
