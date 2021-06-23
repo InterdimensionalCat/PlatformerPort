@@ -103,13 +103,13 @@ Scene::~Scene() {
 	//}
 	////pool.data = nullptr;
 
-	auto& pool = componentPools.at(getComponentId<SpriteDrawable>());
-	for (size_t i = 0; i < pool.size(); i++) {
-		if (!actors.at(i)->hasComponent(getComponentId<SpriteDrawable>())) continue;
-		SpriteDrawable* component = static_cast<SpriteDrawable*>(pool.at(i));
-		delete component->spr;
-		delete component->tex;
-	}
+	//auto& pool = componentPools.at(getComponentId<SpriteDrawable>());
+	//for (size_t i = 0; i < pool.size(); i++) {
+	//	if (!actors.at(i)->hasComponent(getComponentId<SpriteDrawable>())) continue;
+	//	SpriteDrawable* component = static_cast<SpriteDrawable*>(pool.at(i));
+	//	delete component->spr;
+	//	delete component->tex;
+	//}
 	////pool.data = nullptr;
 
 	componentPools.clear();
@@ -122,12 +122,11 @@ void Scene::loadActors() {
 	assignComponent<PlayerFlag>(player);
 	assignComponent<Transform>(player, toMeters(100.0f), toMeters(100.0f));
 	assignComponent<Velocity>(player, 0.0f, 0.0f);
-	//assignComponent<InputController>(player, input);
-	assignComponent<InputController>(player, input.get());
+	assignComponent<InputController>(player, std::static_pointer_cast<Input>(input));
 	assignComponent<PhysicsProperties>(player, 0.0f, toMeters(0.5f), 0.0f);
 	assignComponent<HorzMovable>(player, toMeters(0.6f));
 	assignComponent<TileCollidable>(player);
-	assignComponent<SpriteDrawable>(player, DBG_NEW sf::Sprite(), DBG_NEW Texture("astronautTurn"));
+	assignComponent<SpriteDrawable>(player, std::make_shared<sf::Sprite>(), std::make_shared<Texture>("astronautTurn"));
 	assignComponent<Hitbox>(player, sf::FloatRect(0, 0, 1.0f, 1.0f));
 
 	spawnActor("test", "test");
@@ -144,8 +143,11 @@ void Scene::update() {
 		return;
 	}
 
+	auto actor = spawnActor("test", "test");
+	assignComponent<Transform>(actor, toMeters(100.0f), toMeters(100.0f));
 
 	HorzMove(this).excecute();
+	GenericStateDriver(this).excecute();
 	ApplyGravity(this).excecute();
 	TilemapCollision(this, tilemap).excecute();
 	UpdatePositions(this).excecute();
@@ -181,23 +183,11 @@ std::shared_ptr<ActorEntry> Scene::spawnActor(const std::string& typeName, const
 	}
 
 	if (maxActors <= actors.size()) {
-
-
-		int spriteId = getComponentId<SpriteDrawable>();
-		if (spriteId < componentPools.size()) {
-			auto& pool = componentPools.at(spriteId);
-			for (size_t i = 0; i < pool.size(); i++) {
-				if (!actors.at(i)->hasComponent(getComponentId<SpriteDrawable>())) continue;
-				SpriteDrawable* component = static_cast<SpriteDrawable*>(pool.at(i));
-				delete component->spr;
-				delete component->tex;
-			}
-		}
+		maxActors *= 2;
 
 		for (auto& pool : componentPools) {
-			pool.resize((size_t)2);
+			pool->resize(maxActors);
 		}
-		maxActors *= 2;
 	}
 
 	actors.push_back(std::make_shared<ActorEntry>(actors.size()));

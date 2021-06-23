@@ -67,9 +67,13 @@ void stop() {
 	Settings::setSetting<bool>("running", false);
 }
 
-
+#ifdef _DEBUG
 int main(int argc, char* argv[])
 {
+#else
+int WinMain() 
+{
+#endif
 
 	std::cout.flush();
 

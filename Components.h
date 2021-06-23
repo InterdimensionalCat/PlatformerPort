@@ -1,5 +1,7 @@
 #pragma once
 #include "Texture.h"
+#include "TileCollisionEvent.h"
+
 class Input;
 class Animation;
 
@@ -19,7 +21,7 @@ struct StateController {
 };
 
 struct InputController {
-	Input* input;
+	std::shared_ptr<Input> input;
 };
 
 struct Animatable {
@@ -82,13 +84,8 @@ struct JumpOn {
 };
 
 struct SpriteDrawable {
-	sf::Sprite* spr;
-	Texture* tex;
-
-	~SpriteDrawable() {
-		delete spr;
-		delete tex;
-	}
+	std::shared_ptr<sf::Sprite> spr;
+	std::shared_ptr<Texture> tex;
 };
 
 struct Hitbox {
@@ -105,5 +102,10 @@ struct HitboxExtension {
 
 struct TileCollidable {
 	bool tileCollidable = true;
+};
+
+
+struct TileCollisionEventListener {
+	std::queue<TileCollisionEvent> events;
 };
 

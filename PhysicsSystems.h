@@ -1,6 +1,7 @@
 #pragma once
 #include "System.h"
 #include "Tilemap.h"
+#include "TileCollisionEvent.h"
 
 class UpdatePositions : public System<Transform, Velocity> {
 public:
@@ -29,18 +30,18 @@ public:
 
 		auto hitbox = getPosSpeedAdjustedHitbox(entry);
 		auto tiles = tilemap->getTilesWithinArea(hitbox);
-		wallCollision(trans, vel, tiles, hitbox, originalhitbox);
+		wallCollision(trans, vel, tiles, hitbox, originalhitbox, entry);
 		tiles = tilemap->getTilesWithinArea(hitbox);
-		floorCollision(trans, vel, tiles, hitbox, originalhitbox);
+		floorCollision(trans, vel, tiles, hitbox, originalhitbox, entry);
 		tiles = tilemap->getTilesWithinArea(hitbox);
-		ceilingCollision(trans, vel, tiles, hitbox, originalhitbox);
+		ceilingCollision(trans, vel, tiles, hitbox, originalhitbox, entry);
 
 	}
 private:
 
 	void wallCollision(Transform* trans, Velocity* vel, 
 		const std::vector<Tile>& tiles, const sf::FloatRect& hitbox, 
-		const Hitbox* originalhitbox) {
+		const Hitbox* originalhitbox, std::shared_ptr<ActorEntry> entry) {
 		if (vel->x == 0) {
 			return;
 		}
@@ -56,7 +57,10 @@ private:
 						continue;
 					}
 
-					//body->onTileCollision(tile, CollisionType::Wall);
+					auto listener = scene->getComponent<TileCollisionEventListener>(entry);
+					if (listener != nullptr) {
+						listener->events.push(TileCollisionEvent{ tile, CollisionFace::WallLeft });
+					}
 
 					// -> |
 					trans->x = tile.getPosX() - originalhitbox->rect.width;
@@ -65,7 +69,10 @@ private:
 						continue;
 					}
 
-					//body->onTileCollision(tile, CollisionType::Wall);
+					auto listener = scene->getComponent<TileCollisionEventListener>(entry);
+					if (listener != nullptr) {
+						listener->events.push(TileCollisionEvent{ tile, CollisionFace::WallRight });
+					}
 
 					// | <-
 					trans->x = tile.getPosX() + 1.0f;
@@ -78,7 +85,7 @@ private:
 
 	void floorCollision(Transform* trans, Velocity* vel, 
 		const std::vector<Tile>& tiles, const sf::FloatRect& hitbox, 
-		const Hitbox* originalhitbox) {
+		const Hitbox* originalhitbox, std::shared_ptr<ActorEntry> entry) {
 
 		if (vel->y <= 0) {
 			return;
@@ -93,7 +100,10 @@ private:
 					continue;
 				}
 
-				//body->onTileCollision(tile, CollisionType::Floor);
+				auto listener = scene->getComponent<TileCollisionEventListener>(entry);
+				if (listener != nullptr) {
+					listener->events.push(TileCollisionEvent{ tile, CollisionFace::Floor });
+				}
 
 				trans->y = tile.getPosY() - originalhitbox->rect.height;
 				vel->y = 0.0f;
@@ -103,7 +113,7 @@ private:
 
 	void ceilingCollision(Transform* trans, Velocity* vel,
 		const std::vector<Tile>& tiles, const sf::FloatRect& hitbox,
-		const Hitbox* originalhitbox) {
+		const Hitbox* originalhitbox, std::shared_ptr<ActorEntry> entry) {
 
 		if (vel->y >= 0) {
 			return;
@@ -120,7 +130,10 @@ private:
 					continue;
 				}
 
-				//body->onTileCollision(tile, CollisionType::Ceiling);
+				auto listener = scene->getComponent<TileCollisionEventListener>(entry);
+				if (listener != nullptr) {
+					listener->events.push(TileCollisionEvent{ tile, CollisionFace::Ceiling });
+				}
 
 				trans->y = tile.getPosY() + 1.0f;
 				vel->y = 0.0f;

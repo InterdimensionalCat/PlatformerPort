@@ -202,7 +202,10 @@
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
     <ClCompile Include="System.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="TileCollisionEvent.cpp">
+      <Filter>Source Files\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -331,6 +334,9 @@
     </ClInclude>
     <ClInclude Include="MovingPlatform.h">
       <Filter>Header Files\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="TileCollisionEvent.h">
+      <Filter>Header Files\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

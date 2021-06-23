@@ -5,42 +5,36 @@ typedef char byte;
 class ComponentPool
 {
 public:
+    virtual ~ComponentPool() {}
+    virtual void resize(const size_t newsize) = 0;
+    virtual void* at(const size_t index) = 0;
+    virtual size_t size() const = 0;
+};
 
-    ComponentPool();
-
-    ComponentPool(const size_t elementSize, const size_t numEntries);
-
-    bool isValid() const;
-
-    ComponentPool(const ComponentPool& other);
-
-    friend void swap(ComponentPool& lhs, ComponentPool& rhs) {
-        std::swap(lhs.data, rhs.data);
-        std::swap(lhs.elementSize, rhs.elementSize);
-        std::swap(lhs.totalSizeElts, rhs.totalSizeElts);
+template<typename T>
+class TypedComponentPool : public ComponentPool {
+public:
+    TypedComponentPool(const size_t numEntries) {
+        data.resize(numEntries);
     }
 
-    ComponentPool& operator=(ComponentPool rhs);
-
-    ~ComponentPool();
-
-    void* at(const size_t& index);
-
-    size_t resize(const size_t scaleFactor);
-
-    void logData() const;
-
-    size_t size() const {
-        return totalSizeElts;
+    ~TypedComponentPool() {
+        data.clear();
     }
 
+    virtual void* at(const size_t index) override {
+        return (void*)&data.at(index);
+    }
+
+    virtual void resize(const size_t newsize) {
+        data.resize(newsize);
+    }
+
+    virtual size_t size() const override {
+        return data.size();
+    }
 private:
-
-    friend class Scene;
-
-    size_t elementSize;
-    size_t totalSizeElts;
-    byte* data;
+    std::vector<T> data;
 };
 
 

@@ -131,15 +131,16 @@ public:
 		auto idind = entry->getIndex();
 		int componentId = getComponentId<T>();
 		if (componentPools.size() <= componentId) {
-			componentPools.resize(componentId + 1);
+			componentPools.resize(componentId + 1, std::shared_ptr<TypedComponentPool<T>>(nullptr));
 		}
 
-		if (!componentPools.at(componentId).isValid()) {
-			componentPools.at(componentId) = ComponentPool(sizeof(T), maxActors);
+		if (componentPools.at(componentId).get() == nullptr) {
+			componentPools.at(componentId) = std::make_shared<TypedComponentPool<T>>(maxActors);
 		}
 
+		auto poolTyped = static_cast<TypedComponentPool<T>*>(componentPools.at(componentId).get());
 
-		T* component = new (componentPools.at(componentId).at(idind)) T{ args... };
+		T* component = new (poolTyped->at(idind)) T{ args... };
 		entry->setComponent(componentId);
 		return component;
 	}
@@ -151,7 +152,7 @@ public:
 			return nullptr;
 		}
 
-		T* component = static_cast<T*>(componentPools.at(componentId).at(entry->getIndex()));
+		T* component = static_cast<T*>(componentPools.at(componentId)->at(entry->getIndex()));
 		return component;
 	}
 
@@ -182,7 +183,7 @@ public:
 	std::shared_ptr<ActorEntry> spawnActor(const std::string& typeName, const std::string& variantName);
 
 	std::vector<std::shared_ptr<ActorEntry>> freeActors;
-	std::vector<ComponentPool> componentPools;
+	std::vector<std::shared_ptr<ComponentPool>> componentPools;
 	std::vector<std::shared_ptr<ActorEntry>> actors;
 
 	size_t maxActors = 1;
