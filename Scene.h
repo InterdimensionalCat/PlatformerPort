@@ -10,6 +10,7 @@
 #include "PhysicsEngine.h"
 #include "AudioEngine.h"
 #include "ActorEntry.h"
+#include "SceneEvent.h"
 
 //class Tilemap;
 //class Parallax;
@@ -49,7 +50,7 @@ public:
 		}
 
 		bool ValidIndex() {
-			bool valid = scene->actors.at(index)->isIdValid();
+			bool valid = scene->actors.at(index)->isIdValid() && scene->actors.at(index)->isActive();
 			if (!valid) return valid;
 			if (all && valid) return valid;
 			for (size_t i = 0; i < viewComponents.size(); i++) {
@@ -81,7 +82,7 @@ public:
 		int index = 0;
 		while (index < scene->actors.size()) {
 
-			if (!scene->actors.at(index)->isIdValid()) continue;
+			if (!scene->actors.at(index)->isIdValid() || !scene->actors.at(index)->isActive()) continue;
 
 			bool validFirst = true;
 			for (size_t i = 0; i < viewComponents.size(); i++) {
@@ -140,7 +141,12 @@ public:
 
 		auto poolTyped = static_cast<TypedComponentPool<T>*>(componentPools.at(componentId).get());
 
-		T* component = new (poolTyped->at(idind)) T{ args... };
+
+		poolTyped->setIndex(idind, args... );
+		T* component = static_cast<T*>(poolTyped->at(idind));
+		//component->addJsonGenerator();
+
+		//T* component = new (poolTyped->at(idind)) T{ args... };
 		entry->setComponent(componentId);
 		return component;
 	}
@@ -169,18 +175,21 @@ public:
 
 	template<typename T>
 	void removeComponent(std::shared_ptr<ActorEntry> entry) {
-		if (!entry->isIdValid()) {
+		if (entry->isIdValid()) {
 			int componentId = getComponentId<T>();
 			entry->removeComponent(componentId);
+			componentPools.at(componentId)->removeComponent(entry->getIndex());
 		}
 	}
 
-	void despawnActor(std::shared_ptr<ActorEntry> entry) {
-		entry->resetEntry();
-		freeActors.push_back(entry);
-	}
+	void despawnActor(std::shared_ptr<ActorEntry> entry);
+
+	void respawnActor(std::shared_ptr<ActorEntry> entry);
+
+	std::shared_ptr<json> createJsonFromActor(std::shared_ptr<ActorEntry> entry);
 
 	std::shared_ptr<ActorEntry> spawnActor(const std::string& typeName, const std::string& variantName);
+	std::shared_ptr<ActorEntry> spawnActor(const std::string& typeName, const std::string& variantName, const tmx::Object& obj);
 
 	std::vector<std::shared_ptr<ActorEntry>> freeActors;
 	std::vector<std::shared_ptr<ComponentPool>> componentPools;
@@ -188,11 +197,29 @@ public:
 
 	size_t maxActors = 1;
 
-private:
+	float getUpperBound() {
+		return -1.0f;
+	}
 
-	//friend class MapParser;
-	//friend class Player;
-	//friend class PlayerLogic;
+	float getLowerBound() {
+		return mapheight + 1.0f;
+	}
+
+	float getLeftBound() {
+		return 0.0f;
+	}
+
+	float getRightBound() {
+		return mapwidth;
+	}
+
+	void saveActorJsonToFile(std::shared_ptr<json> data, const std::string& filename);
+
+	template<typename T, typename... Args>
+	void pushEvent(const Args&&... args) {
+		events.push(std::make_unique<T>(std::forward<Args>(args)...));
+	}
+
 
 	std::shared_ptr<Tilemap> tilemap;
 	std::shared_ptr<Camera> camera;
@@ -200,6 +227,15 @@ private:
 
 	std::shared_ptr<Window> window;
 	std::shared_ptr<KeyboardInput> input;
+
+	std::string currentlevelname;
+
+	void loadLevel(const std::string& levelname);
+
+	float mapwidth;
+	float mapheight;
+private:
+	std::queue<std::unique_ptr<SceneEvent>> events;
 };
 
 extern int componentCounter;

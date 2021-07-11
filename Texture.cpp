@@ -27,3 +27,7 @@ sf::Texture& Texture::getTexture() {
 const sf::Texture& Texture::getTexture() const {
 	return *tex;
 }
+
+std::string Texture::getName() const { 
+	return filename; 
+}

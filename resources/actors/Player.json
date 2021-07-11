@@ -1,0 +1,166 @@
+{
+  "AirborneState": {
+    "airborneTimer": 0,
+    "maxAirborneTimer": 5
+  },
+  "AnimStateMap": {
+    "animations": [
+      {
+        "key": "GroundStill",
+        "value": {
+          "filename": "astronautIdle",
+          "firstFrame": 0,
+          "fps": 12,
+          "frameDim": {
+            "x": 45,
+            "y": 90
+          },
+          "numFrames": 12,
+          "targetDim": {
+            "x": 45.0,
+            "y": 90.0
+          }
+        }
+      },
+      {
+        "key": "GroundMove",
+        "value": {
+          "filename": "astronautRun",
+          "firstFrame": 0,
+          "fps": 15,
+          "frameDim": {
+            "x": 48,
+            "y": 96
+          },
+          "numFrames": 12,
+          "targetDim": {
+            "x": 48.0,
+            "y": 96.0
+          }
+        }
+      },
+      {
+        "key": "GroundTurn",
+        "value": {
+          "filename": "astronautTurn",
+          "firstFrame": 0,
+          "fps": 60,
+          "frameDim": {
+            "x": 60,
+            "y": 82
+          },
+          "numFrames": 1,
+          "targetDim": {
+            "x": 60.0,
+            "y": 82.0
+          }
+        }
+      },
+      {
+        "key": "Airborne",
+        "value": {
+          "filename": "astronautAirborne",
+          "firstFrame": 0,
+          "fps": 12,
+          "frameDim": {
+            "x": 64,
+            "y": 64
+          },
+          "numFrames": 4,
+          "targetDim": {
+            "x": 64.0,
+            "y": 64.0
+          }
+        }
+      }
+    ],
+    "prevstate": "Airborne"
+  },
+  "Animatable": {
+    "animation": {
+      "filename": "astronautAirborne",
+      "firstFrame": 0,
+      "fps": 12,
+      "frameDim": {
+        "x": 64,
+        "y": 64
+      },
+      "numFrames": 4,
+      "targetDim": {
+        "x": 64.0,
+        "y": 64.0
+      }
+    }
+  },
+  "BoundByMapBounds": {
+    "boundDown": true,
+    "boundLeft": true,
+    "boundRight": true,
+    "boundUp": true
+  },
+  "BoundedVelocity": {
+    "maxVelX": 0.1015625,
+    "maxVelY": 0.546875
+  },
+  "Hitbox": {
+    "rect": {
+      "height": 0.84375,
+      "left": 0.0,
+      "top": 0.0,
+      "width": 0.609375
+    }
+  },
+  "HorzMovable": {
+    "accelX": 0.00937500037252903
+  },
+  "InputController": {
+    "input": "KeyboardInput"
+  },
+  "Jumpable": {
+    "jumpFloat": 0.5099999904632568,
+    "jumpForce": 0.234375,
+    "jumpReleaseMod": 0.8299999833106995
+  },
+  "MapBoundCollisionListener": {
+    "events": null
+  },
+  "PhysicsProperties": {
+    "friction": 0.9523810148239136,
+    "gravity": 0.0078125
+  },
+  "PlayerFlag": {
+    "pflag": true
+  },
+  "StateAccelerationValues": {
+    "airAccel": 0.015625,
+    "groundAccel": 0.004687500186264515,
+    "stillAccel": 0.014062500558793545,
+    "turnAccel": 0.00937500037252903
+  },
+  "StateController": {
+    "state": "Airborne"
+  },
+  "StateFrictionValues": {
+    "airFrc": 0.9920634627342224,
+    "groundFrc": 0.9523810148239136,
+    "stillFrc": 0.9523810148239136,
+    "turnFrc": 0.9523810148239136
+  },
+  "TileCollidable": {
+    "tileCollidable": true
+  },
+  "TileCollisionEventListener": {
+    "events": null
+  },
+  "Transform": {
+    "x": 1.5625,
+    "y": 1.5625
+  },
+  "Turnable": {
+    "turnThreshold": 0.03125
+  },
+  "Velocity": {
+    "x": 0.0,
+    "y": 0.0
+  }
+}

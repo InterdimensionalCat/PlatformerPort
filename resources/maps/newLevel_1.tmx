@@ -88,6 +88,7 @@
   <object id="19" name="Player" gid="21" x="128" y="2240" width="64" height="64">
    <properties>
     <property name="PlayerTag" type="bool" value="true"/>
+    <property name="StateController/state" value="GroundStill"/>
    </properties>
   </object>
   <object id="21" name="MovingPlatform" gid="18" x="0" y="320" width="64" height="64">

@@ -2,6 +2,7 @@
 #include "System.h"
 #include "Tilemap.h"
 #include "TileCollisionEvent.h"
+#include "MapBoundCollisionEvent.h"
 
 class UpdatePositions : public System<Transform, Velocity> {
 public:
@@ -32,8 +33,10 @@ public:
 		auto tiles = tilemap->getTilesWithinArea(hitbox);
 		wallCollision(trans, vel, tiles, hitbox, originalhitbox, entry);
 		tiles = tilemap->getTilesWithinArea(hitbox);
+		hitbox = getPosSpeedAdjustedHitbox(entry);
 		floorCollision(trans, vel, tiles, hitbox, originalhitbox, entry);
 		tiles = tilemap->getTilesWithinArea(hitbox);
+		hitbox = getPosSpeedAdjustedHitbox(entry);
 		ceilingCollision(trans, vel, tiles, hitbox, originalhitbox, entry);
 
 	}
@@ -59,7 +62,7 @@ private:
 
 					auto listener = scene->getComponent<TileCollisionEventListener>(entry);
 					if (listener != nullptr) {
-						listener->events.push(TileCollisionEvent{ tile, CollisionFace::WallLeft });
+						listener->events->push_back(TileCollisionEvent{ tile, CollisionFace::WallLeft });
 					}
 
 					// -> |
@@ -71,7 +74,7 @@ private:
 
 					auto listener = scene->getComponent<TileCollisionEventListener>(entry);
 					if (listener != nullptr) {
-						listener->events.push(TileCollisionEvent{ tile, CollisionFace::WallRight });
+						listener->events->push_back(TileCollisionEvent{ tile, CollisionFace::WallRight });
 					}
 
 					// | <-
@@ -102,7 +105,7 @@ private:
 
 				auto listener = scene->getComponent<TileCollisionEventListener>(entry);
 				if (listener != nullptr) {
-					listener->events.push(TileCollisionEvent{ tile, CollisionFace::Floor });
+					listener->events->push_back(TileCollisionEvent{ tile, CollisionFace::Floor });
 				}
 
 				trans->y = tile.getPosY() - originalhitbox->rect.height;
@@ -132,7 +135,7 @@ private:
 
 				auto listener = scene->getComponent<TileCollisionEventListener>(entry);
 				if (listener != nullptr) {
-					listener->events.push(TileCollisionEvent{ tile, CollisionFace::Ceiling });
+					listener->events->push_back(TileCollisionEvent{ tile, CollisionFace::Ceiling });
 				}
 
 				trans->y = tile.getPosY() + 1.0f;
@@ -165,5 +168,108 @@ public:
 		auto grv = scene->getComponent<PhysicsProperties>(entry)->gravity;
 		auto vel = scene->getComponent<Velocity>(entry);
 		vel->y += grv;
+	}
+};
+
+class ApplyFriction : public System<PhysicsProperties, Velocity> {
+public:
+	ApplyFriction(Scene* scene) : System(scene) {}
+	void excecutionFunction(std::shared_ptr<ActorEntry> entry) override {
+
+		auto input = scene->getComponent<InputController>(entry);
+
+		auto frc = scene->getComponent<PhysicsProperties>(entry)->friction;
+		auto vel = scene->getComponent<Velocity>(entry);
+
+		if (input != nullptr) {
+			auto right = input->input->isDown(InputButton::RIGHT);
+			auto left =  input->input->isDown(InputButton::LEFT);
+			if (right || left && !(right && left)) {
+				frc = 1.0f;
+			}
+		}
+
+
+		vel->x *= frc;
+		if (abs(vel->x) < toMeters(0.2f)) {
+			vel->x = 0;
+		}
+	}
+};
+
+class BindMovement : public System<BoundedVelocity, Velocity> {
+public:
+	BindMovement(Scene* scene) : System(scene) {}
+	void excecutionFunction(std::shared_ptr<ActorEntry> entry) override {
+		auto mvmt = scene->getComponent<BoundedVelocity>(entry);
+		auto vel = scene->getComponent<Velocity>(entry);
+
+		if (vel->x > mvmt->maxVelX) {
+			vel->x = mvmt->maxVelX;
+		}
+
+		if (vel->x < -mvmt->maxVelX) {
+			vel->x = -mvmt->maxVelX;
+		}
+
+		if (vel->y > mvmt->maxVelY) {
+			vel->y = mvmt->maxVelY;
+		}
+
+		if (vel->y < -mvmt->maxVelY) {
+			vel->y = -mvmt->maxVelY;
+		}
+
+	}
+};
+
+class BindPositionByMapBounds : public System<Transform, BoundByMapBounds> {
+public:
+	BindPositionByMapBounds(Scene* scene) : System(scene) {}
+	void excecutionFunction(std::shared_ptr<ActorEntry> entry) override {
+		auto transform = scene->getComponent<Transform>(entry);
+		auto mapBounds = scene->getComponent<BoundByMapBounds>(entry);
+		auto eventlistener = scene->getComponent<MapBoundCollisionListener>(entry);
+		auto vel = scene->getComponent<Velocity>(entry);
+
+		if (mapBounds->boundUp) {
+			transform->y = std::max(transform->y, scene->getUpperBound());
+			if (transform->y == scene->getUpperBound() && eventlistener != nullptr) {
+				eventlistener->events->push_back(MapBoundCollisionEvent::HitUp);
+				if (vel != nullptr) {
+					vel->y = 0.0f;
+				}
+			}
+		}
+
+		if (mapBounds->boundDown) {
+			transform->y = std::min(transform->y, scene->getLowerBound());
+			if (transform->y == scene->getLowerBound() && eventlistener != nullptr) {
+				eventlistener->events->push_back(MapBoundCollisionEvent::HitDown);
+				if (vel != nullptr) {
+					vel->y = 0.0f;
+				}
+			}
+		}
+
+		if (mapBounds->boundLeft) {
+			transform->x = std::max(transform->x, scene->getLeftBound());
+			if (transform->x == scene->getLeftBound() && eventlistener != nullptr) {
+				eventlistener->events->push_back(MapBoundCollisionEvent::HitLeft);
+				if (vel != nullptr) {
+					vel->x = 0.0f;
+				}
+			}
+		}
+
+		if (mapBounds->boundRight) {
+			transform->x = std::min(transform->x, scene->getRightBound());
+			if (transform->x == scene->getRightBound() && eventlistener != nullptr) {
+				eventlistener->events->push_back(MapBoundCollisionEvent::HitRight);
+				if (vel != nullptr) {
+					vel->x = 0.0f;
+				}
+			}
+		}
 	}
 };

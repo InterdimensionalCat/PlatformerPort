@@ -1,89 +1,168 @@
 #pragma once
 #include "Scene.h"
 
+void inline addPropertyToJson(const tmx::Property& property, json& val, const std::string& name) {
+	switch (property.getType()) {
+	case tmx::Property::Type::Boolean:
+		val[name] = property.getBoolValue();
+		break;
+	case tmx::Property::Type::Float:
+		val[name] = property.getFloatValue();
+		break;
+	case tmx::Property::Type::Int:
+		val[name] = property.getIntValue();
+		break;
+	case tmx::Property::Type::String:
+		val[name] = property.getStringValue();
+		break;
+	default:
+		val[name] = property.getStringValue();
+	}
+}
+
+void inline createPropertyHeirarchy(std::string propname, const tmx::Property& property, json& val) {
+	auto slash = propname.find("/");
+
+	if (slash == std::string::npos) {
+		addPropertyToJson(property, val, propname);
+		return;
+	}
+	else {
+		auto tiername = propname.substr(0, slash);
+		propname = propname.substr(slash + 1, propname.size());
+		if (val.find(tiername) == val.end()) {
+			val[tiername] = json();
+		}
+		createPropertyHeirarchy(propname, property, val[tiername]);
+	}
+}
+
+void inline objToJson(const tmx::Object& obj, std::shared_ptr<json> mapData) {
+
+	auto& properties = obj.getProperties();
+
+	auto& x = obj.getPosition().x;
+	auto& y = obj.getPosition().y;
+
+	(*mapData)["Transform"]["x"] = toMeters(x);
+	(*mapData)["Transform"]["y"] = toMeters(y) - 1.0f;
+
+	for (auto& property : properties) {
+		std::string propname = property.getName();
+		createPropertyHeirarchy(propname, property, *mapData);
+	}
+}
+
+
 class ActorData {
 public:
-	ActorData(const json& mapData, Scene* scene) : mapData(mapData), scene(scene) {
 
+	ActorData(const std::string& actorname, const std::string& variantname) {
 
-		Logger::get() << mapData << "\n";
+		std::shared_ptr<json> actorjson;
+		std::shared_ptr<json> variantjson;
 
-		//if (actorname != "") {
-		//	std::filesystem::path staticJson(std::filesystem::current_path());
-		//	staticJson /= "resources";
-		//	staticJson /= "actor";
-		//	staticJson /= "static";
-		//	staticJson /= actorname;
-		//	staticJson += ".json";
+		fs::path filepath(fs::current_path());
+		filepath /= "resources";
+		filepath /= "actors";
+		filepath /= actorname;
+		filepath += ".json";
 
-		//	std::ifstream st(staticJson.string().c_str());
-		//	if (st.is_open()) {
-		//		staticData = std::make_unique<json>();
-		//		st >> *staticData;
-		//	}
-		//}
+		actorjson = std::make_shared<json>();
+		std::ifstream actorfile(filepath);
 
-
-		//if (variantname != "") {
-		//	std::filesystem::path dynamicJson(std::filesystem::current_path());
-		//	dynamicJson /= "resources";
-		//	dynamicJson /= "actor";
-		//	dynamicJson /= "dynamic";
-		//	dynamicJson /= variantname;
-		//	dynamicJson += ".json";
-
-		//	std::ifstream dyn(dynamicJson.string().c_str());
-		//	if (dyn.is_open()) {
-		//		dynamicData = std::make_unique<json>();
-		//		dyn >> *dynamicData.value();
-		//	}
-		//}
-	}
-
-
-	//WARNING: NO TWO KEYS CAN HAVE THE SAME NAME IN AN ACTOR DATA OBJECT, FINDER WILL STOP AFTER THE FIRST FOUND INSTANCE
-	template<typename SearchType>
-	SearchType findKey(const std::string& keyval) const {
-		std::optional<SearchType> foundVal;
-
-		foundVal = findKey<SearchType>(mapData, keyval);
-
-		//if (!foundVal.has_value()) {
-		//	foundVal = findKey<SearchType>(*staticData, keyval);
-		//}
-
-		//if (!foundVal.has_value() && dynamicData.has_value()) {
-		//	foundVal = findKey<SearchType>(*dynamicData.value(), keyval);
-		//}
-
-		return foundVal.value();
-	}
-
-	Scene* scene;
-
-private:
-	template<typename SearchType>
-	std::optional<SearchType> findKey(const json& j, const std::string& keyval) const {
-		std::optional<SearchType> returnval{};
-
-		for (auto& [key, val] : j.items()) {
-			if (val.is_object()) {
-				returnval = findKey<SearchType>(val, keyval);
-			}
-			else {
-				if (keyval == key) {
-					returnval = val.get<SearchType>();
-				}
-			}
-
-			if (returnval.has_value()) break;
+		if (!actorfile.is_open()) {
+#ifdef _DEBUG
+			throw std::exception();
+#endif
 		}
 
-		return returnval;
+		actorfile >> (*actorjson);
+
+		if (variantname != "") {
+			filepath = fs::current_path();
+			filepath /= "resources";
+			filepath /= "actors";
+			filepath /= variantname;
+			filepath += ".json";
+
+			variantjson = std::make_shared<json>();
+			std::ifstream variantfile(filepath);
+
+			if (!variantfile.is_open()) {
+#ifdef _DEBUG
+				throw std::exception();
+#endif
+			}
+
+			variantfile >> (*variantjson);
+		}
+
+		data = std::make_shared<json>();
+		data->update(*actorjson);
+		if (variantjson.get() != nullptr) {
+			data->update(*variantjson);
+		}
 	}
 
-	//json staticData;
-	//json dynamicData;
-	json mapData;
+	ActorData(const std::string& actorname, const std::string& variantname, const tmx::Object& mapdata) {
+		std::shared_ptr<json> actorjson;
+		std::shared_ptr<json> variantjson;
+		std::shared_ptr<json> mapjson;
+
+		fs::path filepath(fs::current_path());
+		filepath /= "resources";
+		filepath /= "actors";
+		filepath /= actorname;
+		filepath += ".json";
+
+		actorjson = std::make_shared<json>();
+		std::ifstream actorfile(filepath);
+
+		if (!actorfile.is_open()) {
+#ifdef _DEBUG
+			throw std::exception();
+#endif
+		}
+
+		actorfile >> (*actorjson);
+
+		if (variantname != "") {
+			filepath = fs::current_path();
+			filepath /= "resources";
+			filepath /= "actors";
+			filepath /= variantname;
+			filepath += ".json";
+
+			variantjson = std::make_shared<json>();
+			std::ifstream variantfile(filepath);
+
+			if (!variantfile.is_open()) {
+#ifdef _DEBUG
+				throw std::exception();
+#endif
+			}
+
+			variantfile >> (*variantjson);
+		}
+
+		mapjson = std::make_shared<json>();
+		objToJson(mapdata, mapjson);
+
+
+		data = std::make_shared<json>();
+		data->update(*actorjson);
+		if (variantjson.get() != nullptr) {
+			data->update(*variantjson);
+		}
+		data->update(*mapjson);
+	}
+
+	const std::shared_ptr<json> get() const {
+		return data;
+	}
+
+private:
+	std::shared_ptr<json> data;
 };
 

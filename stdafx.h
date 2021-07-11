@@ -20,6 +20,7 @@
 #include <queue>
 #include <optional>
 #include <bitset>
+#include <limits>
 #include "json.hpp"
 
 #include <tmxlite/Map.hpp>
@@ -46,9 +47,10 @@ using json = nlohmann::json;
 */
 #ifdef _DEBUG
 //#define new new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
-#define DBG_NEW new ( _CLIENT_BLOCK , __FILE__ , __LINE__ )
+//#define DBG_NEW new ( _CLIENT_BLOCK , __FILE__ , __LINE__ )
 #else
 #define DBG_NEW new
+//#define DBG_NEW new
 #endif
 
 ///////////////////////////////////////////////////////////

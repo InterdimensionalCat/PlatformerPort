@@ -2,12 +2,25 @@
 #include "Input.h"
 #include "Window.h"
 
-KeyboardInput::KeyboardInput() {
+std::map<std::string, InputFinder>findInput = std::map<std::string, InputFinder>();
+std::shared_ptr<KeyboardInput> keyboard = std::make_shared<KeyboardInput>();
+
+
+std::shared_ptr<Input> findKeyboard(const std::string& name) {
+	return keyboard;
+}
+
+
+KeyboardInput::KeyboardInput() : Input("KeyboardInput", findKeyboard)  {
 	inputMap.emplace(InputButton::UP, (int)sf::Keyboard::W);
 	inputMap.emplace(InputButton::DOWN, (int)sf::Keyboard::S);
 	inputMap.emplace(InputButton::LEFT, (int)sf::Keyboard::A);
 	inputMap.emplace(InputButton::RIGHT, (int)sf::Keyboard::D);
 	inputMap.emplace(InputButton::JUMP, (int)sf::Keyboard::Space);
+}
+
+std::string KeyboardInput::getName() const {
+	return "KeyboardInput";
 }
 
 void KeyboardInput::update(Window& window) {

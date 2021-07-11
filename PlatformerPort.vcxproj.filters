@@ -207,6 +207,12 @@
     <ClCompile Include="TileCollisionEvent.cpp">
       <Filter>Source Files\System</Filter>
     </ClCompile>
+    <ClCompile Include="Components.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneEvent.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -337,6 +343,12 @@
     </ClInclude>
     <ClInclude Include="TileCollisionEvent.h">
       <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="MapBoundCollisionEvent.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneEvent.h">
+      <Filter>Header Files\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
