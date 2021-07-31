@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "MapBoundCollisionEvent.h"
 #include <typeinfo>
+#include "StringableEnum.h"
 
 
 
@@ -108,13 +109,23 @@ genericFromJson(file, getName(), #__VA_ARGS__, __VA_ARGS__);\
 }
 #endif
 
+#ifndef _JsonEnum
+#define _JsonEnum(enumtype, enumval) \
+  void toJson(std::shared_ptr<json> file) const {\
+    (*file)[getName()][#enumval] = enumtype##ToString(enumval);\
+}\
+void fromJson(const std::shared_ptr<json>& file) {\
+    enumval = enumtype##FromString((*file)[getName()][#enumval]); \
+}
+#endif
+
 //components must be structs and call this macro where x is the type name
 #ifndef _Component
 #define _Component(x) std::string getName() const {\
-    return ((std::string)typeid(x).name()).erase(0, 7);\
+    return #x;\
 }\
 static std::string getNameStatic() {\
-	return ((std::string)typeid(x).name()).erase(0, 7);\
+	return #x;\
 }\
 private:\
 class StartupObj {\
@@ -141,11 +152,19 @@ inline static bool added = false;
 #define _Component_Trivial(x, ...) _JsonTrivial(__VA_ARGS__) _Component(x)
 #endif
 
-enum class ActionState {
-	GroundStill,
-	GroundMove,
-	GroundTurn,
-	Airborne
+#ifndef _Component_Enum
+#define _Component_Enum(x, enumtype, enumval) _JsonEnum(enumtype, enumval) _Component(x)
+#endif
+
+_CREATE_STRINGABLE_ENUM(ActionState, GroundStill, GroundMove, GroundTurn, Airborne);
+_CREATE_STRINGABLE_ENUM(PlatformType, Vertical, Horizontal, Falling, Still);
+
+enum class ConstrainedMovementEvent {
+	OOB,
+	OOBLeft,
+	OOBRight,
+	OOBTop,
+	OOBBot
 };
 
 ActionState StateFromStr(const std::string& str);
@@ -157,18 +176,15 @@ struct PlayerFlag {
 	_Component_Trivial(PlayerFlag, pflag)
 };
 
+struct EnemyFlag {
+	std::string enemyname = "";
+
+	_Component_Trivial(EnemyFlag, enemyname)
+};
+
 struct StateController {
 	ActionState state;
-
-	void toJson(std::shared_ptr<json> file) const {
-		(*file)[getName()]["state"] = StateToStr(state);
-	}
-
-	void fromJson(const std::shared_ptr<json> file) {
-		state = StateFromStr((*file)[getName()]["state"]);
-	}
-
-	_Component(StateController)
+	_Component_Enum(StateController, ActionState, state)
 };
 
 struct AnimStateMap {
@@ -216,9 +232,7 @@ struct InputController {
 	}
 
 	void fromJson(const std::shared_ptr<json>& file) {
-
-		InputFinder finder = findInput.at((*file)[getName()]["input"]);
-		input = finder((*file)[getName()]["input"]);
+		input = Input::createInputDevice((*file)[getName()]["input"]);
 	}
 
 	_Component(InputController)
@@ -330,6 +344,27 @@ struct HorzMovable {
 	_Component_Trivial(HorzMovable, accelX)
 };
 
+struct CircularMovable {
+	float accel;
+	float angleX;
+	float angleY;
+
+	void toJson(std::shared_ptr<json> file) const {
+		(*file)[getName()]["accel"] = accel;
+		(*file)[getName()]["angleX"] = angleX;
+		(*file)[getName()]["angleY"] = angleY;
+	}
+
+	void fromJson(const std::shared_ptr<json>& file) {
+		accel = (*file)[getName()]["accel"];
+		angleX = (*file)[getName()]["angleX"];
+		angleY = (*file)[getName()]["angleY"];
+	}
+
+	//_Component_Trivial(CircularMovable, accel, angleX, angleY);
+	_Component(CircularMovable);
+};
+
 struct StateAccelerationValues {
 	float groundAccel;
 	float airAccel;
@@ -348,18 +383,67 @@ struct StateFrictionValues {
 	_Component_Trivial(StateFrictionValues, groundFrc, airFrc, stillFrc, turnFrc)
 };
 
-struct ConstrainedVerticalMovement {
-	float maxDisplacementUp;
-	float maxDisplacementDown;
+struct ConstrainedMovement {
+	float maxDisplacementLeft  = -1.0f;
+	float maxDisplacementRight = -1.0f;
+	float maxDisplacementUp    = -1.0f;
+	float maxDisplacementDown  = -1.0f;
 
-	_Component_Trivial(ConstrainedVerticalMovement, maxDisplacementUp, maxDisplacementDown)
+	float originX;
+	float originY;
+
+	std::shared_ptr<std::queue<ConstrainedMovementEvent>> events 
+		= std::make_shared<std::queue<ConstrainedMovementEvent>>();
+
+	void toJson(std::shared_ptr<json> file) const {
+
+		(*file)[getName()]["maxDisplacementLeft" ] = maxDisplacementLeft;
+		(*file)[getName()]["maxDisplacementRight"] = maxDisplacementRight;
+		(*file)[getName()]["maxDisplacementUp"   ] = maxDisplacementUp;
+		(*file)[getName()]["maxDisplacementDown" ] = maxDisplacementDown;
+
+		(*file)[getName()]["originX"] = originX;
+		(*file)[getName()]["originY"] = originY;
+
+		(*file)[getName()]["events"] = nullptr;
+	}
+
+	void fromJson(const std::shared_ptr<json>& file) {
+		maxDisplacementLeft  = (*file)[getName()]["maxDisplacementLeft" ];
+		maxDisplacementRight = (*file)[getName()]["maxDisplacementRight"];
+		maxDisplacementUp    = (*file)[getName()]["maxDisplacementUp"   ];
+		maxDisplacementDown  = (*file)[getName()]["maxDisplacementDown" ];
+
+		originX = (*file)[getName()]["originX"];
+		originY = (*file)[getName()]["originY"];
+	}
+
+
+	_Component(ConstrainedMovement)
 };
 
-struct ConstrainedHorizontalMovement {
-	float maxDisplacementLeft;
-	float maxDisplacementRight;
+struct ConstrainedMovementEventListener {
+	std::shared_ptr<std::queue<ConstrainedMovementEvent>> events
+		= std::make_shared<std::queue<ConstrainedMovementEvent>>();
 
-	_Component_Trivial(ConstrainedHorizontalMovement, maxDisplacementLeft, maxDisplacementRight)
+	void toJson(std::shared_ptr<json> file) const {
+		(*file)[getName()]["events"] = nullptr;
+	}
+
+	void fromJson(const std::shared_ptr<json>& file) {
+
+	}
+
+
+	_Component(ConstrainedMovementEventListener)
+};
+
+struct CircularConstrainedMovement {
+	float radius;
+	float originX;
+	float originY;
+
+	_Component_Trivial(CircularConstrainedMovement, radius, originX, originY);
 };
 
 struct JumpOn {
@@ -417,11 +501,23 @@ struct Hitbox {
 };
 
 struct HitboxExtension {
-	float extensionUp;
-	float extensionDown;
+	sf::FloatRect rect;
 
-	float extensionLeft;
-	float extensionRight;
+	void toJson(std::shared_ptr<json> file) const {
+		(*file)[getName()]["rect"]["left"] = rect.left;
+		(*file)[getName()]["rect"]["top"] = rect.top;
+		(*file)[getName()]["rect"]["width"] = rect.width;
+		(*file)[getName()]["rect"]["height"] = rect.height;
+	}
+
+	void fromJson(const std::shared_ptr<json>& file) {
+		rect.left = (*file)[getName()]["rect"]["left"];
+		rect.top = (*file)[getName()]["rect"]["top"];
+		rect.width = (*file)[getName()]["rect"]["width"];
+		rect.height = (*file)[getName()]["rect"]["height"];
+	}
+
+	_Component(HitboxExtension)
 };
 
 struct TileCollidable {
@@ -430,6 +526,12 @@ struct TileCollidable {
 	_Component_Trivial(TileCollidable, tileCollidable)
 };
 
+struct PlatformTolerence {
+	float up;
+	float down;
+
+	_Component_Trivial(PlatformTolerence, up, down);
+};
 
 struct TileCollisionEventListener {
 	std::shared_ptr<std::deque<TileCollisionEvent>> events = std::make_shared<std::deque<TileCollisionEvent>>();
@@ -474,5 +576,23 @@ struct MapBoundCollisionListener {
 	}
 
 	_Component(MapBoundCollisionListener)
+};
+
+struct ActorCollidable {
+	std::string collisiontype;
+
+	_Component_Trivial(ActorCollidable, collisiontype);
+};
+
+struct PlatformTypeable {
+	PlatformType type;
+
+	_Component_Enum(PlatformTypeable, PlatformType, type);
+};
+
+struct FallingPlatform {
+	bool falling = false;
+	float grv = toMeters(0.5f);
+	_Component_Trivial(FallingPlatform, falling, grv);
 };
 

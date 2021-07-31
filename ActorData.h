@@ -83,7 +83,7 @@ public:
 			filepath = fs::current_path();
 			filepath /= "resources";
 			filepath /= "actors";
-			filepath /= variantname;
+			filepath /= actorname + "_" + variantname;
 			filepath += ".json";
 
 			variantjson = std::make_shared<json>();
@@ -131,7 +131,7 @@ public:
 			filepath = fs::current_path();
 			filepath /= "resources";
 			filepath /= "actors";
-			filepath /= variantname;
+			filepath /= actorname + "_" + variantname;
 			filepath += ".json";
 
 			variantjson = std::make_shared<json>();

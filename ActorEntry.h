@@ -9,6 +9,13 @@ class ActorEntry
 public:
 
 	ActorEntry(const size_t index);
+
+	~ActorEntry() {
+		id = ActorID();
+		mask.clear();
+		data.reset();
+	}
+
 	void createNewEntry(const std::string& typeName, const std::string& variantName, 
 		bool respawnable = false);
 	void createNewEntry(const std::string& typeName, const std::string& variantName, 

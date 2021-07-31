@@ -20,13 +20,15 @@
 //class AudioEngine;
 
 class Actor;
+class System;
+enum class SystemType;
 
 template<typename... ComponentTypes>
 class SceneView {
 public:
 	SceneView(Scene* scene) : scene(scene), all(sizeof...(ComponentTypes) == 0) {
 		if (!all) {
-			viewComponents = { 0, getComponentId<ComponentTypes>() ... };
+			viewComponents = {getComponentId<ComponentTypes>() ... };
 		}
 	}
 
@@ -82,7 +84,10 @@ public:
 		int index = 0;
 		while (index < scene->actors.size()) {
 
-			if (!scene->actors.at(index)->isIdValid() || !scene->actors.at(index)->isActive()) continue;
+			if (!scene->actors.at(index)->isIdValid() || !scene->actors.at(index)->isActive()) {
+				index++;
+				continue;
+			}
 
 			bool validFirst = true;
 			for (size_t i = 0; i < viewComponents.size(); i++) {
@@ -125,6 +130,8 @@ public:
 	void update();
 	void draw(const float interpol);
 
+	void runSystemsInRange(const SystemType begin, const SystemType end);
+
 	std::shared_ptr<AudioEngine> audio;
 
 	template<typename T, typename... Args>
@@ -144,9 +151,6 @@ public:
 
 		poolTyped->setIndex(idind, args... );
 		T* component = static_cast<T*>(poolTyped->at(idind));
-		//component->addJsonGenerator();
-
-		//T* component = new (poolTyped->at(idind)) T{ args... };
 		entry->setComponent(componentId);
 		return component;
 	}
@@ -216,17 +220,43 @@ public:
 	void saveActorJsonToFile(std::shared_ptr<json> data, const std::string& filename);
 
 	template<typename T, typename... Args>
-	void pushEvent(const Args&&... args) {
-		events.push(std::make_unique<T>(std::forward<Args>(args)...));
+	void pushEvent(const Args... args) {
+		switch (T::getStaticType()) {
+		case SceneEventType::Pre:
+			preevents.push(std::make_unique<T>((args)...));
+			break;
+		case SceneEventType::Post:
+			postevents.push(std::make_unique<T>((args)...));
+		}
+
 	}
 
+	void handlePreEvents();
+
+	void handlePostEvents();
+
+	void reloadLevel() {
+		Logger::get() << "reloading level\n";
+		loadLevel(currentlevelname);
+	}
+
+	void changeLevel(const std::string newlevel = "") {
+		if (newlevel == "") {
+			Logger::get() << "loading level newLevel_1.tmx\n";
+			loadLevel("newLevel_1");
+		}
+		else {
+			Logger::get() << "loading level " << newlevel <<".tmx\n";
+			loadLevel(newlevel);
+		}
+	}
 
 	std::shared_ptr<Tilemap> tilemap;
 	std::shared_ptr<Camera> camera;
 	std::shared_ptr<Parallax> parallaxEngine;
 
 	std::shared_ptr<Window> window;
-	std::shared_ptr<KeyboardInput> input;
+	KeyboardHandle input;
 
 	std::string currentlevelname;
 
@@ -234,8 +264,14 @@ public:
 
 	float mapwidth;
 	float mapheight;
+
+	std::vector<sf::RectangleShape> debugShapes;
+
 private:
-	std::queue<std::unique_ptr<SceneEvent>> events;
+	std::vector<std::shared_ptr<System>> systems;
+	std::queue<std::unique_ptr<SceneEvent>> preevents;
+	std::queue<std::unique_ptr<SceneEvent>> postevents;
+
 };
 
 extern int componentCounter;

@@ -3,22 +3,25 @@
 #include "SFML/Graphics.hpp"
 #include "Animation.h"
 
-class DrawSprites : public System<SpriteDrawable> {
+class DrawSprites : public SystemTrivial<SpriteDrawable> {
 public:
-	DrawSprites(Scene* scene, std::shared_ptr<Window> window) : System(scene), window(window) {}
+	DrawSprites(Scene* scene) : SystemTrivial(scene), window(scene->window) {}
 
 	void excecutionFunction(std::shared_ptr<ActorEntry> entry) override {
 		auto sprite = scene->getComponent<SpriteDrawable>(entry);
 		sprite->spr->setTexture(sprite->tex->getTexture());
 		window->window->draw(*sprite->spr);
 	}
+
+	_System(DrawSprites, SystemType::Graphics);
+
 private:
 	std::shared_ptr<Window> window;
 };
 
-class UpdateSpritePos : public System<SpriteDrawable, Transform> {
+class UpdateSpritePos : public SystemTrivial<SpriteDrawable, Transform> {
 public:
-	UpdateSpritePos(Scene* scene) : System(scene) {}
+	UpdateSpritePos(Scene* scene) : SystemTrivial(scene) {}
 
 	void excecutionFunction(std::shared_ptr<ActorEntry> entry) override {
 		auto sprite = scene->getComponent<SpriteDrawable>(entry);
@@ -26,11 +29,13 @@ public:
 		sf::Sprite& spr = *sprite->spr;
 		spr.setPosition(toPixels(trans->x), toPixels(trans->y));
 	}
+
+	_System(UpdateSpritePos, SystemType::PreGraphics);
 };
 
-class DrawAnimations : public System<Animatable> {
+class DrawAnimations : public SystemTrivial<Animatable> {
 public:
-	DrawAnimations(Scene* scene, std::shared_ptr<Window> window) : System(scene), window(window) {}
+	DrawAnimations(Scene* scene) : SystemTrivial(scene), window(scene->window) {}
 
 	void excecutionFunction(std::shared_ptr<ActorEntry> entry) override {
 		auto anim = scene->getComponent<Animatable>(entry);
@@ -38,11 +43,13 @@ public:
 	}
 private:
 	std::shared_ptr<Window> window;
+
+	_System(DrawAnimations, SystemType::Graphics);
 };
 
-class StateAnimationDriver : public System<Animatable, Transform, StateController, Velocity, AnimStateMap, Hitbox, InputController> {
+class StateAnimationDriver : public SystemTrivial<Animatable, Transform, StateController, Velocity, AnimStateMap, Hitbox, InputController> {
 public:
-	StateAnimationDriver(Scene* scene) : System(scene) {}
+	StateAnimationDriver(Scene* scene) : SystemTrivial(scene) {}
 
 	void excecutionFunction(std::shared_ptr<ActorEntry> entry) override {
 		auto anim = scene->getComponent<Animatable>(entry);
@@ -93,4 +100,6 @@ public:
 		anim->animation->setPosition(sf::Vector2f(toPixels(center.x - width / 2.0f), toPixels(hitbox.top + hitbox.height - height)));
 		anim->animation->update();
 	}
+
+	_System(StateAnimationDriver, SystemType::PreGraphics);
 };

@@ -5,11 +5,11 @@
 class Scene;
 class ActorData;
 
-enum class PlatformType {
-	Vertical,
-	Horizontal,
-	Falling
-};
+//enum class PlatformType {
+//	Vertical,
+//	Horizontal,
+//	Falling
+//};
 
 class MovingPlatform :
 	public Actor

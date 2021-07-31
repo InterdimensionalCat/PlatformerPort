@@ -21,6 +21,7 @@
 
 #include "ActorData.h"
 
+
 int componentCounter = 0;
 
 Scene::Scene() {
@@ -32,14 +33,25 @@ Scene::Scene() {
 	RegisterAudio();
 
 	window = std::make_shared<Window>();
-	input = keyboard;//std::make_shared<KeyboardInput>();
-	window->registerWindowEventListener(input);
 
 	tilemap = std::make_shared<Tilemap>();
 
 	audio = std::make_shared<AudioEngine>();
 
 	loadLevel("newLevel_1");
+
+	for (auto& [name, id] : System::nameidmap) {
+		systems.push_back(std::move(System::createSystem(this, name)));
+	}
+
+	std::sort(systems.begin(), systems.end(), [](const auto a, const auto b) {
+		return a->getType() < b->getType();
+		}
+	);
+
+	for (auto system : systems) {
+		//Logger::get() << system->toString() << "\n";
+	}
 
 	//audio->playMusic("FlatZone", 10.0f);
 }
@@ -78,8 +90,6 @@ void Scene::loadLevel(const std::string& levelname) {
 				for (auto& obj : objlayer.getObjects()) {
 					auto actorname = obj.getName();
 
-					if (actorname != "Player") continue;
-
 					auto variantNameItr = std::find_if(obj.getProperties().begin(), obj.getProperties().end(), [](const tmx::Property val) {
 						return val.getName() == "VariantName";
 						});
@@ -88,7 +98,17 @@ void Scene::loadLevel(const std::string& levelname) {
 						variantname = variantNameItr->getStringValue();
 					}
 
+					//spawnActor(actorname, variantname);
+
 					spawnActor(actorname, variantname, obj);
+
+					//if (actorname == "Player") {
+					//	spawnActor(actorname, variantname, obj);
+					//}
+					//else {
+					//	spawnActor(actorname, variantname);
+					//}
+
 				}
 			}
 
@@ -177,53 +197,42 @@ Scene::~Scene() {
 	////pool.data = nullptr;
 
 	componentPools.clear();
+	actors.clear();
+	freeActors.clear();
+
+	while (!preevents.empty()) {
+		preevents.pop();
+	}
+
+	while (!postevents.empty()) {
+		postevents.pop();
+	}
 
 }
 
 void Scene::loadActors() {
 	//auto testactor = spawnActor("test", "test");
-	auto player = spawnActor("Player", "");
-	assignComponent<PlayerFlag>(player);
-	assignComponent<Transform>(player, toMeters(100.0f), toMeters(100.0f));
+	auto player = spawnActor("MovingPlatform", "");
+	assignComponent<Transform>(player, toMeters(70.0f), 32.0f);
 	assignComponent<Velocity>(player, 0.0f, 0.0f);
-	assignComponent<InputController>(player, std::static_pointer_cast<Input>(input));
-	assignComponent<PhysicsProperties>(player, (1.0f/1.05f), toMeters(0.5f));
-	assignComponent<HorzMovable>(player, toMeters(0.6f));
-	assignComponent<TileCollidable>(player);
-	assignComponent<Hitbox>(player, sf::FloatRect(0, 0, toMeters(64 - 25), toMeters(64 - 10)));
-	assignComponent<StateController>(player, ActionState::Airborne);
-	assignComponent<StateAccelerationValues>(player, toMeters(0.3f), toMeters(1.0f), toMeters(0.3f) * 3.0f, toMeters(0.3f) * 2.0f);
-	assignComponent<StateFrictionValues>(player, (1.0f/1.05f), (1.0f/1.008f), (1.0f / 1.05f), (1.0f / 1.05f));
 
-	std::shared_ptr<std::map<ActionState, AnimationEntry>> map = std::make_shared<std::map<ActionState, AnimationEntry>>();
+	assignComponent<Hitbox>(player, sf::FloatRect(0, 0, toMeters(128.0f), toMeters(20.0f)));
+	assignComponent<HitboxExtension>(player, sf::FloatRect(0, 0, toMeters(128.0f), toMeters(60.0f)));
 
-	map->emplace(ActionState::Airborne,    AnimationEntry("astronautAirborne", sf::Vector2i(64, 64), sf::Vector2f(toPixels(1.0f), toPixels(1.0f)), 0, 4, 12));
-	map->emplace(ActionState::GroundStill, AnimationEntry("astronautIdle", sf::Vector2i(45, 90), sf::Vector2f(45.0f, 90.0f), 0, 12, 12));
-	map->emplace(ActionState::GroundMove,  AnimationEntry("astronautRun", sf::Vector2i(48, 96), sf::Vector2f(48.0f, 96.0f), 0, 12, 15));
-	map->emplace(ActionState::GroundTurn,  AnimationEntry("astronautTurn", sf::Vector2i(60, 82), sf::Vector2f(60, 82), 0, 1, 60));
-
-	assignComponent<AnimStateMap>(player, map, ActionState::Airborne);
-	assignComponent<Animatable>(player, std::make_shared<Animation>(map->at(ActionState::Airborne), true));
-	assignComponent<Turnable>(player, toMeters(2.0f));
-	assignComponent<AirborneState>(player, 0, 5);
-	assignComponent<TileCollisionEventListener>(player);
-	assignComponent<Jumpable>(player, toMeters(15.0f), 0.83f, 0.51f);
-	assignComponent<BoundedVelocity>(player, toMeters(6.5f), toMeters(35.0f));
-	assignComponent<BoundByMapBounds>(player);
 	assignComponent<MapBoundCollisionListener>(player);
+	assignComponent<CircularConstrainedMovement>(player, 4.0f, toMeters(100.0f), toMeters(100.0f));
+	assignComponent<ActorCollidable>(player, "platform");
+	assignComponent<PlatformTypeable>(player, PlatformType::Horizontal);
+	assignComponent<PlatformTolerence>(player, toMeters(4.0f), toMeters(20.0f));
+	assignComponent<CircularMovable>(player, toMeters(3.0f), 1.0f, 0.0f);
+	assignComponent<SpriteDrawable>(player, std::make_shared<sf::Sprite>(), std::make_shared<Texture>("movingTileAstro"));
 
 
-	Logger::get() << createJsonFromActor(player)->dump(2) << "\n";
-
-	auto flag = getComponent<PlayerFlag>(player);
-	std::shared_ptr<json> file = std::make_shared<json>();
-	for (auto func : generateJsonFunctions) {
-		func(this, player, file);
-	}
+	std::shared_ptr<json> file = createJsonFromActor(player);
 
 	Logger::get() << file->dump(2) << "\n";
 
-	//saveActorJsonToFile(file, "Player");
+	saveActorJsonToFile(file, "MovingPlatform");
 
 	//spawnActor("test", "test");
 
@@ -265,57 +274,96 @@ void Scene::saveActorJsonToFile(std::shared_ptr<json> data, const std::string& f
 	file.close();
 }
 
+void Scene::runSystemsInRange(const SystemType begin, const SystemType end) {
+	auto beginitr = std::find_if(systems.begin(), systems.end(), [begin](const auto a) {
+		return (a->getType() >= begin);
+		});
+	auto enditr = std::find_if(systems.begin(), systems.end(), [end](const auto a) {
+		return (a->getType() >= end);
+		});
+
+	std::for_each(beginitr, enditr,
+		[](auto a) {
+				a->excecute();
+			}
+	);
+}
+
+void Scene::handlePreEvents() {
+	std::vector<std::string> excecutedevents;
+
+	while (!preevents.empty()) {
+
+		//TODO: events that are not local to a 
+		//specific actor and are scenewide should be 
+		//agregated into 1 event call
+		if (std::find(excecutedevents.begin(), excecutedevents.end(), preevents.front()->getName())
+			== excecutedevents.end()) {
+
+			preevents.front()->excecute(this);
+			excecutedevents.push_back(preevents.front()->getName());
+		}
+		preevents.pop();
+	}
+}
+
+void Scene::handlePostEvents() {
+	std::vector<std::string> excecutedevents;
+
+	while (!postevents.empty()) {
+
+		//TODO: events that are not local to a 
+		//specific actor and are scenewide should be 
+		//agregated into 1 event call
+		if (std::find(excecutedevents.begin(), excecutedevents.end(), postevents.front()->getName())
+			== excecutedevents.end()) {
+
+			postevents.front()->excecute(this);
+			excecutedevents.push_back(postevents.front()->getName());
+		}
+		postevents.pop();
+	}
+}
+
 void Scene::update() {
-	input->update(*window);
 
 	if (!window->updateInput()) {
 		Settings::setSetting<bool>("running", false);
 		return;
 	}
 
-	while (!events.empty()) {
-		events.front()->excecute(this);
-		events.pop();
-	}
+	handlePreEvents();
 
-	//auto actor = spawnActor("test", "test");
-	//assignComponent<Transform>(actor, toMeters(100.0f), toMeters(100.0f));
-
-	UpdateAccelByState(this).excecute();
-	UpdateFrcByState(this).excecute();
-	HorzMove(this).excecute();
-	JumpInput(this).excecute();
-	GenericStateDriver(this).excecute();
-	ApplyGravity(this).excecute();
-	ApplyFriction(this).excecute();
-	TilemapCollision(this, tilemap).excecute();
-	BindMovement(this).excecute();
-	UpdatePositions(this).excecute();
-	BindPositionByMapBounds(this).excecute();
-	CheckPlayerFallOffMap(this).excecute();
-
-	for (auto entry : SceneView<PlayerFlag, Transform>(this)) {
-		//Logger::get() << getComponent<Transform>(entry)->y << "\n";
-	}
-
-
+	runSystemsInRange(SystemType::PreUpdate, SystemType::PreGraphics);
 
 	camera->updateWindow(*window);
 	parallaxEngine->move(*camera);
+
+	handlePostEvents();
 }
 
 void Scene::draw(const float interpol) {
 
-	StateAnimationDriver(this).excecute();
-	UpdateSpritePos(this).excecute();
+	//StateAnimationDriver(this).excecute();
+	//UpdateSpritePos(this).excecute();
+
+	runSystemsInRange(SystemType::PreGraphics, SystemType::Graphics);
 
 	window->preRender(interpol);
 
 	parallaxEngine->draw(*window);
 	tilemap->draw(*window);
 
-	DrawAnimations(this, window).excecute();
-	DrawSprites(this, window).excecute();
+	for (auto& shape : debugShapes) {
+		//window->window->draw(shape);
+	}
+
+	debugShapes.clear();
+
+	runSystemsInRange(SystemType::Graphics, SystemType::Count);
+
+	//DrawAnimations(this).excecute();
+	//DrawSprites(this).excecute();
 
 	window->postRender();
 }
@@ -339,6 +387,8 @@ std::shared_ptr<ActorEntry> Scene::spawnActor(const std::string& typeName, const
 	actors.push_back(std::make_shared<ActorEntry>(actors.size()));
 	auto entry = actors.back();
 	entry->createNewEntry(typeName, variantName);
+
+	//Logger::get() << entry->getData()->get()->dump(2) << "\n";
 
 	for (auto func : generateFromJsonFunctions) {
 		func(this, entry, entry->getData()->get());
@@ -368,7 +418,7 @@ std::shared_ptr<ActorEntry> Scene::spawnActor(const std::string& typeName, const
 	auto entry = actors.back();
 	entry->createNewEntry(typeName, variantName, object);
 
-	Logger::get() << entry->getData()->get()->dump(2) << "\n";
+	//Logger::get() << entry->getData()->get()->dump(2) << "\n";
 
 	for (auto func : generateFromJsonFunctions) {
 		func(this, entry, entry->getData()->get());
@@ -378,6 +428,9 @@ std::shared_ptr<ActorEntry> Scene::spawnActor(const std::string& typeName, const
 }
 
 void Scene::despawnActor(std::shared_ptr<ActorEntry> entry) {
+
+	Logger::get() << "despawning actor:" + std::to_string(entry->getIndex()) + "\n";
+
 	if (entry->isRespawnable()) {
 		entry->setActive(false);
 	}

@@ -1,6 +1,6 @@
 {
- "ActorCollidable": {
-    "collisiontype": "player"
+  "ActorCollidable": {
+    "collisiontype": "enemy"
   },
   "AirborneState": {
     "airborneTimer": 0,
@@ -11,65 +11,65 @@
       {
         "key": "GroundStill",
         "value": {
-          "filename": "astronautIdle",
-          "firstFrame": 0,
-          "fps": 12,
-          "frameDim": {
-            "x": 45,
-            "y": 90
-          },
-          "numFrames": 12,
-          "targetDim": {
-            "x": 45.0,
-            "y": 90.0
-          }
-        }
-      },
-      {
-        "key": "GroundMove",
-        "value": {
-          "filename": "astronautRun",
-          "firstFrame": 0,
-          "fps": 15,
-          "frameDim": {
-            "x": 48,
-            "y": 96
-          },
-          "numFrames": 12,
-          "targetDim": {
-            "x": 48.0,
-            "y": 96.0
-          }
-        }
-      },
-      {
-        "key": "GroundTurn",
-        "value": {
-          "filename": "astronautTurn",
-          "firstFrame": 0,
-          "fps": 60,
-          "frameDim": {
-            "x": 60,
-            "y": 82
-          },
-          "numFrames": 1,
-          "targetDim": {
-            "x": 60.0,
-            "y": 82.0
-          }
-        }
-      },
-      {
-        "key": "Airborne",
-        "value": {
-          "filename": "astronautAirborne",
+          "filename": "BoopAnim",
           "firstFrame": 0,
           "fps": 12,
           "frameDim": {
             "x": 64,
             "y": 64
           },
-          "numFrames": 4,
+          "numFrames": 3,
+          "targetDim": {
+            "x": 64.0,
+            "y": 64.0
+          }
+        }
+      },
+      {
+        "key": "GroundMove",
+        "value": {
+          "filename": "BoopAnim",
+          "firstFrame": 0,
+          "fps": 12,
+          "frameDim": {
+            "x": 64,
+            "y": 64
+          },
+          "numFrames": 3,
+          "targetDim": {
+            "x": 64.0,
+            "y": 64.0
+          }
+        }
+      },
+      {
+        "key": "GroundTurn",
+        "value": {
+          "filename": "BoopAnim",
+          "firstFrame": 0,
+          "fps": 12,
+          "frameDim": {
+            "x": 64,
+            "y": 64
+          },
+          "numFrames": 3,
+          "targetDim": {
+            "x": 64.0,
+            "y": 64.0
+          }
+        }
+      },
+      {
+        "key": "Airborne",
+        "value": {
+          "filename": "BoopAnim",
+          "firstFrame": 0,
+          "fps": 12,
+          "frameDim": {
+            "x": 64,
+            "y": 64
+          },
+          "numFrames": 3,
           "targetDim": {
             "x": 64.0,
             "y": 64.0
@@ -81,14 +81,14 @@
   },
   "Animatable": {
     "animation": {
-      "filename": "astronautAirborne",
+      "filename": "BoopAnim",
       "firstFrame": 0,
       "fps": 12,
       "frameDim": {
         "x": 64,
         "y": 64
       },
-      "numFrames": 4,
+      "numFrames": 3,
       "targetDim": {
         "x": 64.0,
         "y": 64.0
@@ -99,30 +99,42 @@
     "boundDown": true,
     "boundLeft": true,
     "boundRight": true,
-    "boundUp": false
+    "boundUp": true
   },
   "BoundedVelocity": {
-    "maxVelX": 0.1015625,
+    "maxVelX": 0.078125,
     "maxVelY": 0.546875
+  },
+  "ConstrainedMovement": {
+    "events": null,
+    "maxDisplacementDown": -0.015625,
+    "maxDisplacementLeft": 1.0,
+    "maxDisplacementRight": 1.0,
+    "maxDisplacementUp": -0.015625,
+    "originX": 1.5625,
+    "originY": 1.5625
+  },
+  "EnemyFlag": {
+    "enemyname": "Boop"
   },
   "Hitbox": {
     "rect": {
-      "height": 0.84375,
+      "height": 1.0,
       "left": 0.0,
       "top": 0.0,
-      "width": 0.609375
+      "width": 1.0
     }
   },
   "HorzMovable": {
     "accelX": 0.00937500037252903
   },
   "InputController": {
-    "input": "KeyboardInput"
+    "input": "BoopAI"
   },
-  "Jumpable": {
-    "jumpFloat": 0.5099999904632568,
-    "jumpForce": 0.234375,
-    "jumpReleaseMod": 0.8299999833106995
+  "JumpOn": {
+    "jumpMin": 0.15625,
+    "jumpTolerencePercent": 0.699999988079071,
+    "jumpVelMod": 1.5
   },
   "MapBoundCollisionListener": {
     "events": null
@@ -131,14 +143,11 @@
     "friction": 0.9523810148239136,
     "gravity": 0.0078125
   },
-  "PlayerFlag": {
-    "pflag": true
-  },
   "StateAccelerationValues": {
-    "airAccel": 0.015625,
-    "groundAccel": 0.004687500186264515,
-    "stillAccel": 0.014062500558793545,
-    "turnAccel": 0.00937500037252903
+    "airAccel": 0.078125,
+    "groundAccel": 0.078125,
+    "stillAccel": 0.078125,
+    "turnAccel": 0.078125
   },
   "StateController": {
     "state": "Airborne"
@@ -160,7 +169,7 @@
     "y": 1.5625
   },
   "Turnable": {
-    "turnThreshold": 0.03125
+    "turnThreshold": 0.0015625000232830644
   },
   "Velocity": {
     "x": 0.0,

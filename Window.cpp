@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Window.h"
 #include "WindowEventListener.h"
+#include "Input.h"
 
 Window::Window() {
 
@@ -19,6 +20,9 @@ Window::Window() {
 
 	//causes keypresses to only send one window event
 	window->setKeyRepeatEnabled(false);
+
+	registerWindowEventListener(KeyboardGlobal::listener);
+
 }
 
 Window::~Window() {
@@ -30,6 +34,12 @@ bool Window::updateInput() {
 
 
 	//poll an event
+
+
+	for (auto& listener : listeners) {
+		listener->update(*this);
+	}
+
 	sf::Event event;
 	while (window->pollEvent(event))
 	{

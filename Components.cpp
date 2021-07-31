@@ -45,3 +45,23 @@ std::string StateToStr(const ActionState& state) {
 
 	return "Airborne";
 }
+
+//PlatformType PtypeFromStr(const std::string& str) {
+//	if (str == "Vertical") {
+//		return  PlatformType::Vertical;
+//	}
+//
+//	if (str == "Horizontal") {
+//		return PlatformType::Horizontal;
+//	}
+//
+//	if (str == "Falling") {
+//		return PlatformType::Falling;
+//	}
+//}
+//std::string PtypeToStr(const PlatformType& type) {
+//	switch (type) {
+//	case PlatformType::Vertical:
+//		return "Vertical";
+//	}
+//}

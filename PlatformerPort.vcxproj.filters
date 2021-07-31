@@ -88,6 +88,12 @@
     <Filter Include="Source Files\System">
       <UniqueIdentifier>{dbae4c73-dec6-4878-88f6-1d16197c68dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\AI">
+      <UniqueIdentifier>{119f6ae3-eddd-4861-b0b3-dea465e96fcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AI">
+      <UniqueIdentifier>{78199177-a51b-4168-94d5-1e576690e0eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -136,9 +142,6 @@
       <Filter>Source Files\Actor</Filter>
     </ClCompile>
     <ClCompile Include="EventQueue.cpp">
-      <Filter>Source Files\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="Input.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
@@ -212,6 +215,12 @@
     </ClCompile>
     <ClCompile Include="SceneEvent.cpp">
       <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="BoopAI.cpp">
+      <Filter>Source Files\AI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -350,5 +359,14 @@
     <ClInclude Include="SceneEvent.h">
       <Filter>Header Files\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="BoopAI.h">
+      <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="StringableEnum.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

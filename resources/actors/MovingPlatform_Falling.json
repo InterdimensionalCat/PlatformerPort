@@ -1,0 +1,23 @@
+{
+  "BoundedVelocity": {
+    "maxVelX": 0.0,
+    "maxVelY": 25.0
+  },
+  "CircularMovable": {
+    "accel":  0.0,
+    "angleX": 0.0,
+    "angleY": 1.0
+  },
+  "CircularConstrainedMovement": {
+    "originX": 1.5625,
+    "originY": 1.5625,
+    "radius": -1.0
+  },
+  "PlatformTypeable": {
+    "type": "Falling"
+  },
+  "FallingPlatform": {
+	"falling": false,
+    "grv": 0.005
+  }
+}

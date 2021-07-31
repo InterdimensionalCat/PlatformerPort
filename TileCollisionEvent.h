@@ -1,15 +1,10 @@
 #pragma once
 #include "Tile.h"
+#include "StringableEnum.h"
 
-enum class CollisionFace {
-	WallLeft,
-	WallRight,
-	Floor,
-	Ceiling
-};
+_CREATE_STRINGABLE_ENUM(CollisionFace, WallLeft, WallRight, Floor, Ceiling);
 
-struct TileCollisionEvent
-{
+struct TileCollisionEvent {
 	Tile collidedTile;
 	CollisionFace face;
 };
